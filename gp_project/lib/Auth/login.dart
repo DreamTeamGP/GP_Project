@@ -10,6 +10,7 @@ import 'package:gp_project/Home.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 //import 'package:gp_project/Auth/GlobalAuth.dart';
 import 'package:gp_project/Pages/homepage.dart';
+import 'choosesignup.dart';
 
 
 class login extends StatefulWidget {
@@ -183,7 +184,7 @@ class _loginState extends State<login> {
                     textColor: Colors.grey,
                     onPressed:(){
                       Navigator.push(
-                        context, MaterialPageRoute(builder: (context) => signUp1()));
+                        context, MaterialPageRoute(builder: (context) => choose()));
                     },
                     child: Text('Dont have Account?',
                         style: TextStyle(fontSize: 18.0)),
