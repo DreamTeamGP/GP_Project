@@ -1,9 +1,61 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../models/user.dart';
+import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class profileWidget extends StatelessWidget {
+class profileWidget extends StatefulWidget {
+
+  @override
+  _profileWidgetState createState() => _profileWidgetState();
+}
+
+class _profileWidgetState extends State<profileWidget> {
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  FirebaseUser firebaseUser;
+  User user;
+  var email, name,phone, birthday, gender, country;
+   Future<FirebaseUser> getCurrentUser() async {
+    FirebaseUser user = await _firebaseAuth.currentUser();
+    return user;
+  }
+  @override
+  void initState() {
+    super.initState();
+    initUser();
+    
+  }
+  initUser() async {
+    firebaseUser = await _firebaseAuth.currentUser();
+    var userID = firebaseUser.uid;
+    DocumentSnapshot result = await Firestore.instance.collection('users').document(userID)
+    .get().then((snapshot) {
+      print(snapshot.data);
+      print(snapshot.data['password']);
+      test(snapshot.data);
+    });
+    print('helllo');
+    setState(() {});
+  }
+  void test(x){
+    print(x);
+    email = x['email'];
+    name = x['name'];
+    phone = x['phone'];
+    country = x['country'];
+    gender = x['gender'];
+    birthday = x['birthday'];
+
+    //print(user.country);
+    print(phone);
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -17,11 +69,6 @@ class profileWidget extends StatelessWidget {
       body: Column(
         
         children: <Widget>[
-          // Row(
-          //   children: <Widget>[
-          //     Image.asset('assests/pp.jpeg'),
-          //   ],
-          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -44,7 +91,8 @@ class profileWidget extends StatelessWidget {
               Container(
                 margin: EdgeInsets.all(15.0),
                 child: new Text(
-                "Esraa Atef",
+                //"${firebaseUser?.email }",
+                "${name}",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black,
@@ -62,7 +110,7 @@ class profileWidget extends StatelessWidget {
               Icon(Icons.location_on, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
-                child: Text('Cairo, Egypt',
+                child: Text('${country}',
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -78,7 +126,7 @@ class profileWidget extends StatelessWidget {
               Icon(Icons.phone, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
-                child: Text('+20 01122880653',
+                child: Text('${phone}',
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -94,7 +142,7 @@ class profileWidget extends StatelessWidget {
               Icon(Icons.mail, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
-                child: Text('esraamosllam@gmail.com',
+                child: Text('${email}',
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -110,7 +158,7 @@ class profileWidget extends StatelessWidget {
               Icon(Icons.calendar_today, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
-                child: Text('5 May 1998',
+                child: Text('${birthday}',
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -126,7 +174,7 @@ class profileWidget extends StatelessWidget {
               Icon(Icons.person, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
-                child: Text('female',
+                child: Text('${gender}',
                   style: TextStyle(
                     fontSize: 18.0,
                   ),

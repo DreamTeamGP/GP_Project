@@ -91,4 +91,12 @@ class User {
   factory User.fromDocument(DocumentSnapshot doc) {
     return User.fromJson(doc.data);
   }
+  Future<void> getUserData(userID) async {
+    DocumentSnapshot result = await Firestore.instance.collection('users').document(userID)
+    .get().then((snapshot) {
+      print(snapshot.data);
+    });
+    
+    return result;
+  }
 }
