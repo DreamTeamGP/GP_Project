@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 Doctor doctorFromJson(String str) {
@@ -22,6 +23,7 @@ class Doctor {
   String address1;
   String address2;
   String role;
+  File photo;
 
   Doctor({
     this.dId,
@@ -34,8 +36,8 @@ class Doctor {
     this.address1,
     this.address2,
     this.role,
+    this.photo,
   });
-
   Map<String, dynamic> toJson() => {
         "id": dId,
         "name": name,
@@ -46,6 +48,7 @@ class Doctor {
         "university": university,
         "address1": address1,
         "address2": address2,
+        "photo":photo,
         "role": 'doctor',
       };
   factory Doctor.fromJson(Map<String, dynamic> json) => new Doctor(
@@ -58,9 +61,15 @@ class Doctor {
         university: json["university"],
         address1: json["address1"],
         address2: json["address2"],
+        photo: json["photo"],
         role: json["doctor"],
       );
   factory Doctor.fromDocument(DocumentSnapshot doc) {
     return Doctor.fromJson(doc.data);
   }
+}
+class DoctorList{
+  List<Doctor> doctorList;
+
+  DoctorList({this.doctorList});
 }

@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:gp_project/Pages/profiledrawer.dart';
 
@@ -151,6 +149,7 @@ class _HomePageState extends State<HomePage> {
                 );
               }).toList(),
               value: 'mood',
+              onChanged: (String value) {},
              // onChanged: (){},
             )),
             Expanded(child: DropdownButton<String>(
@@ -161,6 +160,7 @@ class _HomePageState extends State<HomePage> {
                 );
               }).toList(),
               value: 'month',
+              onChanged: (String value) {},
              // onChanged: (){},
             )),
           ],),
