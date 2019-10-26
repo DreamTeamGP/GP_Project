@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gp_project/Auth/line.dart';
+import 'Detailsdoctor.dart';
 import '../models/doctor.dart';
 
 class listdoc extends StatefulWidget {
@@ -12,6 +13,9 @@ class _listdocState extends State<listdoc> {
   Doctor doctor = new Doctor();
   ScrollController _scrollController = new ScrollController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  Future _data;
+
   Future getDoctors() async {
     var firestore = Firestore.instance;
     QuerySnapshot qn = await firestore
@@ -19,6 +23,19 @@ class _listdocState extends State<listdoc> {
         .where('role', isEqualTo: "doctor")
         .getDocuments();
     return qn.documents;
+  }
+
+  navigateToDetail(DocumentSnapshot doctor) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => details(doctor: doctor)),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _data = getDoctors();
   }
 
   @override
@@ -36,7 +53,7 @@ class _listdocState extends State<listdoc> {
         leading: Icon(Icons.arrow_back_ios, size: 30.0, color: Colors.white),
       ),
       body: FutureBuilder(
-        future: getDoctors(),
+        future: _data,
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -50,7 +67,7 @@ class _listdocState extends State<listdoc> {
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(
-                          top: 0.0, bottom: 10.0, right: 100.0, left: 15.0),
+                          top: 0.0, bottom: 10.0, right: 10.0, left: 10.0),
                       child: Row(
                         children: <Widget>[
                           Container(
@@ -69,13 +86,17 @@ class _listdocState extends State<listdoc> {
                             width: 20,
                           ),
                           Flexible(
-                            child: Container(
-                              margin: EdgeInsets.only(top: 15),
-                              child: Text(
-                                snapshot.data[index].data["name"],
-                                style: TextStyle(
-                                  fontSize: 21,
-                                  color: Colors.black,
+                            child: GestureDetector(
+                              onTap: () =>
+                                  navigateToDetail(snapshot.data[index]),
+                              child: Container(
+                                margin: EdgeInsets.only(top: 15),
+                                child: Text(
+                                  snapshot.data[index].data["name"],
+                                  style: TextStyle(
+                                    fontSize: 21,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
                             ),
