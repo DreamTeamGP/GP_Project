@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_project/Auth/login.dart';
+import 'package:gp_project/Pages/contactUs.dart';
 import 'package:gp_project/Pages/profileWidget.dart';
 import 'package:gp_project/util/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,7 +48,9 @@ class ProfileDrawer extends StatelessWidget {
         ListTile(leading: Icon(Icons.calendar_today), title: Text('My calender',style: TextStyle(fontSize: 22),),onTap: (){},),
         ListTile(leading: Icon(Icons.help), title: Text('Help',style: TextStyle(fontSize: 22),),onTap: (){},),
         ListTile(leading: Icon(Icons.settings), title: Text('Settings',style: TextStyle(fontSize: 22),),onTap: (){},),
-        ListTile(leading: Icon(Icons.contacts), title: Text('Contact Us',style: TextStyle(fontSize: 22),),onTap: (){},),
+        ListTile(leading: Icon(Icons.contacts), title: Text('Contact Us',style: TextStyle(fontSize: 22),),onTap: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> contactUs()));
+        },),
         ListTile(leading: Icon(Icons.accessibility_new), title: Text('Log Out',style: TextStyle(fontSize: 22),),onTap:() async{
           FirebaseAuth.instance.signOut();
           Navigator.of(context).pushNamed('/login');
