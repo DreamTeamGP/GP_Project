@@ -1,61 +1,26 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import '../models/user.dart';
-import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../Pages/profileEditWidget.dart';
 
 class profileWidget extends StatefulWidget {
-
+  final User currentUser;
   @override
   _profileWidgetState createState() => _profileWidgetState();
+  profileWidget({this.currentUser});
 }
 
 class _profileWidgetState extends State<profileWidget> {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  FirebaseUser firebaseUser;
-  User user;
-  var email, name,phone, birthday, gender, country;
-   Future<FirebaseUser> getCurrentUser() async {
-    FirebaseUser user = await _firebaseAuth.currentUser();
-    return user;
-  }
+  String gender;
   @override
   void initState() {
+    widget.currentUser.gender==1? gender = 'female': gender = 'male';
     super.initState();
-    initUser();
-    
   }
-  initUser() async {
-    firebaseUser = await _firebaseAuth.currentUser();
-    var userID = firebaseUser.uid;
-    DocumentSnapshot result = await Firestore.instance.collection('users').document(userID)
-    .get().then((snapshot) {
-      print(snapshot.data);
-      print(snapshot.data['password']);
-      test(snapshot.data);
-    });
-    print('helllo');
-    setState(() {});
-  }
-  void test(x){
-    print(x);
-    email = x['email'];
-    name = x['name'];
-    phone = x['phone'];
-    country = x['country'];
-    gender = x['gender'];
-    birthday = x['birthday'];
-
-    //print(user.country);
-    print(phone);
-  }
-
+  
   @override
   Widget build(BuildContext context) {
-
+  //user = this.userClass.getCurrentUser();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -92,7 +57,7 @@ class _profileWidgetState extends State<profileWidget> {
                 margin: EdgeInsets.all(15.0),
                 child: new Text(
                 //"${firebaseUser?.email }",
-                "${name}",
+                "${widget.currentUser.name}",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black,
@@ -110,7 +75,7 @@ class _profileWidgetState extends State<profileWidget> {
               Icon(Icons.location_on, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
-                child: Text('${country}',
+                child: Text('${widget.currentUser.country}',
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -126,7 +91,7 @@ class _profileWidgetState extends State<profileWidget> {
               Icon(Icons.phone, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
-                child: Text('${phone}',
+                child: Text('${widget.currentUser.phone}',
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -142,7 +107,7 @@ class _profileWidgetState extends State<profileWidget> {
               Icon(Icons.mail, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
-                child: Text('${email}',
+                child: Text('${widget.currentUser.email}',
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -158,7 +123,7 @@ class _profileWidgetState extends State<profileWidget> {
               Icon(Icons.calendar_today, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
-                child: Text('${birthday}',
+                child: Text('${widget.currentUser.birthday}',
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -208,7 +173,10 @@ class _profileWidgetState extends State<profileWidget> {
         width: 85.0,
         height: 85.0,
         child: FloatingActionButton(
-          onPressed: (){},   
+          onPressed: (){           
+            Navigator.push(context, MaterialPageRoute(builder: 
+            (context)=> profileEditWidget(currentUser: widget.currentUser,)));
+          },   
           child: Icon(Icons.edit, color: Colors.white, size: 50.0,),
         )
            

@@ -292,11 +292,6 @@ class UserDetails{
   final List<ProviderDetails> providerData;
   UserDetails(this.providerDetails , this.username , this.photoURL , this.userEmail , this.providerData);
 }
-
-
-
-
-
 class ProviderDetails{
   ProviderDetails(this.providerDetails);
   final String providerDetails;
