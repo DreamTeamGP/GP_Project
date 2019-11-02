@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gp_project/Pages/profiledrawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gp_project/measurementPopup.dart';
+import 'package:gp_project/moodPopup.dart';
 
 
 
@@ -15,18 +16,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var mood = ['mood'];
   var month = ['month'];
-  final _formKey = GlobalKey<FormState>();
-  String dropdownValue = 'Dizziness';
-  List<String> moods = [
-    'Dizziness',
-    'Sweating',
-    'Lack of concentration',
-    'Blackout',
-    'Sense of low',
-    'Thirstiness',
-    'Too much urine'
-  ];
-
  
   @override
   Widget build(BuildContext context) {
@@ -70,7 +59,7 @@ class _HomePageState extends State<HomePage> {
                               backgroundColor: Colors.cyan,
                               fontSize: 25.0,
                             ),
-                             content: PopUp()
+                             content: MeasurementPopUp()
                             );
                       });
                 },
@@ -105,7 +94,6 @@ class _HomePageState extends State<HomePage> {
                 ),
                 onPressed: () {
                   //Navigator.push(context, MaterialPageRoute(builder: (context)=> DropdownButtonAletDialog()));
-
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -115,68 +103,8 @@ class _HomePageState extends State<HomePage> {
                               backgroundColor: Colors.cyan,
                               fontSize: 25.0,
                             ),
-                            content: Container(
-                              padding: EdgeInsets.all(5.0),
-                              width: 230.0,
-                              height: 110.0,
-                              child: Form(
-                                key: _formKey,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    DropdownButton<String>(
-                                      value: dropdownValue,
-                                      icon: Icon(Icons.arrow_downward),
-                                      iconSize: 24,
-                                      elevation: 16,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                      underline: Container(
-                                        height: 2,
-                                        color: Colors.cyan,
-                                      ),
-                                      items: moods
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          dropdownValue = newValue;
-                                        });
-                                      },
-                                      isExpanded: false,
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        padding: const EdgeInsets.all(2.0),
-                                        child: RaisedButton(
-                                          child: Text(
-                                            'Record',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18.0,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          color: Colors.cyan,
-                                          onPressed: () {
-                                            if (_formKey.currentState
-                                                .validate()) {
-                                              _formKey.currentState.save();
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ));
+                            content: MoodPopUp()
+                            );
                       });
                 },
                 color: Colors.yellow,

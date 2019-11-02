@@ -1,36 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class MeasurementPopUp extends StatefulWidget {
+class MoodPopUp extends StatefulWidget {
   @override
-  _MeasurementPopUp createState() => _MeasurementPopUp();
+  _MoodPopUp createState() => _MoodPopUp();
 }
 
-class _MeasurementPopUp extends State<MeasurementPopUp> {
+class _MoodPopUp extends State<MoodPopUp> {
   final _formKey = GlobalKey<FormState>();
-  
-
-  String measruringTimedropdownValue = 'Fasting blood glucose';
-  List<String> measurementType = [
-    'Fasting blood glucose',
-    'Post prandial blood glucose'
+  String moodDropdownValue = 'Dizziness';
+  List<String> moods = [
+    'Dizziness',
+    'Sweating',
+    'Lack of concentration',
+    'Blackout',
+    'Sense of low',
+    'Thirstiness',
+    'Too much urine'
   ];
 
-  final measurementController = TextEditingController();
-  
   @override
   Widget build(BuildContext context) {
-    return new Container(
+    return Container(
       padding: EdgeInsets.all(5.0),
       width: 230.0,
-      height: 170.0,
+      height: 110.0,
       child: Form(
         key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             DropdownButton<String>(
-              value: measruringTimedropdownValue,
+              value: moodDropdownValue,
               icon: Icon(Icons.arrow_downward),
               iconSize: 24,
               elevation: 16,
@@ -41,8 +42,7 @@ class _MeasurementPopUp extends State<MeasurementPopUp> {
                 height: 2,
                 color: Colors.cyan,
               ),
-              items:
-                  measurementType.map<DropdownMenuItem<String>>((String value) {
+              items: moods.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -50,25 +50,10 @@ class _MeasurementPopUp extends State<MeasurementPopUp> {
               }).toList(),
               onChanged: (String newValue) {
                 setState(() {
-                  measruringTimedropdownValue = newValue;
+                  moodDropdownValue = newValue;
                 });
               },
               isExpanded: false,
-            ),
-            Container(
-              padding: EdgeInsets.all(5.0),
-              child: TextFormField(
-                controller: measurementController,
-                validator: (String value) {
-                  if (value.isEmpty) {
-                    return 'please input a number';
-                  }
-                },
-                keyboardType: TextInputType.number,
-                decoration: new InputDecoration(
-                  hintText: 'Enter measurement in mg/dL',
-                ),
-              ),
             ),
             Expanded(
               child: Container(
@@ -85,11 +70,9 @@ class _MeasurementPopUp extends State<MeasurementPopUp> {
                   color: Colors.cyan,
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
-                      measurementRecord(); //records new measurement into db
+                      moodRecord(); //records new measurement into db
                       Navigator.pop(context); //closes popup
-                      measurementController.clear(); //clears textfield
                     }
-                    // SnackBar(content: Text("Successfully recorded"));
                   },
                 ),
               ),
@@ -99,12 +82,10 @@ class _MeasurementPopUp extends State<MeasurementPopUp> {
       ),
     );
   }
-
-  measurementRecord() {
+  moodRecord() {
     Firestore.instance
         .collection('patientRecord')
         .document()
-        .setData({'measurement': measurementController.text,
-                  'measruringTime': measruringTimedropdownValue});
+        .setData({'mood': moodDropdownValue});
   }
 }
