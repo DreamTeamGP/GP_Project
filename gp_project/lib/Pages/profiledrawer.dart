@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_project/Auth/login.dart';
+import 'package:gp_project/Pages/Calendar.dart';
 import 'package:gp_project/Pages/contactUs.dart';
 import 'package:gp_project/Pages/profileWidget.dart';
 import 'package:gp_project/util/auth.dart';
@@ -45,7 +46,9 @@ class ProfileDrawer extends StatelessWidget {
         ListTile(leading: Icon(Icons.border_color), title: Text('My Report',style: TextStyle(fontSize: 22),),onTap: (){},),
         ListTile(leading: Icon(Icons.perm_identity), title: Text('My Doctor',style: TextStyle(fontSize: 22),),onTap: (){},),
         ListTile(leading: Icon(Icons.map), title: Text('My Maps',style: TextStyle(fontSize: 22),),onTap: (){},),
-        ListTile(leading: Icon(Icons.calendar_today), title: Text('My calender',style: TextStyle(fontSize: 22),),onTap: (){},),
+        ListTile(leading: Icon(Icons.calendar_today), title: Text('My calender',style: TextStyle(fontSize: 22),),onTap: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> calenderPage()));
+        },),
         ListTile(leading: Icon(Icons.help), title: Text('Help',style: TextStyle(fontSize: 22),),onTap: (){},),
         ListTile(leading: Icon(Icons.settings), title: Text('Settings',style: TextStyle(fontSize: 22),),onTap: (){},),
         ListTile(leading: Icon(Icons.contacts), title: Text('Contact Us',style: TextStyle(fontSize: 22),),onTap: (){
