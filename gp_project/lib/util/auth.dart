@@ -21,9 +21,7 @@ class Auth {
     checkUserExist(user.uId).then((value) {
       if (!value) {
         print("user ${user.name} ${user.email} added");
-        Firestore.instance
-            .document("users/${user.uId}")
-            .setData(user.toJson());
+        Firestore.instance.document("users/${user.uId}").setData(user.toJson());
         _addSettings(new Settings(
           settingsId: user.uId,
         ));
@@ -55,8 +53,8 @@ class Auth {
   }
 
   static Future<String> signIn(String email, String password) async {
-    FirebaseUser user = (await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email, password: password)) as FirebaseUser;
+    FirebaseUser user = (await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email, password: password)) as FirebaseUser;
     return user.uid;
   }
 
@@ -159,7 +157,6 @@ class Auth {
       return 'Unknown error occured.';
     }
   }
-    
 
   //doctor
   static Future<String> signUp2(String email, String password) async {
@@ -184,7 +181,7 @@ class Auth {
     });
   }
 
-  static Future<bool> checkUserExist2(String  doctorId) async {
+  static Future<bool> checkUserExist2(String doctorId) async {
     bool exists = false;
     try {
       await Firestore.instance.document("users/$doctorId").get().then((doc) {
@@ -207,7 +204,8 @@ class Auth {
 
   static Future<String> signIn2(String email, String password) async {
     FirebaseUser doctor = (await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email, password: password)) as FirebaseUser;
+            .signInWithEmailAndPassword(email: email, password: password))
+        as FirebaseUser;
     return doctor.uid;
   }
 

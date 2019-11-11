@@ -94,8 +94,8 @@ class Drawhorizontalline4 extends CustomPainter {
 
   Drawhorizontalline4(this.reverse) {
 _paint = Paint()
-..color = Colors.grey[200]
-..strokeWidth = 1.5
+..color = Colors.black
+..strokeWidth = 0.5
 ..strokeCap = StrokeCap.round;
 }
 
