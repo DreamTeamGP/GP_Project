@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import '../models/user.dart';
+import '../Pages/profileEditWidget.dart';
 class profileWidget extends StatefulWidget {
   final User currentUser;
   @override
@@ -12,7 +13,8 @@ class _profileWidgetState extends State<profileWidget> {
   String gender;
   @override
   void initState() {
-    widget?.currentUser?.gender==1? gender = 'female': gender = 'male';
+
+    widget.currentUser.gender==1? gender = 'female': gender = 'male';
     super.initState();
   }
   
@@ -74,6 +76,7 @@ class _profileWidgetState extends State<profileWidget> {
               Container(
                 margin: EdgeInsets.only(left: 15.0),
                 child: Text('${widget?.currentUser?.country}',
+
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -171,7 +174,10 @@ class _profileWidgetState extends State<profileWidget> {
         width: 85.0,
         height: 85.0,
         child: FloatingActionButton(
-          onPressed: (){},   
+          onPressed: (){           
+            Navigator.push(context, MaterialPageRoute(builder: 
+            (context)=> profileEditWidget(currentUser: widget.currentUser,)));
+          },   
           child: Icon(Icons.edit, color: Colors.white, size: 50.0,),
         )
            

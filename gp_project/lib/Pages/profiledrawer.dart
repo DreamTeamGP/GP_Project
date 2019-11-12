@@ -2,10 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_project/Auth/login.dart';
 import 'package:gp_project/Pages/homepage.dart';
+import 'package:gp_project/Pages/Calendar.dart';
+import 'package:gp_project/Pages/contactUs.dart';
 import 'package:gp_project/Pages/profileWidget.dart';
+import 'package:gp_project/models/user.dart';
 import 'package:gp_project/util/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfileDrawer extends StatefulWidget {
   final FirebaseUser user;
@@ -37,6 +39,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
             return checkRole(snapshot.data);
           }
           return LinearProgressIndicator();
+
         },
       ),
     );
@@ -163,7 +166,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
     /*Center(
         child: Text('${snapshot.data['role']} ${snapshot.data['name']}'));*/
   }
-
   Drawer userPage(DocumentSnapshot snapshot) {
     return Drawer(
       child: SingleChildScrollView(
@@ -303,3 +305,4 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
     ); /*(child: Text(snapshot.data['name']));*/
   }
 }
+

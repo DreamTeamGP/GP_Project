@@ -86,7 +86,6 @@ class _signUp1State extends State<signUp1> {
   void _handleRadioValueChange1(int value) {
     setState(() {
       _gender = value;
-
       switch (_gender) {
         case 0:
           correctScore++;

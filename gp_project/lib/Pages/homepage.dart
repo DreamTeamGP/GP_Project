@@ -15,8 +15,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var mood = ['mood'];
-  var month = ['month'];
+
+  var mood=['mood'];
+  var month=['month'];
+  UserClass userClass = new UserClass();
+  User user = new User();
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  FirebaseUser firebaseUser;
+  User currentUser = new User();
+
+  initUser() async {
+    //firebaseUser = await _firebaseAuth.currentUser();
+    //userID = firebaseUser.uid;
+    currentUser = this.userClass.getCurrentUser();
+    setState(() {
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+    initUser(); 
+  }
 
   final List<String> _dropdownValues = [
     "One",
@@ -57,6 +76,7 @@ class _HomePageState extends State<HomePage> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+
         // floatingActionButton: FloatingActionButton(child: Icon(Icons.person),onPressed: (){},),
         drawer: ProfileDrawer(user: widget.user),
         appBar: AppBar(
@@ -96,6 +116,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
 
   FutureBuilder checkRole(DocumentSnapshot snapshot) {
     if (snapshot.data == null) {

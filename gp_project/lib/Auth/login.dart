@@ -289,7 +289,7 @@ class UserDetails {
       this.userEmail, this.providerData);
 }
 
-class ProviderDetails {
+class ProviderDetails{
   ProviderDetails(this.providerDetails);
   final String providerDetails;
 }
