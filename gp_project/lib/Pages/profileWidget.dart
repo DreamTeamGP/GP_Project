@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import '../models/user.dart';
+import '../Pages/profileEditWidget.dart';
 
-class profileWidget extends StatelessWidget {
+class profileWidget extends StatefulWidget {
+  final User currentUser;
+  @override
+  _profileWidgetState createState() => _profileWidgetState();
+  profileWidget({this.currentUser});
+}
+
+class _profileWidgetState extends State<profileWidget> {
+  String gender;
+  @override
+  void initState() {
+    widget.currentUser.gender==1? gender = 'female': gender = 'male';
+    super.initState();
+  }
+  
   @override
   Widget build(BuildContext context) {
+  //user = this.userClass.getCurrentUser();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -17,11 +34,6 @@ class profileWidget extends StatelessWidget {
       body: Column(
         
         children: <Widget>[
-          // Row(
-          //   children: <Widget>[
-          //     Image.asset('assests/pp.jpeg'),
-          //   ],
-          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -44,7 +56,8 @@ class profileWidget extends StatelessWidget {
               Container(
                 margin: EdgeInsets.all(15.0),
                 child: new Text(
-                "Esraa Atef",
+                //"${firebaseUser?.email }",
+                "${widget.currentUser.name}",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black,
@@ -62,7 +75,7 @@ class profileWidget extends StatelessWidget {
               Icon(Icons.location_on, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
-                child: Text('Cairo, Egypt',
+                child: Text('${widget.currentUser.country}',
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -78,7 +91,7 @@ class profileWidget extends StatelessWidget {
               Icon(Icons.phone, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
-                child: Text('+20 01122880653',
+                child: Text('${widget.currentUser.phone}',
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -94,7 +107,7 @@ class profileWidget extends StatelessWidget {
               Icon(Icons.mail, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
-                child: Text('esraamosllam@gmail.com',
+                child: Text('${widget.currentUser.email}',
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -110,7 +123,7 @@ class profileWidget extends StatelessWidget {
               Icon(Icons.calendar_today, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
-                child: Text('5 May 1998',
+                child: Text('${widget.currentUser.birthday}',
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -126,7 +139,7 @@ class profileWidget extends StatelessWidget {
               Icon(Icons.person, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
-                child: Text('female',
+                child: Text('${gender}',
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -160,7 +173,10 @@ class profileWidget extends StatelessWidget {
         width: 85.0,
         height: 85.0,
         child: FloatingActionButton(
-          onPressed: (){},   
+          onPressed: (){           
+            Navigator.push(context, MaterialPageRoute(builder: 
+            (context)=> profileEditWidget(currentUser: widget.currentUser,)));
+          },   
           child: Icon(Icons.edit, color: Colors.white, size: 50.0,),
         )
            

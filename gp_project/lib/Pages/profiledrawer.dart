@@ -2,11 +2,26 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_project/Auth/login.dart';
 import 'package:gp_project/Pages/profileWidget.dart';
+import 'package:gp_project/models/user.dart';
 import 'package:gp_project/util/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../Pages/test.dart';
 
-class ProfileDrawer extends StatelessWidget {
-  
+class ProfileDrawer extends StatefulWidget {
+  final User currentUser;
+  @override
+  _ProfileDrawerState createState() => _ProfileDrawerState();
+  ProfileDrawer({this.currentUser});
+
+  static Future<void> signOut() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+      FirebaseAuth.instance.signOut();
+     // Navigator.popUntil(, ModalRoute.withName("/"));
+    }
+}
+
+class _ProfileDrawerState extends State<ProfileDrawer> {
   @override
   Widget build(BuildContext context) {
     return 
@@ -30,16 +45,19 @@ class ProfileDrawer extends StatelessWidget {
                   ),
                   
                 ),
-                Text('Ahmed Mustafa',style: TextStyle(fontSize: 22,color: Colors.white)),
+                Text(widget.currentUser.name,style: TextStyle(fontSize: 22,color: Colors.white)),
               ],
             ),
           ),
         ),
        Container( color: Colors.red,child: Text('Home',textAlign: TextAlign.left,style: TextStyle(fontSize: 22,color: Colors.cyanAccent,fontWeight:FontWeight.bold,),)),
-        ListTile(leading: Icon(Icons.person,size: 25,), title: Text('Profile',style: TextStyle(fontSize: 22),),onTap: (){
-           Navigator.push(context, MaterialPageRoute(builder: (context)=> profileWidget()));
-        
-        },),
+        ListTile(
+          leading: Icon(Icons.person,size: 25,), 
+          title: Text('Profile',style: TextStyle(fontSize: 22),),
+          onTap: (){
+           Navigator.push(context, MaterialPageRoute(builder: (context)=> profileWidget(currentUser: widget.currentUser)));
+          },
+        ),
         ListTile(leading: Icon(Icons.notifications), title: Text('Notification',style: TextStyle(fontSize: 22),),onTap: (){},),
         ListTile(leading: Icon(Icons.border_color), title: Text('My Report',style: TextStyle(fontSize: 22),),onTap: (){},),
         ListTile(leading: Icon(Icons.perm_identity), title: Text('My Doctor',style: TextStyle(fontSize: 22),),onTap: (){},),
@@ -62,12 +80,6 @@ class ProfileDrawer extends StatelessWidget {
 
 
   }
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  static Future<void> signOut() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.clear();
-      FirebaseAuth.instance.signOut();
-     // Navigator.popUntil(, ModalRoute.withName("/"));
-    }
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 }

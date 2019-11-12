@@ -1,7 +1,10 @@
-
-
+import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gp_project/Classes/User.dart';
 import 'package:gp_project/Pages/profiledrawer.dart';
+import 'package:gp_project/models/user.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -11,8 +14,26 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 class _HomePageState extends State<HomePage> {
- var mood=['mood'];
- var month=['month'];
+  var mood=['mood'];
+  var month=['month'];
+  UserClass userClass = new UserClass();
+  User user = new User();
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  FirebaseUser firebaseUser;
+  User currentUser = new User();
+
+  initUser() async {
+    //firebaseUser = await _firebaseAuth.currentUser();
+    //userID = firebaseUser.uid;
+    currentUser = this.userClass.getCurrentUser();
+    setState(() {
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+    initUser(); 
+  }
 
  final List<String> _dropdownValues = [
     "One",
@@ -29,7 +50,7 @@ class _HomePageState extends State<HomePage> {
   debugShowCheckedModeBanner: false,
       home: Scaffold(
        // floatingActionButton: FloatingActionButton(child: Icon(Icons.person),onPressed: (){},),
-          drawer: ProfileDrawer(),
+          drawer: ProfileDrawer(currentUser: currentUser,),
         appBar: AppBar(title: Text('Home'), backgroundColor: Colors.cyan,),
         body: Container(
           margin: EdgeInsets.only(left: 10,right: 10),
