@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/services.dart';
+import 'package:gp_project/Pages/homepage.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -784,11 +785,12 @@ class _signUp1State extends State<signUp1> {
                 celostorol: _celostorol,
                 heart: _heart,
                 handnumb: _handnumb,
+                role: "patient",
                 context: context,
               );
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => login()),
+                MaterialPageRoute(builder: (context) => HomePage()),
               );
             },
             child: Text('Finish',
@@ -826,6 +828,7 @@ class _signUp1State extends State<signUp1> {
       int celostorol,
       int heart,
       int handnumb,
+      String role,
       BuildContext context}) async {
     if (_formKey.currentState.validate()) {
       try {
@@ -833,7 +836,8 @@ class _signUp1State extends State<signUp1> {
         await _changeLoadingVisible();
         //need await so it has chance to go through error if found.
         await Auth.signUp(email, password).then((uId) {
-          Auth.addUserSettingsDB(new User(
+          Auth.addUserSettingsDB(
+            new User(
               uId: uId,
               name: name,
               email: email,
@@ -850,7 +854,10 @@ class _signUp1State extends State<signUp1> {
               pressure: pressure,
               celostorol: celostorol,
               heart: heart,
-              handnumb: handnumb));
+              handnumb: handnumb,
+              role: role,
+            ),
+          );
         });
         //now automatically login user too
         //await StateWidget.of(context).logInUser(email, password);

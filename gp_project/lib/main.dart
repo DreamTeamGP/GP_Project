@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gp_project/Auth/login.dart';
-import 'package:gp_project/Auth/signUp1.dart';
-
+import 'Auth/login.dart';
+import 'Pages/Listdoctors.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {

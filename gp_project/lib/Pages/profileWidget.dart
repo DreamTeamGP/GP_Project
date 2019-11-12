@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import '../models/user.dart';
 import '../Pages/profileEditWidget.dart';
-
 class profileWidget extends StatefulWidget {
   final User currentUser;
   @override
@@ -14,6 +13,7 @@ class _profileWidgetState extends State<profileWidget> {
   String gender;
   @override
   void initState() {
+
     widget.currentUser.gender==1? gender = 'female': gender = 'male';
     super.initState();
   }
@@ -57,7 +57,7 @@ class _profileWidgetState extends State<profileWidget> {
                 margin: EdgeInsets.all(15.0),
                 child: new Text(
                 //"${firebaseUser?.email }",
-                "${widget.currentUser.name}",
+                "${widget?.currentUser?.name}",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black,
@@ -75,7 +75,8 @@ class _profileWidgetState extends State<profileWidget> {
               Icon(Icons.location_on, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
-                child: Text('${widget.currentUser.country}',
+                child: Text('${widget?.currentUser?.country}',
+
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -91,7 +92,7 @@ class _profileWidgetState extends State<profileWidget> {
               Icon(Icons.phone, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
-                child: Text('${widget.currentUser.phone}',
+                child: Text('${widget?.currentUser?.phone}',
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -107,7 +108,7 @@ class _profileWidgetState extends State<profileWidget> {
               Icon(Icons.mail, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
-                child: Text('${widget.currentUser.email}',
+                child: Text('${widget?.currentUser?.email}',
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -123,7 +124,7 @@ class _profileWidgetState extends State<profileWidget> {
               Icon(Icons.calendar_today, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
-                child: Text('${widget.currentUser.birthday}',
+                child: Text('${widget?.currentUser?.birthday}',
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
