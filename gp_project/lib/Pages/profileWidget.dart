@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import '../models/user.dart';
+<<<<<<< HEAD
 import '../Pages/profileEditWidget.dart';
 
+=======
+>>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa
 class profileWidget extends StatefulWidget {
   final User currentUser;
   @override
@@ -14,7 +17,11 @@ class _profileWidgetState extends State<profileWidget> {
   String gender;
   @override
   void initState() {
+<<<<<<< HEAD
     widget.currentUser.gender==1? gender = 'female': gender = 'male';
+=======
+    widget?.currentUser?.gender==1? gender = 'female': gender = 'male';
+>>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa
     super.initState();
   }
   
@@ -75,7 +82,11 @@ class _profileWidgetState extends State<profileWidget> {
               Icon(Icons.location_on, color: Colors.grey, size: 32.0,),
               Container(
                 margin: EdgeInsets.only(left: 15.0),
+<<<<<<< HEAD
                 child: Text('${widget.currentUser.country}',
+=======
+                child: Text('${widget?.currentUser?.country}',
+>>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa
                   style: TextStyle(
                     fontSize: 18.0,
                   ),
@@ -173,10 +184,7 @@ class _profileWidgetState extends State<profileWidget> {
         width: 85.0,
         height: 85.0,
         child: FloatingActionButton(
-          onPressed: (){           
-            Navigator.push(context, MaterialPageRoute(builder: 
-            (context)=> profileEditWidget(currentUser: widget.currentUser,)));
-          },   
+          onPressed: (){},   
           child: Icon(Icons.edit, color: Colors.white, size: 50.0,),
         )
            

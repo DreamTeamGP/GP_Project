@@ -292,7 +292,12 @@ class UserDetails{
   final List<ProviderDetails> providerData;
   UserDetails(this.providerDetails , this.username , this.photoURL , this.userEmail , this.providerData);
 }
+<<<<<<< HEAD
 class ProviderDetails{
+=======
+
+class ProviderDetails {
+>>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa
   ProviderDetails(this.providerDetails);
   final String providerDetails;
   
