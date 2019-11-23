@@ -213,6 +213,7 @@ packages:
     source: hosted
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     version: "1.0.5"
   table_calendar:
     dependency: "direct main"
@@ -221,6 +222,9 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+=======
+    version: "1.0.4"
+>>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa
 =======
     version: "1.0.4"
 >>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa
