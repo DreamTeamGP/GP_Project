@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_project/Auth/login.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import 'package:gp_project/Pages/Calendar.dart';
 import 'package:gp_project/Pages/contactUs.dart';
 =======
@@ -13,6 +14,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 <<<<<<< HEAD
 import '../Pages/test.dart';
 =======
+import 'package:cloud_firestore/cloud_firestore.dart';
+>>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa
+=======
+import 'package:gp_project/Pages/homepage.dart';
+import 'package:gp_project/Pages/profileWidget.dart';
+import 'package:gp_project/util/auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 >>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa
 
@@ -298,9 +306,13 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
 
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 }
+=======
+}
+>>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa
 =======
 }
 >>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa

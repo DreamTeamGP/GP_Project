@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import '../models/user.dart';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import '../Pages/profileEditWidget.dart';
 
+=======
+>>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa
 =======
 >>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa
 class profileWidget extends StatefulWidget {
@@ -18,7 +21,11 @@ class _profileWidgetState extends State<profileWidget> {
   @override
   void initState() {
 <<<<<<< HEAD
+<<<<<<< HEAD
     widget.currentUser.gender==1? gender = 'female': gender = 'male';
+=======
+    widget?.currentUser?.gender==1? gender = 'female': gender = 'male';
+>>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa
 =======
     widget?.currentUser?.gender==1? gender = 'female': gender = 'male';
 >>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa
@@ -86,6 +93,9 @@ class _profileWidgetState extends State<profileWidget> {
                 child: Text('${widget.currentUser.country}',
 =======
                 child: Text('${widget?.currentUser?.country}',
+<<<<<<< HEAD
+>>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa
+=======
 >>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa
                   style: TextStyle(
                     fontSize: 18.0,

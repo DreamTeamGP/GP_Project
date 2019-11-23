@@ -15,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 class _HomePageState extends State<HomePage> {
 <<<<<<< HEAD
+<<<<<<< HEAD
   var mood=['mood'];
   var month=['month'];
   UserClass userClass = new UserClass();
@@ -39,6 +40,10 @@ class _HomePageState extends State<HomePage> {
   var mood = ['mood'];
   var month = ['month'];
 >>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa
+=======
+  var mood = ['mood'];
+  var month = ['month'];
+>>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa
 
  final List<String> _dropdownValues = [
     "One",
@@ -54,6 +59,7 @@ class _HomePageState extends State<HomePage> {
     return MaterialApp(
   debugShowCheckedModeBanner: false,
       home: Scaffold(
+<<<<<<< HEAD
 <<<<<<< HEAD
        // floatingActionButton: FloatingActionButton(child: Icon(Icons.person),onPressed: (){},),
           drawer: ProfileDrawer(currentUser: currentUser,),
@@ -94,6 +100,8 @@ class _HomePageState extends State<HomePage> {
                                   decoration: new InputDecoration(
                                     hintText: 'Enter measurement in mg/dL',
 =======
+=======
+>>>>>>> parent of 63db3ff... Merge branch 'master' into Asmaa
         // floatingActionButton: FloatingActionButton(child: Icon(Icons.person),onPressed: (){},),
         drawer: ProfileDrawer(user: widget.user),
         appBar: AppBar(
