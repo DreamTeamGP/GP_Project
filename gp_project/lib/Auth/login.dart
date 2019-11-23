@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart' as prefix0;
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -7,8 +8,9 @@ import 'package:gp_project/Auth/line.dart';
 import 'package:gp_project/Auth/signUp1.dart';
 import 'package:gp_project/Home.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+//import 'package:gp_project/Auth/GlobalAuth.dart';
 import 'package:gp_project/Pages/homepage.dart';
-import 'choosesignup.dart';
+
 
 class login extends StatefulWidget {
   @override
@@ -22,8 +24,9 @@ class _loginState extends State<login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   FacebookLogin fbLogin = new FacebookLogin();
+ 
 
-  // get https => null;
+ // get https => null;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +70,7 @@ class _loginState extends State<login> {
               padding: EdgeInsets.only(
                   top: 25.0, bottom: 5.0, right: 50.0, left: 22.0),
               child: TextFormField(
-                validator: (input) {
+                validator: (input){
                   if (input.length < 6) {
                     return 'Your password need to be at least 6 characters';
                   }
@@ -98,7 +101,7 @@ class _loginState extends State<login> {
                     child: RaisedButton(
                       padding: EdgeInsets.only(
                           top: 5, bottom: 5, right: 20, left: 20),
-                      onPressed: signIn,
+                      onPressed:signIn,
                       child: Text(
                         'Login',
                         style: TextStyle(
@@ -115,11 +118,10 @@ class _loginState extends State<login> {
                   ),
                   FlatButton(
                     textColor: Colors.grey,
-                    onPressed: () {
+                    onPressed: (){
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ResetPassword()));
+                        context, MaterialPageRoute(builder: (context) => ResetPassword()));
+                    
                     },
                     child: Text('Forgot pasword?',
                         style: TextStyle(fontSize: 15.0)),
@@ -160,7 +162,7 @@ class _loginState extends State<login> {
                     //   {print(e);}
                     //   )
                     //   ;
-                    //},
+                     //},
                     mini: true,
                   ),
                   SignInButton(
@@ -179,9 +181,9 @@ class _loginState extends State<login> {
                   FlatButton(
                     padding: EdgeInsets.only(left: 130),
                     textColor: Colors.grey,
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => choose()));
+                    onPressed:(){
+                      Navigator.push(
+                        context, MaterialPageRoute(builder: (context) => signUp1()));
                     },
                     child: Text('Dont have Account?',
                         style: TextStyle(fontSize: 18.0)),
@@ -205,7 +207,7 @@ class _loginState extends State<login> {
           AuthResult user =  await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: _email,
          password:_password ) ;
-         Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage(user:user.user)));
+         Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage()));
         }
         catch(e){
           print(e.message);
@@ -214,14 +216,14 @@ class _loginState extends State<login> {
       } 
     }
 
-  Future<FirebaseUser> loginWithFacebook() async {
+  
+ Future<FirebaseUser> loginWithFacebook() async {
     final facebookLogin = new FacebookLogin();
     final result = await facebookLogin.logIn(['email']);
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
         print(result.accessToken.token);
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Home()));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> Home()));
         break;
       case FacebookLoginStatus.cancelledByUser:
         print('CANCELED BY USER');
@@ -231,65 +233,67 @@ class _loginState extends State<login> {
         break;
     }
     //Navigator.push(context, MaterialPageRoute(builder: (context)=> Home()));
+
   }
 
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = new GoogleSignIn();
+      final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+      final GoogleSignIn _googleSignIn = new GoogleSignIn();
 
-  Future<FirebaseUser> _loginWithGoogle() async {
-    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+      Future<FirebaseUser> _loginWithGoogle() async{
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    try {
-      AuthResult userDetails =
-          await _firebaseAuth.signInWithCredential(credential);
-      ProviderDetails providerInfo =
-          new ProviderDetails(userDetails.user.providerId);
+        final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
-      List<ProviderDetails> providerData = new List<ProviderDetails>();
-      providerData.add(providerInfo);
+        final AuthCredential credential = GoogleAuthProvider.getCredential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+        try{
+          AuthResult userDetails = await _firebaseAuth.signInWithCredential(credential);
+        ProviderDetails providerInfo = new ProviderDetails(userDetails.user.providerId);
 
-      UserDetails details = new UserDetails(
+        List<ProviderDetails> providerData = new List<ProviderDetails>();
+        providerData.add(providerInfo);
+
+        UserDetails details = new UserDetails(
         userDetails.user.providerId,
         userDetails.user.displayName,
         userDetails.user.photoUrl,
         userDetails.user.email,
         providerData,
-      );
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Home(),
-        ),
-      );
-    } catch (e) {
-      print(e);
-    }
+        );
+        Navigator.push(context,
+       MaterialPageRoute(
+        builder: (context) => Home(),
+      ),
+    );
+        }catch(e){
+          print(e);
+        }
+        
+      //return userDetails;
+ }
 
-    //return userDetails;
-  }
 
   Future sendPasswordResetEmail(String email) async {
     return _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 }
 
-class UserDetails {
+
+
+
+
+class UserDetails{
   final String providerDetails;
   final String username;
   final String photoURL;
   final String userEmail;
   final List<ProviderDetails> providerData;
-  UserDetails(this.providerDetails, this.username, this.photoURL,
-      this.userEmail, this.providerData);
+  UserDetails(this.providerDetails , this.username , this.photoURL , this.userEmail , this.providerData);
 }
-
 class ProviderDetails{
   ProviderDetails(this.providerDetails);
   final String providerDetails;
+  
 }
