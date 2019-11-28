@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:gp_project/Pages/profiledrawer.dart';
 import '../models/user.dart';
 import '../Pages/profileEditWidget.dart';
 
@@ -25,6 +26,7 @@ class _profileWidgetState extends State<profileWidget> {
   Widget build(BuildContext context) {
     //user = this.userClass.getCurrentUser();
     return Scaffold(
+      drawer: ProfileDrawer(currentUser: widget.currentUser),
       appBar: AppBar(
         title: Text(
           'Profile',
@@ -32,10 +34,10 @@ class _profileWidgetState extends State<profileWidget> {
             color: Colors.white,
           ),
         ),
-        leading: Icon(
+/*         leading: Icon(
           Icons.menu,
           color: Colors.white,
-        ),
+        ), */
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: Firestore.instance

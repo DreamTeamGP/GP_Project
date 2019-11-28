@@ -1,8 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 
  class calenderPage extends StatefulWidget {
+   final FirebaseUser user;
+
+  const calenderPage({Key key, this.user}) : super(key: key);
   @override
   _calenderPageState createState() => _calenderPageState();
 }

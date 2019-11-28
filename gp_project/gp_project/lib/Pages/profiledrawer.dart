@@ -6,11 +6,8 @@ import 'package:gp_project/Pages/Listdoctors.dart';
 import 'package:gp_project/Pages/contactUs.dart';
 import 'package:gp_project/Pages/homepage.dart';
 import 'package:gp_project/Pages/profileWidget.dart';
-import 'package:gp_project/models/user.dart';
-import 'package:gp_project/util/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../Pages/test.dart';
 
 class ProfileDrawer extends StatefulWidget {
   final FirebaseUser currentUser;
@@ -101,7 +98,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               ),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage()));
+                    MaterialPageRoute(builder: (context) => HomePage(user: widget.currentUser,)));
               },
             ),
             ListTile(
@@ -150,7 +147,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               ),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => contactUs()));
+                    MaterialPageRoute(builder: (context) => contactUs(user: widget.currentUser,)));
               },
             ),
             ListTile(
@@ -213,7 +210,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               ),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage()));
+                    MaterialPageRoute(builder: (context) => HomePage(user: widget.currentUser,)));
               },
             ),
             ListTile(
@@ -257,7 +254,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               ),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => listdoc()));},
+                    MaterialPageRoute(builder: (context) => listdoc(currentUser: widget.currentUser,)));},
             ),
             ListTile(
               leading: Icon(Icons.map),
@@ -275,7 +272,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               ),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => calenderPage()));
+                    MaterialPageRoute(builder: (context) => calenderPage(user: widget.currentUser,)));
               },
             ),
             ListTile(
@@ -302,7 +299,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               ),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => contactUs()));
+                    MaterialPageRoute(builder: (context) => contactUs(user: widget.currentUser,)));
               },
             ),
             ListTile(

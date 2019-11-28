@@ -1,11 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gp_project/Auth/line.dart';
-import 'package:gp_project/Pages/homepage.dart';
 import 'Detailsdoctor.dart';
 import '../models/doctor.dart';
+import 'homepage.dart';
 
 class listdoc extends StatefulWidget {
+  final FirebaseUser currentUser;
+
+  const listdoc({Key key, this.currentUser}) : super(key: key);
+
   @override
   _listdocState createState() => _listdocState();
 }
@@ -29,7 +34,7 @@ class _listdocState extends State<listdoc> {
   navigateToDetail(DocumentSnapshot doctor) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => details(doctor: doctor)),
+      MaterialPageRoute(builder: (context) => details(doctor: doctor, currentuser:widget.currentUser)),
     );
   }
 
@@ -59,9 +64,10 @@ class _listdocState extends State<listdoc> {
           ),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => HomePage()));
+                context, MaterialPageRoute(builder: (context) => HomePage(user: widget.currentUser,)));
           },
-        ),      ),
+        ),
+      ),
       body: FutureBuilder(
         future: _data,
         builder: (_, snapshot) {
