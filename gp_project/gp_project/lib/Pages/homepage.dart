@@ -9,6 +9,7 @@ import 'package:gp_project/Pages/measurementPopup.dart';
 import 'package:gp_project/Pages/moodPopup.dart';
 import 'package:gp_project/models/user.dart';
 import 'Detailsdoctor.dart';
+import 'meals.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key, this.user}) : super(key: key);
@@ -357,7 +358,11 @@ class _HomePageState extends State<HomePage> {
                     )
                   ],
                 ),
-                onPressed: () {},
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => meals(currentUser: widget.user)),
+                ),
                 color: Colors.red,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
@@ -410,7 +415,7 @@ class _HomePageState extends State<HomePage> {
                     'Statistics Bar Chart',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
                   )),
-             Row(
+              Row(
                 children: <Widget>[
                   Expanded(
                       child: DropdownButton<String>(
@@ -431,7 +436,7 @@ class _HomePageState extends State<HomePage> {
                         child: Text(value),
                       );
                     }).toList(),
-                   //onChanged: (){},
+                    //onChanged: (){},
                   )),
                 ],
               ),
