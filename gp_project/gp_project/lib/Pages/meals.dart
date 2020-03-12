@@ -14,6 +14,7 @@ class meals extends StatefulWidget {
 }
 
 class _mealsState extends State<meals> {
+Future<QuerySnapshot> list =Firestore.instance.collection("FoddData").getDocuments();
   var items = [
     'Rice',
     'Fish',
@@ -72,10 +73,12 @@ class _mealsState extends State<meals> {
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                       ),
+                      enableSuggestions: true,
                       keyboardType: TextInputType.text,
                     ),
                   ),
                   new PopupMenuButton<String>(
+                    
                     icon: const Icon(Icons.arrow_drop_down),
                     onSelected: (String value) {
                       _foodController.text = value;
@@ -177,8 +180,8 @@ class _mealsState extends State<meals> {
             onPressed: () {
               food.add(_foodController.text);
               qtn.add(_quantityController.text);
-              //print(food);
-              //print(qtn);
+              print(food);
+              print(qtn);
               _add();
             },
             iconSize: 30,

@@ -10,7 +10,6 @@ import 'package:gp_project/Pages/moodPopup.dart';
 import 'package:gp_project/models/user.dart';
 import 'Detailsdoctor.dart';
 import 'meals.dart';
-
 class HomePage extends StatefulWidget {
   const HomePage({Key key, this.user}) : super(key: key);
   final FirebaseUser user;
@@ -361,7 +360,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => meals(currentUser: widget.user)),
+                      builder: (context) => meals(currentUser: widget.user,)),
                 ),
                 color: Colors.red,
                 shape: RoundedRectangleBorder(
