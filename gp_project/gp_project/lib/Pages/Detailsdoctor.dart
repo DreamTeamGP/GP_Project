@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_project/Pages/Listdoctors.dart';
+import 'package:gp_project/Pages/Search.dart';
 
 class details extends StatefulWidget {
   final FirebaseUser currentuser;
@@ -34,7 +35,7 @@ class _detailsState extends State<details> {
           ),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => listdoc(currentUser: widget.currentuser,)));
+                context, MaterialPageRoute(builder: (context) => searchByName(currentUser: widget.currentuser,)));
           },
         ),
       ),

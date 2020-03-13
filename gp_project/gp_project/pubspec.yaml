@@ -26,7 +26,7 @@ dependencies:
   firebase_analytics: ^5.0.2
   firebase_core: ^0.4.0+9 
   rxdart: ^0.22.4
-  cloud_firestore: ^0.12.9+5
+  cloud_firestore: ^0.13.4+1
   shared_preferences: ^0.5.3+5
   flushbar: ^1.9.1
   flutter_datetime_picker: ^1.2.8
