@@ -1,13 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../models/user.dart';
 
 class MoodPopUp extends StatefulWidget {
+  final FirebaseUser currentUser;
+  final User user;
+
+  const MoodPopUp({Key key, this.currentUser, this.user}) : super(key: key);
   @override
   _MoodPopUp createState() => _MoodPopUp();
 }
 
 class _MoodPopUp extends State<MoodPopUp> {
   final _formKey = GlobalKey<FormState>();
+  final FirebaseAuth auth = FirebaseAuth.instance;
   String moodDropdownValue = 'Dizziness';
   List<String> moods = [
     'Dizziness',
@@ -82,10 +89,18 @@ class _MoodPopUp extends State<MoodPopUp> {
       ),
     );
   }
-  moodRecord() {
+
+  
+
+  void moodRecord() async {
+    final FirebaseUser user = await auth.currentUser();
     Firestore.instance
-        .collection('patientRecord')
+        .collection('moods')
         .document()
-        .setData({'mood': moodDropdownValue});
+        .setData({
+          'UserId': user.uid,
+          'Timestamp': Timestamp.now(),
+          'mood': moodDropdownValue,
+          });
   }
 }
