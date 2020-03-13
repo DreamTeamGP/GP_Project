@@ -333,7 +333,7 @@ class _HomePageState extends State<HomePage> {
                             backgroundColor: Colors.cyan,
                             fontSize: 25.0,
                           ),
-                          content: MeasurementPopUp(currentUser:widget.user),
+                          content: MeasurementPopUp(currentUser: widget.user),
                         );
                       });
                 },
@@ -351,9 +351,11 @@ class _HomePageState extends State<HomePage> {
                     )
                   ],
                 ),
-                onPressed: () {
-                  
-                },
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => meals(currentUser: widget.user)),
+                ),
                 color: Colors.red,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
@@ -378,7 +380,7 @@ class _HomePageState extends State<HomePage> {
                               backgroundColor: Colors.cyan,
                               fontSize: 25.0,
                             ),
-                            content: MoodPopUp(currentUser:widget.user));
+                            content: MoodPopUp(currentUser: widget.user));
                       });
                 },
                 color: Colors.yellow,
@@ -406,7 +408,7 @@ class _HomePageState extends State<HomePage> {
                     'Statistics Bar Chart',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
                   )),
-             Row(
+              Row(
                 children: <Widget>[
                   Expanded(
                       child: DropdownButton<String>(
