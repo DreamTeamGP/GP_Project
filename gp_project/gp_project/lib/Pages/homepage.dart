@@ -22,13 +22,6 @@ class _HomePageState extends State<HomePage> {
   var mood = ['mood'];
   var month = ['month'];
 
-  final List<String> _dropdownValues = [
-    "One",
-    "Two",
-    "Three",
-    "Four",
-    "Five"
-  ]; //The list of values we want on the dropdown
   UserClass userClass = new UserClass();
   User user = new User();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -339,7 +332,7 @@ class _HomePageState extends State<HomePage> {
                             backgroundColor: Colors.cyan,
                             fontSize: 25.0,
                           ),
-                          content: MeasurementPopUp(),
+                          content: MeasurementPopUp(currentUser:widget.user),
                         );
                       });
                 },
@@ -357,11 +350,9 @@ class _HomePageState extends State<HomePage> {
                     )
                   ],
                 ),
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => meals(currentUser: widget.user,)),
-                ),
+                onPressed: () {
+                  
+                },
                 color: Colors.red,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
@@ -386,7 +377,7 @@ class _HomePageState extends State<HomePage> {
                               backgroundColor: Colors.cyan,
                               fontSize: 25.0,
                             ),
-                            content: MoodPopUp());
+                            content: MoodPopUp(currentUser:widget.user));
                       });
                 },
                 color: Colors.yellow,
@@ -414,7 +405,7 @@ class _HomePageState extends State<HomePage> {
                     'Statistics Bar Chart',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
                   )),
-              Row(
+             Row(
                 children: <Widget>[
                   Expanded(
                       child: DropdownButton<String>(
@@ -425,7 +416,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     }).toList(),
                     value: 'mood',
-                    // onChanged: (){},
+                    onChanged: (String value) {},
                   )),
                   Expanded(
                       child: DropdownButton<String>(
@@ -435,7 +426,7 @@ class _HomePageState extends State<HomePage> {
                         child: Text(value),
                       );
                     }).toList(),
-                    //onChanged: (){},
+                    onChanged: (String value) {},
                   )),
                 ],
               ),
