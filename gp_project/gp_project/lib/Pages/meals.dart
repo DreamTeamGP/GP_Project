@@ -129,7 +129,22 @@ Future<QuerySnapshot> list =Firestore.instance.collection("FoddData").getDocumen
     _add();
   }
 
+  getDateForTimetamp(DateTime inputVal) {
+    String processedDate = inputVal.year.toString() +
+        '-' +
+        inputVal.month.toString() +
+        '-' +
+        inputVal.day.toString();
+    return processedDate;
+  }
+
+  
+
   void submitData() async {
+
+    DateTime now = new DateTime.now();
+    DateTime date = new DateTime(now.year, now.month, now.day, now.hour, now.minute);
+
     final FirebaseUser user = await _auth.currentUser();
     Firestore _firestore = new Firestore();
     try {
@@ -138,6 +153,7 @@ Future<QuerySnapshot> list =Firestore.instance.collection("FoddData").getDocumen
         'quantity': FieldValue.arrayUnion(qtn),
         'Date': DateTime.now(),
         'UserID' : user.uid,
+        'Timestamp': getDateForTimetamp(date),
       });
       //Firestore.instance.collection('meals').document().setData(
       //  {'Food': _foodController.text, 'quantity': _quantityController.text});

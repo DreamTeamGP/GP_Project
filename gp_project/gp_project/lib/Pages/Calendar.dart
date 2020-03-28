@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gp_project/models/meal.dart';
+import 'package:gp_project/models/user.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-
- class calenderPage extends StatefulWidget {
-   final FirebaseUser user;
+class calenderPage extends StatefulWidget {
+  final FirebaseUser user;
 
   const calenderPage({Key key, this.user}) : super(key: key);
   @override
@@ -12,21 +15,46 @@ import 'package:table_calendar/table_calendar.dart';
 }
 
 class _calenderPageState extends State<calenderPage> {
-  
-  
+  User user = new User();
+  Meal meal = new Meal();
+
   CalendarController _controller;
   final _formKey = GlobalKey<FormState>();
+  ScrollController _scrollController = ScrollController();
+
+
+  Future _data;
+
+  getMeasurement() async {
+    var firestore = Firestore.instance;
+    QuerySnapshot qn = await firestore
+        .collection("patientsMeasurements")
+        .where("UserId", isEqualTo: widget.user.uid)
+        .getDocuments();
+    return qn.documents;
+  }
+
+  
+
+  getMood() async {
+    var firestore = Firestore.instance;
+    QuerySnapshot qn = await firestore
+        .collection("moods")
+        .where("Timestamp", isEqualTo: onSelected)
+        .where("UserId", isEqualTo: widget.user.uid)
+        .getDocuments();
+
+    return qn.documents;
+  }
 
   @override
   void initState() {
-    
     super.initState();
     _controller = CalendarController();
-} 
+  }
 
-@override
-
-Widget build(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('My Calendar'),
@@ -39,7 +67,7 @@ Widget build(BuildContext context) {
             TableCalendar(
               initialCalendarFormat: CalendarFormat.month,
               //dayHitTestBehavior: HitTestBehavior.deferToChild,
-              
+
               calendarStyle: CalendarStyle(
                   todayColor: Colors.orange,
                   selectedColor: Colors.cyan,
@@ -49,14 +77,12 @@ Widget build(BuildContext context) {
                       color: Colors.white)),
               headerStyle: HeaderStyle(
                 centerHeaderTitle: true,
-                
                 formatButtonDecoration: BoxDecoration(
                   color: Colors.orange,
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 formatButtonTextStyle: TextStyle(color: Colors.white),
                 formatButtonShowsNext: false,
-                
               ),
               startingDayOfWeek: StartingDayOfWeek.saturday,
               onDaySelected: onSelected,
@@ -64,7 +90,6 @@ Widget build(BuildContext context) {
                 selectedDayBuilder: (context, date, events) => Container(
                     margin: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
-
                     decoration: BoxDecoration(
                         color: Colors.cyan,
                         borderRadius: BorderRadius.circular(10.0)),
@@ -73,7 +98,6 @@ Widget build(BuildContext context) {
                       style: TextStyle(color: Colors.white),
                     )),
                 todayDayBuilder: (context, date, events) => Container(
-                  
                     margin: const EdgeInsets.all(4.0),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
@@ -83,7 +107,6 @@ Widget build(BuildContext context) {
                       date.day.toString(),
                       style: TextStyle(color: Colors.white),
                     )),
-
               ),
               calendarController: _controller,
             )
@@ -93,81 +116,222 @@ Widget build(BuildContext context) {
     );
   }
 
-  void onSelected(DateTime day, List events){
-    
-      _show(context, day.day.toString());
+  void onSelected(DateTime day, List events) {
+    _show(context, day);
+    // print(day);
   }
 
+  Future _show(BuildContext context, DateTime day) async {
+    
+    getDateForTimetamp(DateTime inputVal) {
+    String processedDate = inputVal.year.toString() +
+        '-' +
+        inputVal.month.toString() +
+        '-' +
+        inputVal.day.toString();
+    return processedDate;
+  }
+  
+  
 
+//   getDateForMoo(DateTime date){
+//      date = timestamp.toDate();
+//  return DateFormat("yyyy-MM-dd").format(date);
+//   }
+    
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('On This Day'),
+            titleTextStyle: TextStyle(
+              //backgroundColor: Colors.cyan,
+              color: Colors.cyan,
+              fontSize: 25.0,
+              fontWeight: FontWeight.w600,
+            ),
+            content: Container(
+                padding: EdgeInsets.all(5.0),
+                width: 280.0,
+                //   height: 200.0,
+                child: Column(
+                  children: <Widget>[
+                   
+                  Expanded(
+                      child: StreamBuilder<QuerySnapshot>(
+                    stream: Firestore.instance
+                        .collection("moods")
+                        .where("Timestamp" , isEqualTo: getDateForTimetamp(day))
+                        .where("UserId", isEqualTo: widget.user.uid)
+                        .snapshots(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.hasError)
+                        return new Text('Error: ${snapshot.error}');
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return new Text('Loading...');
+                        default:
+                          return ListView(
+                            children: snapshot.data.documents
+                                .map((DocumentSnapshot document) {
+                              return Column(children: <Widget>[
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 0.0,
+                                        bottom: 10.0,
+                                        right: 10.0,
+                                        left: 10.0),
+                                    child: Row(children: <Widget>[
+                                      Text(
+                                        'Mood:',
+                                        style: TextStyle(
+                                          fontSize: 21,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      
+                                      Flexible(
+                                          child: Column(children: <Widget>[
+                                        new ListTile(
+                                          title: new Text(
+                                            '${document['mood']}',
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              color: Colors.cyan.shade700,
+                                            ),
+                                          ),
+                                        )
+                                      ]))
+                                    ]))
+                              ]);
+                            }).toList(),
+                          );
+                      }
+                    },
+                  )
+                  ),
 
-  Future _show(BuildContext context, String day) async{
-
-showDialog(
-                context: context,
-                builder: (BuildContext context) {
-    return AlertDialog(
-                      title: Text('On This Day'),
-                      titleTextStyle: TextStyle (
-                        //backgroundColor: Colors.cyan,
-                        color: Colors.cyan,
-                        fontSize: 25.0,
-                        fontWeight: FontWeight.w600, 
-                      ), 
-                      content: Container(
-                        padding: EdgeInsets.all(5.0),
-                        width: 230.0,
-                        height: 110.0,
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Container(
-                                padding: EdgeInsets.all(5.0),
-                                child : Row(
-                                  children: <Widget>[
-                                    Text('Measurement: '),
-
-                                    Container(
-                                      child: Text(''),
-                                    )
-                                  ],
-                                  
-                                )  
-                              ),
-
-                              Container(
-                                padding: EdgeInsets.all(5.0),
-                                child : Row(
-                                  children: <Widget>[
-                                    Text('Mood: '),
-
-                                    Container(
-                                      child: Text(''),
-                                    )
-                                  ],
-                                  
-                                )  
-                              ),
-
-                              Container(
-                                padding: EdgeInsets.all(5.0),
-                                child : Row(
-                                  children: <Widget>[
-                                    Text('Meal: '),
-
-                                    Container(
-                                      child: Text(''),
-                                    )
-                                  ],
-                                  
-                                ) 
-                              ),
-                            ],
-                          ),
-                        ),
-                      ));
-                });
-
+                   Expanded(
+                      child: StreamBuilder<QuerySnapshot>(
+                    stream: Firestore.instance
+                        .collection("meals")
+                        .where("Timestamp" ,  isEqualTo: getDateForTimetamp(day) )
+                        .where("UserID", isEqualTo: widget.user.uid)
+                        .snapshots(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.hasError)
+                        return new Text('Error: ${snapshot.error}');
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return new Text('Loading...');
+                        default:
+                          return ListView(
+                            children: snapshot.data.documents
+                                .map((DocumentSnapshot document) {
+                              return Column(children: <Widget>[
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 0.0,
+                                        bottom: 10.0,
+                                        right: 10.0,
+                                        left: 10.0),
+                                    child: Row(children: <Widget>[
+                                      Text(
+                                        'Meals:',
+                                        style: TextStyle(
+                                          fontSize: 21,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      // Container(
+                                      //   width: 20,
+                                      // ),
+                                      //Row(
+                                      //  children: <Widget>[
+                                      Flexible(
+                                          child: Column(children: <Widget>[
+                                        new ListTile(
+                                          title: new Text(
+                                            '${document['food']}',
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              color: Colors.cyan.shade700,
+                                            ),
+                                          ),
+                                        )
+                                      ]))
+                                    ]))
+                              ]);
+                            }).toList(),
+                          );
+                      }
+                    },
+                  )),
+                 Expanded(
+                      child: StreamBuilder<QuerySnapshot>(
+                    stream: Firestore.instance
+                        .collection("patientsMeasurements")
+                        .where("Date" ,  isEqualTo: getDateForTimetamp(day))
+                        .where("UserId", isEqualTo: widget.user.uid)
+                        .snapshots(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.hasError)
+                        return new Text('Error: ${snapshot.error}');
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return new Text('Loading...');
+                        default:
+                          return ListView(
+                            children: snapshot.data.documents
+                                .map((DocumentSnapshot document) {
+                              return Column(children: <Widget>[
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 0.0,
+                                        bottom: 10.0,
+                                        right: 10.0,
+                                        left: 10.0),
+                                    child: Row(children: <Widget>[
+                                      Text(
+                                        'Measurement:',
+                                        style: TextStyle(
+                                          fontSize: 21,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      // Container(
+                                      //   width: 20,
+                                      // ),
+                                      //Row(
+                                      //  children: <Widget>[
+                                      Flexible(
+                                          child: Column(children: <Widget>[
+                                        new ListTile(
+                                          title: new Text(
+                                            '${document['measurement']}',
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              color: Colors.cyan.shade700,
+                                            ),
+                                          ),
+                                        )
+                                      ]))
+                                    ]))
+                              ]);
+                            }).toList(),
+                          );
+                      }
+                    },
+                  ))
+                ])
+                
+                ),
+           
+          );
+        });
   }
 }
+
