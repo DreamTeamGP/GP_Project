@@ -161,7 +161,7 @@ class _calenderPageState extends State<calenderPage> {
                       child: StreamBuilder<QuerySnapshot>(
                     stream: Firestore.instance
                         .collection("moods")
-                        .where("Timestamp" , isEqualTo: getDateForTimetamp(day))
+                        .where("Date" , isEqualTo: getDateForTimetamp(day))
                         .where("UserId", isEqualTo: widget.user.uid)
                         .snapshots(),
                     builder: (BuildContext context,
