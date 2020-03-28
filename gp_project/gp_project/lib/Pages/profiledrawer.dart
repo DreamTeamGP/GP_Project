@@ -8,6 +8,8 @@ import 'package:gp_project/Pages/homepage.dart';
 import 'package:gp_project/Pages/profileWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gp_project/Pages/Maps.dart';
+
 
 import 'Search.dart';
 
@@ -274,7 +276,10 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 'My Maps',
                 style: TextStyle(fontSize: 22),
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                   MaterialPageRoute(builder: (context) => Map(user: widget.currentUser)));
+              },
             ),
             ListTile(
               leading: Icon(Icons.calendar_today),
