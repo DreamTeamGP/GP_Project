@@ -352,7 +352,9 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 onPressed: () {
-                  
+                  Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => meals(currentUser: widget.user,)));
+           
                 },
                 color: Colors.red,
                 shape: RoundedRectangleBorder(

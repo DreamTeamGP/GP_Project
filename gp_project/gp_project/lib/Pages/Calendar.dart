@@ -186,7 +186,7 @@ class _calenderPageState extends State<calenderPage> {
                                       Text(
                                         'Mood:',
                                         style: TextStyle(
-                                          fontSize: 21,
+                                          fontSize: 23,
                                           color: Colors.black,
                                         ),
                                       ),
@@ -197,7 +197,7 @@ class _calenderPageState extends State<calenderPage> {
                                           title: new Text(
                                             '${document['mood']}',
                                             style: TextStyle(
-                                              fontSize: 17,
+                                              fontSize: 19,
                                               color: Colors.cyan.shade700,
                                             ),
                                           ),
@@ -241,7 +241,7 @@ class _calenderPageState extends State<calenderPage> {
                                       Text(
                                         'Meals:',
                                         style: TextStyle(
-                                          fontSize: 21,
+                                          fontSize: 23,
                                           color: Colors.black,
                                         ),
                                       ),
@@ -256,7 +256,7 @@ class _calenderPageState extends State<calenderPage> {
                                           title: new Text(
                                             '${document['food']}',
                                             style: TextStyle(
-                                              fontSize: 17,
+                                              fontSize: 19,
                                               color: Colors.cyan.shade700,
                                             ),
                                           ),
@@ -298,7 +298,7 @@ class _calenderPageState extends State<calenderPage> {
                                       Text(
                                         'Measurement:',
                                         style: TextStyle(
-                                          fontSize: 21,
+                                          fontSize: 23,
                                           color: Colors.black,
                                         ),
                                       ),
@@ -313,7 +313,7 @@ class _calenderPageState extends State<calenderPage> {
                                           title: new Text(
                                             '${document['measurement']}',
                                             style: TextStyle(
-                                              fontSize: 17,
+                                              fontSize: 19,
                                               color: Colors.cyan.shade700,
                                             ),
                                           ),
