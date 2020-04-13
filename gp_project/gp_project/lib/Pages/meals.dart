@@ -132,11 +132,12 @@ Future<QuerySnapshot> list =Firestore.instance.collection("FoddData").getDocumen
   void submitData() async {
     final FirebaseUser user = await _auth.currentUser();
     Firestore _firestore = new Firestore();
+    final date = DateTime.now();
     try {
       Firestore.instance.collection('meals').document().setData({
         "food": FieldValue.arrayUnion(food),
         'quantity': FieldValue.arrayUnion(qtn),
-        'Date': DateTime.now(),
+        'Date': date,
         'UserID' : user.uid,
       });
       //Firestore.instance.collection('meals').document().setData(
