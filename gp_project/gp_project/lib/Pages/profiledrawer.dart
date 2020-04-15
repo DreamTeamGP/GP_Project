@@ -5,6 +5,7 @@ import 'package:gp_project/Pages/Calendar.dart';
 import 'package:gp_project/Pages/Listdoctors.dart';
 import 'package:gp_project/Pages/contactUs.dart';
 import 'package:gp_project/Pages/homepage.dart';
+import 'package:gp_project/Pages/notification.dart';
 import 'package:gp_project/Pages/profileWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -121,7 +122,10 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 'Notification',
                 style: TextStyle(fontSize: 22),
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => notification(currentUser: widget.currentUser,)));
+              },
             ),
             ListTile(
               leading: Icon(Icons.help),
@@ -236,7 +240,10 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 'Notification',
                 style: TextStyle(fontSize: 22),
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => notification(currentUser: widget.currentUser,)));
+              },
             ),
             ListTile(
               leading: Icon(Icons.border_color),

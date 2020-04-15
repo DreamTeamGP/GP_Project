@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_project/Pages/Listdoctors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class details extends StatefulWidget {
   final FirebaseUser currentuser;
@@ -13,6 +14,24 @@ class details extends StatefulWidget {
 
 
 class _detailsState extends State<details> {
+  var patientName;
+  initUser() async{
+    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    FirebaseUser firebaseUser;
+    firebaseUser = await firebaseAuth.currentUser();
+    var userID = firebaseUser.uid;
+    DocumentSnapshot result = await Firestore.instance.collection('users').document(userID)
+    .get().then((snapshot){
+      patientName = snapshot.data['name'];
+      print(snapshot.data['name']);
+    });
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initUser();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -196,6 +215,7 @@ class _detailsState extends State<details> {
                           ),
                         ),
                       ),
+                      
                     ],
                   ),
                 )
@@ -204,11 +224,23 @@ class _detailsState extends State<details> {
                 ),
         ],
       ),
+      
       floatingActionButton: Container(
         width: 95.0,
         height: 95.0,
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Firestore.instance
+                .collection('addDoctorRequest')
+                .document()
+                .setData(
+                  {
+                    'doctorID':widget.doctor.data["id"],
+                    'patientID':widget.currentuser.uid,
+                    'patientName':patientName,
+                  });
+          
+          },
           child: Icon(
             Icons.person_add,
             color: Colors.white,

@@ -12,6 +12,7 @@ class profileWidget extends StatefulWidget {
   @override
   _profileWidgetState createState() => _profileWidgetState();
   profileWidget({this.currentUser, this.user});
+  
 }
 
 class _profileWidgetState extends State<profileWidget> {

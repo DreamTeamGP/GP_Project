@@ -9,6 +9,7 @@ import 'package:gp_project/Pages/measurementPopup.dart';
 import 'package:gp_project/Pages/moodPopup.dart';
 import 'package:gp_project/models/user.dart';
 import 'Detailsdoctor.dart';
+import '../Classes/notificationClass.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key, this.user}) : super(key: key);
@@ -19,6 +20,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  
   var mood = ['mood'];
   var month = ['month'];
 
@@ -34,12 +36,39 @@ class _HomePageState extends State<HomePage> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   FirebaseUser firebaseUser;
   User currentUser = new User();
-
+  void measurementAlert(String patientName, String patientDoctor){
+    
+    Firestore.instance
+                .collection('patientAlert')
+                .document()
+                .setData(
+                  {
+                    'doctorID':patientDoctor,
+                    'patientID':widget.user.uid,
+                    'patientName':patientName,
+                    'state':"the measurments are upnormal for three days please take care",
+                  });
+  }
   initUser() async {
-    //firebaseUser = await _firebaseAuth.currentUser();
-    //userID = firebaseUser.uid;
-    currentUser = this.userClass.getCurrentUser();
+    DocumentSnapshot measurementAlertResult = await Firestore.instance
+    .collection('patientsMeasurements')
+        .where('UserId', isEqualTo: widget.user.uid)
+        // .where('UserId', isGreaterThan: widget.user.uid)
+        .getDocuments().then((snapshot){
+          print(snapshot.documents);
+    });
+
+    DocumentSnapshot result = await Firestore.instance.collection('users').document(widget.user.uid
+     )
+    .get().then((snapshot){
+      if(snapshot.data['role']=="patient"){
+        measurementAlert(snapshot.data['name'], snapshot.data['doctorId']);
+      }
+      
+    });
+    
     setState(() {});
+    MessageHandler();
   }
 
   User patient = new User();
@@ -66,8 +95,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    
+    
     initUser();
     _data = getPatients();
+    
   }
 
   @override
