@@ -10,6 +10,7 @@ import 'package:gp_project/Pages/moodPopup.dart';
 import 'package:gp_project/models/user.dart';
 import 'Detailsdoctor.dart';
 import '../Classes/notificationClass.dart';
+import '../Classes/LocalNotification.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key, this.user}) : super(key: key);
@@ -20,7 +21,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
+  LocalNotifications localNotifications = new LocalNotifications();
   var mood = ['mood'];
   var month = ['month'];
 
@@ -94,6 +95,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    localNotifications.dailyMeasurementReminder();
+    print('local from home');
     super.initState();
     
     
