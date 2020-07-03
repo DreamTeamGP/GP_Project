@@ -9,8 +9,9 @@ import 'package:gp_project/Pages/measurementPopup.dart';
 import 'package:gp_project/Pages/moodPopup.dart';
 import 'package:gp_project/models/user.dart';
 import 'Detailsdoctor.dart';
-import '../Classes/notificationClass.dart';
 import '../Classes/LocalNotification.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'dart:io';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key, this.user}) : super(key: key);
@@ -24,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   LocalNotifications localNotifications = new LocalNotifications();
   var mood = ['mood'];
   var month = ['month'];
-
+  
   final List<String> _dropdownValues = [
     "One",
     "Two",
@@ -69,7 +70,6 @@ class _HomePageState extends State<HomePage> {
     });
     
     setState(() {});
-    MessageHandler();
   }
 
   User patient = new User();
@@ -93,18 +93,90 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  @override
-  void initState() {
-    localNotifications.dailyMeasurementReminder();
-    print('local from home');
-    super.initState();
+  // @override
+  // void initState() {
+  //   localNotifications.dailyMeasurementReminder();
+  //   print('local from home');
+  //   super.initState();
+  //   initUser();
+  //   _data = getPatients();
     
-    
-    initUser();
-    _data = getPatients();
-    
-  }
+  // }
+//
+final Firestore _db = Firestore.instance;
+  final FirebaseMessaging _fcm = FirebaseMessaging();
+  
+  StreamSubscription iosSubscription;
+  _saveDeviceToken() async {
+    // Get the current user
+    String uid = widget.user.uid;
+    String fcmToken = await _fcm.getToken();
+    // Save it to Firestore
+    if (fcmToken != null) {
+      var tokens = _db
+          .collection('users')
+          .document(uid)
+          .collection('tokens')
+          .document(fcmToken);
 
+      await tokens.setData({
+        'token': fcmToken,
+        'createdAt': FieldValue.serverTimestamp(), // optional
+        'platform': Platform.operatingSystem // optional
+      });
+    }
+  }
+  @override
+    void initState() {
+      super.initState();
+      localNotifications.dailyMeasurementReminder();
+      initUser();
+      _data = getPatients();
+      if (Platform.isIOS) {
+        iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
+          print(data);
+          _saveDeviceToken();   
+        });
+
+        _fcm.requestNotificationPermissions(IosNotificationSettings());
+      } else {
+        _saveDeviceToken();
+      }
+      _fcm.configure(
+          onMessage: (Map<String, dynamic> message) async {
+            print("onMessage: $message");
+            showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                        content: ListTile(
+                        title: Text(message['notification']['title']),
+                        subtitle: Text(message['notification']['body']),
+                        ),
+                        actions: <Widget>[
+                        FlatButton(
+                            child: Text('Ok'),
+                            onPressed: () => Navigator.of(context).pop(),
+                        ),
+                    ],
+                ),
+            );
+        },
+        onLaunch: (Map<String, dynamic> message) async {
+            print("onLaunch: $message");
+            // TODO optional
+        },
+        onResume: (Map<String, dynamic> message) async {
+            print("onResume: $message");
+            // TODO optional
+        },
+      );
+    }
+  @override
+  void dispose() {
+    if (iosSubscription != null) iosSubscription.cancel();
+    super.dispose();
+  }
+//
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
