@@ -133,7 +133,7 @@ class _MeasurementPopUp extends State<MeasurementPopUp> {
     return processedDate;
   }
 
-  getDateForTimetamp(DateTime inputVal) {
+  getDateForTimeStamp(DateTime inputVal) {
     String processedDate = inputVal.year.toString() +
         '-' +
         inputVal.month.toString() +
@@ -146,8 +146,12 @@ class _MeasurementPopUp extends State<MeasurementPopUp> {
   void initState() {
     super.initState();
     DateTime now = new DateTime.now();
-    DateTime date = new DateTime(now.year, now.month, now.day, now.hour, now.minute);
-    Measurement().getRecord(widget.currentUser.uid, getDateForTimetamp(date), measruringTypedropdownValue).then((QuerySnapshot docs) {
+    DateTime date =
+        new DateTime(now.year, now.month, now.day, now.hour, now.minute);
+    Measurement()
+        .getRecord(widget.currentUser.uid, getDateForTimeStamp(date),
+            measruringTypedropdownValue)
+        .then((QuerySnapshot docs) {
       if (docs.documents.isNotEmpty) {
         flag = true;
         docId = docs.documents[0].documentID;
@@ -158,22 +162,25 @@ class _MeasurementPopUp extends State<MeasurementPopUp> {
 
   void measurementRecord() async {
     DateTime now = new DateTime.now();
-    DateTime date = new DateTime(now.year, now.month, now.day, now.hour, now.minute);
+    DateTime date =
+        new DateTime(now.year, now.month, now.day, now.hour, now.minute);
 
     //Map map = Map<int, String>();
     //map = {'uniqueid': UniqueKey(), 'value': measruringTypedropdownValue};
 
     List<String> timeStamp = [getDate(date)];
-    List<String> measruringTime = [measruringTypedropdownValue]; 
+    List<String> measruringTime = [measruringTypedropdownValue];
     List<String> measurement = [_measurementController.text];
     //if doc found it will get updated
-    if (flag && record['UserId'] == widget.currentUser.uid && record['Date'] == getDateForTimetamp(date)) {
+    if (flag &&
+        record['UserId'] == widget.currentUser.uid &&
+        record['Date'] == getDateForTimeStamp(date)) {
       databaseReference
           .collection('patientsMeasurements')
           .document(docId)
           .updateData({
         'UserId': widget.currentUser.uid,
-        'Date': getDateForTimetamp(date),
+        'Date': getDateForTimeStamp(date),
         'Time': FieldValue.arrayUnion(timeStamp),
         'measruringTime': record['measruringTime'] + measruringTime,
         'measurement': FieldValue.arrayUnion(measurement),
@@ -183,7 +190,7 @@ class _MeasurementPopUp extends State<MeasurementPopUp> {
     else {
       databaseReference.collection('patientsMeasurements').document().setData({
         'UserId': widget.currentUser.uid,
-        'Date': getDateForTimetamp(date),
+        'Date': getDateForTimeStamp(date),
         'Time': FieldValue.arrayUnion(timeStamp),
         'measruringTime': FieldValue.arrayUnion(measruringTime),
         'measurement': FieldValue.arrayUnion(measurement),
