@@ -91,8 +91,19 @@ class _MoodPopUp extends State<MoodPopUp> {
   }
 
   
+  getDateForTimetamp(DateTime inputVal) {
+    String processedDate = inputVal.year.toString() +
+        '-' +
+        inputVal.month.toString() +
+        '-' +
+        inputVal.day.toString();
+    return processedDate;
+  }
 
   void moodRecord() async {
+    DateTime now = new DateTime.now();
+    DateTime date = new DateTime(now.year, now.month, now.day, now.hour, now.minute);
+    
     final FirebaseUser user = await auth.currentUser();
     Firestore.instance
         .collection('moods')
@@ -101,6 +112,7 @@ class _MoodPopUp extends State<MoodPopUp> {
           'UserId': user.uid,
           'Timestamp': Timestamp.now(),
           'mood': moodDropdownValue,
+          'Date': getDateForTimetamp(date),
           });
   }
 }

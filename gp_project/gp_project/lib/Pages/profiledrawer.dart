@@ -11,6 +11,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gp_project/Pages/Maps.dart';
 
 
+import 'Search.dart';
+
 class ProfileDrawer extends StatefulWidget {
   final FirebaseUser currentUser;
   const ProfileDrawer({Key key, this.currentUser}) : super(key: key);
@@ -257,6 +259,16 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => listdoc(currentUser: widget.currentUser,)));},
+            ),
+            ListTile(
+              leading: Icon(Icons.search),
+              title: Text(
+                'Find Doctor',
+                style: TextStyle(fontSize: 22),
+              ),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => searchByName(currentUser: widget.currentUser,)));},
             ),
             ListTile(
               leading: Icon(Icons.map),
