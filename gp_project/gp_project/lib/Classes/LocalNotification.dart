@@ -12,7 +12,7 @@ class LocalNotifications{
   void dailyMeasurementReminder() async{
     print('local from class');
     initializing();
-    var time = Time(1, 10, 0);
+    var time = Time(10, 00, 00);
     var androidPlatformChannelSpecifics =
         AndroidNotificationDetails('repeatDailyAtTime channel id',
             'repeatDailyAtTime channel name', 'repeatDailyAtTime description');
@@ -22,8 +22,8 @@ class LocalNotifications{
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.showDailyAtTime(
         0,
-        'show daily title',
-        'Daily notification shown at approximately',
+        'Good morning',
+        'Record your measurments',
         time,
         platformChannelSpecifics);
   }
