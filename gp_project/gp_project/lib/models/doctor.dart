@@ -12,16 +12,6 @@ String doctorToJson(Doctor data) {
   return json.encode(dyn);
 }
 
-setSearchParam(String name) {
-  List<String> caseSearchList = List();
-  String temp = "";
-  for (int i = 0; i < name.length; i++) {
-    temp = temp + name[i].toLowerCase();
-    caseSearchList.add(temp);
-  }
-  return caseSearchList;
-}
-
 class Doctor {
   String dId;
   String name;
@@ -32,7 +22,6 @@ class Doctor {
   String university;
   String address1;
   String address2;
-  String region;
   String role;
   File photo;
 
@@ -48,7 +37,6 @@ class Doctor {
     this.address2,
     this.role,
     this.photo,
-    this.region,
   });
   Map<String, dynamic> toJson() => {
         "id": dId,
@@ -62,8 +50,6 @@ class Doctor {
         "address2": address2,
         "photo":photo,
         "role": 'doctor',
-        "SearchIndex": setSearchParam(name),
-        "clinicRegion":region
       };
   factory Doctor.fromJson(Map<String, dynamic> json) => new Doctor(
         dId: json["id"],
@@ -77,7 +63,6 @@ class Doctor {
         address2: json["address2"],
         photo: json["photo"],
         role: json["doctor"],
-        region: json["clinicRegion"]
       );
   factory Doctor.fromDocument(DocumentSnapshot doc) {
     return Doctor.fromJson(doc.data);

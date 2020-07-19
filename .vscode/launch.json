@@ -5,8 +5,8 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Flutter",
-            "program": "C:/Users/NorhanYehia/Desktop/GP_Project/gp_project/gp_project/lib/main.dart",
+            "name": "Dart",
+            "program": "bin/main.dart",
             "request": "launch",
             "type": "dart"
         }

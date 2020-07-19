@@ -9,10 +9,6 @@ import 'package:gp_project/Pages/notification.dart';
 import 'package:gp_project/Pages/profileWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gp_project/Pages/Maps.dart';
-
-
-import 'Search.dart';
 
 class ProfileDrawer extends StatefulWidget {
   final FirebaseUser currentUser;
@@ -268,25 +264,12 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                     MaterialPageRoute(builder: (context) => listdoc(currentUser: widget.currentUser,)));},
             ),
             ListTile(
-              leading: Icon(Icons.search),
-              title: Text(
-                'Find Doctor',
-                style: TextStyle(fontSize: 22),
-              ),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => searchByName(currentUser: widget.currentUser,)));},
-            ),
-            ListTile(
               leading: Icon(Icons.map),
               title: Text(
                 'My Maps',
                 style: TextStyle(fontSize: 22),
               ),
-              onTap: () {
-                Navigator.push(context,
-                   MaterialPageRoute(builder: (context) => Map(user: widget.currentUser)));
-              },
+              onTap: () {},
             ),
             ListTile(
               leading: Icon(Icons.calendar_today),
