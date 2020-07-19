@@ -125,8 +125,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0"
-<<<<<<< HEAD
-<<<<<<< HEAD
   flutter_local_notifications:
     dependency: "direct main"
     description:
@@ -148,10 +146,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.8"
-=======
->>>>>>> parent of 21bf0b7... Revert "Revert "Merge branch 'atef-el-senior'""
-=======
->>>>>>> parent of 21bf0b7... Revert "Revert "Merge branch 'atef-el-senior'""
   flutter_signin_button:
     dependency: "direct main"
     description:
@@ -192,8 +186,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.7"
-<<<<<<< HEAD
-<<<<<<< HEAD
   http:
     dependency: "direct main"
     description:
@@ -215,10 +207,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.4"
-=======
->>>>>>> parent of 21bf0b7... Revert "Revert "Merge branch 'atef-el-senior'""
-=======
->>>>>>> parent of 21bf0b7... Revert "Revert "Merge branch 'atef-el-senior'""
+
   intl:
     dependency: "direct main"
     description:
@@ -422,14 +411,5 @@ packages:
     version: "2.0.8"
 sdks:
 <<<<<<< HEAD
-<<<<<<< HEAD
   dart: ">=2.7.0 <3.0.0"
   flutter: ">=1.12.13+hotfix.5 <2.0.0"
-=======
-  dart: ">=2.2.2 <3.0.0"
-  flutter: ">=1.5.0 <2.0.0"
->>>>>>> parent of 21bf0b7... Revert "Revert "Merge branch 'atef-el-senior'""
-=======
-  dart: ">=2.2.2 <3.0.0"
-  flutter: ">=1.5.0 <2.0.0"
->>>>>>> parent of 21bf0b7... Revert "Revert "Merge branch 'atef-el-senior'""
