@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="2a3979f3-b3b4-47a4-9ef3-6f42e8de6115" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/gp_project/gp_project/android/settings_aar.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gp_project/gp_project/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/gp_project/gp_project/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gp_project/gp_project/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/gp_project/gp_project/android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gp_project/gp_project/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/gp_project/gp_project/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gp_project/gp_project/android/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gp_project/gp_project/android/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gp_project/gp_project/lib/Auth/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/gp_project/gp_project/lib/Auth/login.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gp_project/gp_project/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/gp_project/gp_project/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gp_project/gp_project/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/gp_project/gp_project/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gp_project/gp_project/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/gp_project/gp_project/pubspec.yaml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectConfigurationFiles">
+    <option name="files">
+      <list>
+        <option value="$PROJECT_DIR$/.idea/GP_Project.iml" />
+        <option value="$PROJECT_DIR$/.idea/modules.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1e8GPpeqKONkRswXmQQyNla7DDo" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2a3979f3-b3b4-47a4-9ef3-6f42e8de6115" name="Default Changelist" comment="" />
+      <created>1586293499336</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1586293499336</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="233" y="0" key="#Notifications" timestamp="1595016916069">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="233" y="0" key="#Notifications/0.0.1280.680@0.0.1280.680" timestamp="1595016916069" />
+    <state x="23" y="0" key="SettingsEditor" timestamp="1595019604512">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="23" y="0" key="SettingsEditor/0.0.1280.680@0.0.1280.680" timestamp="1595019604512" />
+    <state x="445" y="524" width="1060" height="440" key="com.android.tools.idea.avdmanager.AvdListDialog" timestamp="1595019683849">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="445" y="524" width="1060" height="440" key="com.android.tools.idea.avdmanager.AvdListDialog/0.0.1280.680@0.0.1280.680" timestamp="1595019683849" />
+    <state x="336" y="164" key="com.intellij.ide.util.TipDialog" timestamp="1595019628284">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="336" y="164" key="com.intellij.ide.util.TipDialog/0.0.1280.680@0.0.1280.680" timestamp="1595019628284" />
+  </component>
+</project>
