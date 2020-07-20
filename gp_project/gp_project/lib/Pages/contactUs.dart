@@ -28,7 +28,6 @@ class _contactUsState extends State<contactUs> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: ProfileDrawer(currentUser: widget.user),
       appBar: AppBar(
         title: Text(
           'Contact Us',
@@ -38,7 +37,6 @@ class _contactUsState extends State<contactUs> {
           ),
         ),
         backgroundColor: Colors.cyan,
-        leading: Icon(Icons.dehaze, size: 30.0, color: Colors.white),
       ),
       body: Form(
         key: _formKey,
@@ -51,12 +49,17 @@ class _contactUsState extends State<contactUs> {
               child: Row(children: <Widget>[
                 Expanded(
                   child: TextFormField(
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter your meassage first';
+                      }
+                    },
                     controller: _messageController,
                     onSaved: (input) => _message = input,
                     maxLines: 20,
                     decoration: InputDecoration(
                       //labelText: 'Enter Inquery',
-                      hintText: 'Enter Inquery',
+                      hintText: 'Please leave your message here',
 
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
@@ -82,14 +85,6 @@ class _contactUsState extends State<contactUs> {
                         padding: EdgeInsets.only(
                             top: 5, bottom: 5, right: 20, left: 20),
                         onPressed: sendMessage,
-                        // crudObj.addData({
-                        //   'Email' : user.email,
-                        //   'Message': this._message,
-
-                        // }).catchError((e){
-                        //   print(e);
-                        // });
-
                         child: Text(
                           'Send',
                           style: TextStyle(
@@ -115,15 +110,23 @@ class _contactUsState extends State<contactUs> {
   void sendMessage() async {
     final FirebaseUser user = await _auth.currentUser();
     Firestore _firestore = new Firestore();
-    try {
-      Firestore.instance
-          .collection('contactUs')
-          .document()
-          .setData({'Message': _messageController.text, 'Email': user.email});
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage(user: widget.user,)));
-    } catch (e) {
-      print(e);
+    if (_formKey.currentState.validate()) {
+      try {
+        Firestore.instance
+            .collection('contactUs')
+            .document()
+            .setData({'Message': _messageController.text, 'Email': user.email});
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomePage(
+                      user: widget.user,
+                    )));
+        Scaffold.of(context)
+            .showSnackBar(SnackBar(content: Text('Message Sent')));
+      } catch (e) {
+        print(e);
+      }
     }
   }
 }
