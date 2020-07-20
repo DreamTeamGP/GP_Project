@@ -1,13 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_project/models/user.dart';
 
 class oneYearReport extends StatefulWidget {
   final FirebaseUser currentUser;
-  final User user;
+  //final User user;
+  final DocumentSnapshot patient;
   @override
   _oneYearReportState createState() => _oneYearReportState();
-  oneYearReport({this.currentUser, this.user});
+  oneYearReport({this.currentUser, this.patient});
 }
 
 class _oneYearReportState extends State<oneYearReport> {

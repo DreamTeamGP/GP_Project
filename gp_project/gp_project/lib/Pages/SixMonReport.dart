@@ -1,13 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_project/models/user.dart';
 
 class sixMonthReport extends StatefulWidget {
   final FirebaseUser currentUser;
-  final User user;
+  //final User user;
+  final DocumentSnapshot patient;
   @override
   _sixMonthReportState createState() => _sixMonthReportState();
-  sixMonthReport({this.currentUser, this.user});
+  sixMonthReport({this.currentUser, this.patient});
 }
 
 class _sixMonthReportState extends State<sixMonthReport> {
