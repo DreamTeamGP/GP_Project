@@ -7,6 +7,9 @@ import 'package:gp_project/Classes/User.dart';
 import 'package:gp_project/Auth/line.dart';
 import 'package:gp_project/Pages/Detailsuser.dart';
 import 'package:gp_project/Pages/MeasurementGraph.dart';
+import 'package:gp_project/Pages/OneYearReport.dart';
+import 'package:gp_project/Pages/SixMonReport.dart';
+import 'package:gp_project/Pages/ThreeMonReport.dart';
 import 'package:gp_project/Pages/profileWidget.dart';
 import 'package:gp_project/Pages/profiledrawer.dart';
 import 'package:gp_project/Pages/measurementPopup.dart';
@@ -175,6 +178,15 @@ class _HomePageState extends State<HomePage> {
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ThreeMonthReport(
+                            currentUser: widget.user,
+                          ),
+                        ),
+                      );
+                      // Navigator.of(context).pop();
                     },
                     color: Colors.cyan,
                   ),
@@ -192,6 +204,15 @@ class _HomePageState extends State<HomePage> {
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => sixMonthReport(
+                            currentUser: widget.user,
+                          ),
+                        ),
+                      );
+                      // Navigator.of(context).pop();
                     },
                     color: Colors.cyan,
                   ),
@@ -209,6 +230,15 @@ class _HomePageState extends State<HomePage> {
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => oneYearReport(
+                            currentUser: widget.user,
+                          ),
+                        ),
+                      );
+                      // Navigator.of(context).pop();
                     },
                     color: Colors.cyan,
                   ),
