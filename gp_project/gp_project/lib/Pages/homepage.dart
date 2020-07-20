@@ -1,10 +1,16 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_project/Classes/User.dart';
 import 'package:gp_project/Auth/line.dart';
+import 'package:gp_project/Pages/Detailsuser.dart';
 import 'package:gp_project/Pages/MeasurementGraph.dart';
+import 'package:gp_project/Pages/OneYearReport.dart';
+import 'package:gp_project/Pages/SixMonReport.dart';
+import 'package:gp_project/Pages/ThreeMonReport.dart';
+import 'package:gp_project/Pages/profileWidget.dart';
 import 'package:gp_project/Pages/profiledrawer.dart';
 import 'package:gp_project/Pages/measurementPopup.dart';
 import 'package:gp_project/Pages/moodPopup.dart';
@@ -87,10 +93,36 @@ class _HomePageState extends State<HomePage> {
     return qn.documents;
   }
 
-  navigateToDetail(DocumentSnapshot doctor) {
+  navigateToDetail(DocumentSnapshot patient) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => details(doctor: doctor)),
+      MaterialPageRoute(
+          builder: (context) =>
+              detailsuser(patient: patient, currentuser: widget.user)),
+    );
+  }
+  navigateToThreemon(DocumentSnapshot patient) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              ThreeMonthReport(patient: patient, currentUser: widget.user)),
+    );
+  }  
+  navigateToSixmon(DocumentSnapshot patient) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              sixMonthReport(patient: patient, currentUser: widget.user)),
+    );
+  }  
+  navigateToOneyear(DocumentSnapshot patient) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              oneYearReport(patient: patient, currentUser: widget.user)),
     );
   }
 
@@ -147,6 +179,102 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Choose Report'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 500,
+                  child: RaisedButton(
+                    child: Text(
+                      "3-Months Report",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ThreeMonthReport(
+                            currentUser: widget.user,
+                          ),
+                        ),
+                      );
+                      // Navigator.of(context).pop();
+                    },
+                    color: Colors.cyan,
+                  ),
+                ),
+                Container(
+                  width: 500,
+                  child: RaisedButton(
+                    child: Text(
+                      "6-Months Report",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => sixMonthReport(
+                            currentUser: widget.user,
+                          ),
+                        ),
+                      );
+                      // Navigator.of(context).pop();
+                    },
+                    color: Colors.cyan,
+                  ),
+                ),
+                Container(
+                  width: 500,
+                  child: RaisedButton(
+                    child: Text(
+                      "One Year Report",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => oneYearReport(
+                            currentUser: widget.user,
+                          ),
+                        ),
+                      );
+                      // Navigator.of(context).pop();
+                    },
+                    color: Colors.cyan,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   FutureBuilder checkRole(DocumentSnapshot snapshot) {
     if (snapshot.data == null) {
       return FutureBuilder(
@@ -156,7 +284,8 @@ class _HomePageState extends State<HomePage> {
               child: Text("Loading ..."),
             );
           } else {
-            return new Text('no data set in the userId document in firestore');
+            return new Text(
+                'There is no data for this user,check and try again');
           }
         },
       );
@@ -175,6 +304,16 @@ class _HomePageState extends State<HomePage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: Text("Loading ..."),
+            );
+          } else if (!snapshot.hasData) {
+            return Center(
+              child: Text(
+                "No patients yet",
+                style: TextStyle(
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             );
           } else {
             return new Column(
@@ -278,18 +417,22 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Flexible(
                                   child: GestureDetector(
-                                    onTap: () =>
-                                        navigateToDetail(snapshot.data[index]),
+                                    //onTap: () =>
+                                    //  navigateToDetail(snapshot.data[index]),
                                     child: Container(
                                       height: 80.0,
                                       margin: EdgeInsets.only(top: 0),
                                       child: IconButton(
+                                        //onPressed: navigateToDetail(snapshot.data[index]),
                                         icon: new Icon(
                                           Icons.person,
                                           color: Colors.green,
                                         ),
-                                        onPressed: () {},
                                         iconSize: 50,
+                                        onPressed: () {
+                                          navigateToDetail(
+                                              snapshot.data[index]);
+                                        },
                                       ),
                                     ),
                                   ),
@@ -300,8 +443,8 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Flexible(
                                   child: GestureDetector(
-                                    onTap: () =>
-                                        navigateToDetail(snapshot.data[index]),
+                                    // onTap: () =>
+                                    //   showDialog(context: context),
                                     child: Container(
                                       height: 80.0,
                                       margin: EdgeInsets.only(top: 10),
@@ -310,8 +453,98 @@ class _HomePageState extends State<HomePage> {
                                           Icons.print,
                                           color: Colors.blue,
                                         ),
-                                        onPressed: () {},
                                         iconSize: 50,
+                                        onPressed: () {
+                                          showDialog<void>(
+                                            context: context,
+                                            barrierDismissible:
+                                                false, // user must tap button!
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: Text('Choose Report'),
+                                                content: SingleChildScrollView(
+                                                  child: Column(
+                                                    children: <Widget>[
+                                                      Container(
+                                                        width: 500,
+                                                        child: RaisedButton(
+                                                          child: Text(
+                                                            "3-Months Report",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                                navigateToThreemon(snapshot.data[index]);
+                                                             },
+                                                          color: Colors.cyan,
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        width: 500,
+                                                        child: RaisedButton(
+                                                          child: Text(
+                                                            "6-Months Report",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            navigateToSixmon(snapshot.data[index]);
+                                                          },
+                                                          color: Colors.cyan,
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        width: 500,
+                                                        child: RaisedButton(
+                                                          child: Text(
+                                                            "One Year Report",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            navigateToOneyear(snapshot.data[index]);
+                                                          },
+                                                          color: Colors.cyan,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
+                                          //_showMyDialog();
+                                        },
                                       ),
                                     ),
                                   ),
@@ -354,6 +587,7 @@ class _HomePageState extends State<HomePage> {
                     Icon(
                       Icons.list,
                       size: 35,
+                      color: Colors.white,
                     ),
                     Text(
                       '  New Measurment',
@@ -366,9 +600,15 @@ class _HomePageState extends State<HomePage> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('Measurement'),
+                          title: Container(
+                            color: Colors.cyan,
+                            child: Text(
+                              'Measurement',
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                           titleTextStyle: TextStyle(
-                            backgroundColor: Colors.cyan,
+                            //backgroundColor: Colors.cyan,
                             fontSize: 25.0,
                           ),
                           content: MeasurementPopUp(currentUser: widget.user),
@@ -382,7 +622,11 @@ class _HomePageState extends State<HomePage> {
               RaisedButton(
                 child: Row(
                   children: <Widget>[
-                    Icon(Icons.fastfood, size: 35),
+                    Icon(
+                      Icons.fastfood,
+                      size: 35,
+                      color: Colors.white,
+                    ),
                     Text(
                       '  Meal Intake',
                       style: TextStyle(fontSize: 25, color: Colors.white),
@@ -406,7 +650,11 @@ class _HomePageState extends State<HomePage> {
               RaisedButton(
                 child: Row(
                   children: <Widget>[
-                    Icon(Icons.tag_faces, size: 35),
+                    Icon(
+                      Icons.tag_faces,
+                      size: 35,
+                      color: Colors.white,
+                    ),
                     Text(
                       '  Mood',
                       style: TextStyle(fontSize: 25, color: Colors.white),
@@ -418,9 +666,15 @@ class _HomePageState extends State<HomePage> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                            title: Text('Mood'),
+                            title: Container(
+                              color: Colors.cyan,
+                              child: Text(
+                                'Mood',
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
                             titleTextStyle: TextStyle(
-                              backgroundColor: Colors.cyan,
+                              //backgroundColor: Colors.cyan,
                               fontSize: 25.0,
                             ),
                             content: MoodPopUp(currentUser: widget.user));
@@ -433,14 +687,27 @@ class _HomePageState extends State<HomePage> {
               RaisedButton(
                 child: Row(
                   children: <Widget>[
-                    Icon(Icons.person, size: 35),
+                    Icon(
+                      Icons.person,
+                      size: 35,
+                      color: Colors.white,
+                    ),
                     Text(
                       '  Profile',
                       style: TextStyle(fontSize: 25, color: Colors.white),
                     )
                   ],
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => profileWidget(
+                        currentUser: widget.user,
+                      ),
+                    ),
+                  );
+                },
                 color: Colors.green,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
@@ -448,7 +715,7 @@ class _HomePageState extends State<HomePage> {
               Padding(
                   padding: EdgeInsets.only(top: 10, bottom: 0),
                   child: Text(
-                    'Statistics Bar Chart',
+                    'Measurments Bar Chart',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
                   )),
               //Column(children: <Widget>[chartdisplay],),

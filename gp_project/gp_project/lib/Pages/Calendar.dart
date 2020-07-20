@@ -22,7 +22,6 @@ class _calenderPageState extends State<calenderPage> {
   final _formKey = GlobalKey<FormState>();
   ScrollController _scrollController = ScrollController();
 
-
   Future _data;
 
   getMeasurement() async {
@@ -33,8 +32,6 @@ class _calenderPageState extends State<calenderPage> {
         .getDocuments();
     return qn.documents;
   }
-
-  
 
   getMood() async {
     var firestore = Firestore.instance;
@@ -122,31 +119,31 @@ class _calenderPageState extends State<calenderPage> {
   }
 
   Future _show(BuildContext context, DateTime day) async {
-    
     getDateForTimetamp(DateTime inputVal) {
-    String processedDate = inputVal.year.toString() +
-        '-' +
-        inputVal.month.toString() +
-        '-' +
-        inputVal.day.toString();
-    return processedDate;
-  }
-  
-  
+      String processedDate = inputVal.year.toString() +
+          '-' +
+          inputVal.month.toString() +
+          '-' +
+          inputVal.day.toString();
+      return processedDate;
+    }
 
 //   getDateForMoo(DateTime date){
 //      date = timestamp.toDate();
 //  return DateFormat("yyyy-MM-dd").format(date);
 //   }
-    
+
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('On This Day'),
+            title: Container(
+              color: Colors.cyan,
+              child: Text('On This Day'),
+            ),
             titleTextStyle: TextStyle(
               //backgroundColor: Colors.cyan,
-              color: Colors.cyan,
+              color: Colors.white,
               fontSize: 25.0,
               fontWeight: FontWeight.w600,
             ),
@@ -154,14 +151,12 @@ class _calenderPageState extends State<calenderPage> {
                 padding: EdgeInsets.all(5.0),
                 width: 280.0,
                 //   height: 200.0,
-                child: Column(
-                  children: <Widget>[
-                   
+                child: Column(children: <Widget>[
                   Expanded(
                       child: StreamBuilder<QuerySnapshot>(
                     stream: Firestore.instance
                         .collection("moods")
-                        .where("Date" , isEqualTo: getDateForTimetamp(day))
+                        .where("Date", isEqualTo: getDateForTimetamp(day))
                         .where("UserId", isEqualTo: widget.user.uid)
                         .snapshots(),
                     builder: (BuildContext context,
@@ -190,7 +185,6 @@ class _calenderPageState extends State<calenderPage> {
                                           color: Colors.black,
                                         ),
                                       ),
-                                      
                                       Flexible(
                                           child: Column(children: <Widget>[
                                         new ListTile(
@@ -209,14 +203,12 @@ class _calenderPageState extends State<calenderPage> {
                           );
                       }
                     },
-                  )
-                  ),
-
-                   Expanded(
+                  )),
+                  Expanded(
                       child: StreamBuilder<QuerySnapshot>(
                     stream: Firestore.instance
                         .collection("meals")
-                        .where("Timestamp" ,  isEqualTo: getDateForTimetamp(day) )
+                        .where("Date", isEqualTo: getDateForTimetamp(day))
                         .where("UserID", isEqualTo: widget.user.uid)
                         .snapshots(),
                     builder: (BuildContext context,
@@ -269,11 +261,11 @@ class _calenderPageState extends State<calenderPage> {
                       }
                     },
                   )),
-                 Expanded(
+                  Expanded(
                       child: StreamBuilder<QuerySnapshot>(
                     stream: Firestore.instance
                         .collection("patientsMeasurements")
-                        .where("Date" ,  isEqualTo: getDateForTimetamp(day))
+                        .where("Date", isEqualTo: getDateForTimetamp(day))
                         .where("UserId", isEqualTo: widget.user.uid)
                         .snapshots(),
                     builder: (BuildContext context,
@@ -326,12 +318,23 @@ class _calenderPageState extends State<calenderPage> {
                       }
                     },
                   ))
-                ])
-                
+                ])),
+            actions: [
+              new Center(
+                child: FlatButton(
+                  child: const Text(
+                    "OK",
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.normal,
+                    ),
+                  ),
+                  onPressed: () => Navigator.pop(context),
                 ),
-           
+              ),
+            ],
           );
         });
   }
 }
-

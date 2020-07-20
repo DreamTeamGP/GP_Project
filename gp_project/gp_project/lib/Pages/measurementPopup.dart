@@ -175,29 +175,77 @@ class _MeasurementPopUp extends State<MeasurementPopUp> {
     if (flag &&
         record['UserId'] == widget.currentUser.uid &&
         record['Date'] == getDateForTimeStamp(date)) {
-      databaseReference
-          .collection('patientsMeasurements')
-          .document(docId)
-          .updateData({
-        'UserId': widget.currentUser.uid,
-        'Date': getDateForTimeStamp(date),
-        'Time': FieldValue.arrayUnion(timeStamp),
-        'measruringTime': record['measruringTime'] + measruringTime,
-        'measurement': FieldValue.arrayUnion(measurement),
-      });
+      if (measruringTypedropdownValue == "Fasting blood glucose") {
+        if (int.parse(_measurementController.text) > 90 &&
+            int.parse(_measurementController.text) < 140) {
+          databaseReference
+              .collection('patientsMeasurements')
+              .document(docId)
+              .updateData({
+            'UserId': widget.currentUser.uid,
+            'Date': getDateForTimeStamp(date),
+            'Time': FieldValue.arrayUnion(timeStamp),
+            'measruringTime': record['measruringTime'] + measruringTime,
+            'measurement': FieldValue.arrayUnion(measurement),
+          });
+        } else {
+          print("no measurement");
+        }
+      } else if (measruringTypedropdownValue == "Post prandial blood glucose") {
+        if (int.parse(_measurementController.text) > 140 &&
+            int.parse(_measurementController.text) < 180) {
+          databaseReference
+              .collection('patientsMeasurements')
+              .document(docId)
+              .updateData({
+            'UserId': widget.currentUser.uid,
+            'Date': getDateForTimeStamp(date),
+            'Time': FieldValue.arrayUnion(timeStamp),
+            'measruringTime': record['measruringTime'] + measruringTime,
+            'measurement': FieldValue.arrayUnion(measurement),
+          });
+        } else {
+          print("no measurement");
+        }
+      }
     }
     //else a new doc will get create
     else {
-      databaseReference.collection('patientsMeasurements').document().setData({
-        'UserId': widget.currentUser.uid,
-        'Date': getDateForTimeStamp(date),
-        'Time': FieldValue.arrayUnion(timeStamp),
-        'measruringTime': FieldValue.arrayUnion(measruringTime),
-        'measurement': FieldValue.arrayUnion(measurement),
-      });
+      if (measruringTypedropdownValue == "Fasting blood glucose") {
+        if (int.parse(_measurementController.text) > 90 &&
+            int.parse(_measurementController.text) < 140) {
+          databaseReference
+              .collection('patientsMeasurements')
+              .document()
+              .setData({
+            'UserId': widget.currentUser.uid,
+            'Date': getDateForTimeStamp(date),
+            'Time': FieldValue.arrayUnion(timeStamp),
+            'measruringTime': FieldValue.arrayUnion(measruringTime),
+            'measurement': FieldValue.arrayUnion(measurement),
+          });
+        } else {
+          print("no measurement");
+        }
+      } else if (measruringTypedropdownValue == "Post prandial blood glucose") {
+        if (int.parse(_measurementController.text) > 140 &&
+            int.parse(_measurementController.text) < 180) {
+          databaseReference
+              .collection('patientsMeasurements')
+              .document()
+              .setData({
+            'UserId': widget.currentUser.uid,
+            'Date': getDateForTimeStamp(date),
+            'Time': FieldValue.arrayUnion(timeStamp),
+            'measruringTime': FieldValue.arrayUnion(measruringTime),
+            'measurement': FieldValue.arrayUnion(measurement),
+          });
+        } else {
+          print("no measurement");
+        }
+      }
       print('da5al el else');
     }
-
     print(record['measruringTime'] + measruringTime);
     print(flag);
     print(getDate(date));
