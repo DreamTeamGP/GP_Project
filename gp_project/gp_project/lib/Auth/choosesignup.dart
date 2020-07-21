@@ -20,6 +20,7 @@ class _chooseState extends State<choose> {
           ),
         ),
         backgroundColor: Colors.cyan,
+        leading: Icon(Icons.dehaze, size: 30.0, color: Colors.white),
       ),
       body: SafeArea(
         //right: false,

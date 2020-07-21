@@ -61,7 +61,7 @@ class _mealsState extends State<meals> {
               child: new Row(
                 children: <Widget>[
                   new Expanded(
-                    child: TextFormField(                
+                    child: TextFormField(
                       style: TextStyle(
                         height: 1.0,
                       ),
@@ -137,15 +137,6 @@ class _mealsState extends State<meals> {
     });
   }
 
-  getDateForTimeStamp(DateTime inputVal) {
-    String processedDate = inputVal.year.toString() +
-        '-' +
-        inputVal.month.toString() +
-        '-' +
-        inputVal.day.toString();
-    return processedDate;
-  }
-
   @override
   void initState() {
     // TODO: implement
@@ -157,7 +148,7 @@ class _mealsState extends State<meals> {
     final FirebaseUser user = await _auth.currentUser();
     Firestore _firestore = new Firestore();
     final date = DateTime.now();
-      try {
+    try {
 /*       for (int i = 0; food.length != 0; i++) {
         var doc = food[i];
         QuerySnapshot query = await Firestore.instance
@@ -171,47 +162,45 @@ class _mealsState extends State<meals> {
         suger.add(snapshot2.data['Sugar_Tot_(g)']);
       } */
 
-        Firestore.instance.collection('meals').document().setData({
-          "food": FieldValue.arrayUnion(food),
-          'quantity': FieldValue.arrayUnion(qtn),
-          'carb': FieldValue.arrayUnion(carb),
-          'suger': FieldValue.arrayUnion(suger),
-          'Date': getDateForTimeStamp(date),
-          'UserID': user.uid,
-        });
-        //Firestore.instance.collection('meals').document().setData(
-        //  {'Food': _foodController.text, 'quantity': _quantityController.text});
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomePage(
-              user: widget.currentUser,
-            ),
+      Firestore.instance.collection('meals').document().setData({
+        "food": FieldValue.arrayUnion(food),
+        'quantity': FieldValue.arrayUnion(qtn),
+        'carb': FieldValue.arrayUnion(carb),
+        'suger':FieldValue.arrayUnion(suger),
+        'Date': date,
+        'UserID': user.uid,
+      });
+      //Firestore.instance.collection('meals').document().setData(
+      //  {'Food': _foodController.text, 'quantity': _quantityController.text});
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(
+            user: widget.currentUser,
           ),
-        );
-      } catch (e) {
-        print(e);
-      }
+        ),
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: ProfileDrawer(currentUser: widget.currentUser),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           food.add(_foodController.text);
           qtn.add(_quantityController.text);
           var query = Firestore.instance
-              .collection('FoodData')
-              .where('Shrt_Desc', isEqualTo: _foodController.text)
-              .getDocuments()
-              .then((snapshot) {
-            Map<dynamic, dynamic> values =
-                snapshot.documents[0].data['Carbohydrt_(g)'];
-            values.forEach((key, values) {
-              print(values["Carbohydrt_(g)"]);
-            });
-          });
+                  .collection('FoodData')
+                  .where('Shrt_Desc', isEqualTo: _foodController.text).getDocuments().then((snapshot){
+  Map<dynamic, dynamic> values = snapshot.documents[0].data['Carbohydrt_(g)'];
+     values.forEach((key,values) {
+      print(values["Carbohydrt_(g)"]);
+    });
+ });
 //                   DocumentSnapshot documentSnapshot = query.then((DocumentSnapshot snapshot){
 //   Map<dynamic, dynamic> values = snapshot.value;
 //      values.forEach((key,values) {

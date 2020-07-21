@@ -105,102 +105,6 @@ class _signup2State extends State<signup2> {
     super.initState();
   }
 
-  String validateName(String value) {
-    String patttern = r'(^[a-zA-Z ]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Name is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Name must be a-z and A-Z";
-    }
-    return null;
-  }
-
-  String validateCountry(String value) {
-    String patttern = r'(^[a-zA-Z ]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Country is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Country must be a-z and A-Z";
-    }
-    return null;
-  }
-
-  String validateCity(String value) {
-    String patttern = r'(^[a-zA-Z ]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Country is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Country must be a-z and A-Z";
-    }
-    return null;
-  }
-
-  String validateMobile(String value) {
-    String patttern = r'(^[0-9]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Mobile is Required";
-    } else if (value.length != 11) {
-      return "Mobile number must 11 digits";
-    } else if (!regExp.hasMatch(value)) {
-      return "Mobile Number must be digits";
-    }
-    return null;
-  }
-
-  String validateTele(String value) {
-    String patttern = r'(^[0-9]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Telephone is Required";
-    } else if (!value.startsWith('02')) {
-      return "Telephone number must Start with 02";
-    } else if (value.length != 11) {
-      return "Telephone number must 11 digits";
-    } else if (!regExp.hasMatch(value)) {
-      return "Telephone Number must be digits";
-    }
-    return null;
-  }
-
-  String validateWeight(String value) {
-    String patttern = r'(^[0-9]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Weight is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Weight Number must be digits";
-    }
-    return null;
-  }
-
-  String validateHeight(String value) {
-    String patttern = r'(^[0-9]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Height is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Height Number must be digits";
-    }
-    return null;
-  }
-
-  String validateEmail(String value) {
-    String pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regExp = new RegExp(pattern);
-    if (value.length == 0) {
-      return "Email is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Invalid Email";
-    } else {
-      return null;
-    }
-  }
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -212,9 +116,9 @@ class _signup2State extends State<signup2> {
           ),
         ),
         backgroundColor: Colors.cyan,
+        leading: Icon(Icons.dehaze, size: 30.0, color: Colors.white),
       ),
       body: Form(
-        key: _formKey,
         child: ListView(
           controller: _scrollController,
           children: <Widget>[
@@ -224,7 +128,11 @@ class _signup2State extends State<signup2> {
               child: TextFormField(
                 controller: _nameController,
                 autofocus: false,
-                validator: validateName,
+                validator: (input) {
+                  if (input.isEmpty) {
+                    return 'Please type your name';
+                  }
+                },
                 onSaved: (input) => _name = input,
                 decoration: InputDecoration(
                   labelText: 'Name',
@@ -243,7 +151,11 @@ class _signup2State extends State<signup2> {
                 controller: _emailController,
                 autofocus: false,
                 keyboardType: TextInputType.emailAddress,
-                validator: validateEmail,
+                validator: (input) {
+                  if (input.isEmpty) {
+                    return 'Please type email';
+                  }
+                },
                 onSaved: (input) => _email = input,
                 decoration: InputDecoration(
                   labelText: 'Email',
@@ -284,7 +196,11 @@ class _signup2State extends State<signup2> {
                 controller: _phoneController,
                 autofocus: false,
                 keyboardType: TextInputType.phone,
-                validator: validateMobile,
+                validator: (input) {
+                  if (input.isEmpty) {
+                    return 'Please enter your phone';
+                  }
+                },
                 onSaved: (input) => _phone = input,
                 decoration: InputDecoration(
                   labelText: 'Phone',
@@ -302,7 +218,11 @@ class _signup2State extends State<signup2> {
                 controller: _clininoController,
                 autofocus: false,
                 keyboardType: TextInputType.phone,
-                validator: validateTele,
+                validator: (input) {
+                  if (input.isEmpty) {
+                    return 'Please enter your clinic phone no.';
+                  }
+                },
                 onSaved: (input) => _clinicno = input,
                 decoration: InputDecoration(
                   labelText: 'Clinic phone number',
@@ -446,6 +366,10 @@ class _signup2State extends State<signup2> {
                 region: _regionController.text,
                 context: context,
               );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => login()),
+              );
             },
             child: Text('Register',
                 style: TextStyle(
@@ -477,41 +401,36 @@ class _signup2State extends State<signup2> {
       String role,
       String region,
       BuildContext context}) async {
-    if (_formKey.currentState.validate()) {
-      try {
-        SystemChannels.textInput.invokeMethod('TextInput.hide');
-        await _changeLoadingVisible();
-        //need await so it has chance to go through error if found.
-        await Auth.signUp2(email, password).then(
-          (id) {
-            Auth.addUserSettingsDB2(
-              new Doctor(
-                dId: id,
-                name: name,
-                email: email,
-                password: password,
-                phone: phone,
-                clinicno: clinicno,
-                university: university,
-                address1: address1,
-                address2: address2,
-                role: role,
-                region: region,
-              ),
-            );
-          },
-        );
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => login()),
-        );
-        await Navigator.pushNamed(context, '/login');
-      } catch (e) {
-        _changeLoadingVisible();
-        print("Sign Up Error: $e");
-      }
-    } else {
-      setState(() => _autoValidate = true);
+    //if (_formKey.currentState.validate()) {
+    try {
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+      await _changeLoadingVisible();
+      //need await so it has chance to go through error if found.
+      await Auth.signUp2(email, password).then(
+        (id) {
+          Auth.addUserSettingsDB2(
+            new Doctor(
+              dId: id,
+              name: name,
+              email: email,
+              password: password,
+              phone: phone,
+              clinicno: clinicno,
+              university: university,
+              address1: address1,
+              address2: address2,
+              role: role,
+              region: region,
+            ),
+          );
+        },
+      );
+      await Navigator.pushNamed(context, '/login');
+    } catch (e) {
+      _changeLoadingVisible();
+      print("Sign Up Error: $e");
     }
   }
+  // else {
+  // setState(() => _autoValidate = true);
 }

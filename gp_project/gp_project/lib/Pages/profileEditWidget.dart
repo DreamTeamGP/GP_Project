@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gp_project/Classes/User.dart';
 import 'package:gp_project/Pages/profileWidget.dart';
 import '../models/user.dart';
@@ -19,7 +18,6 @@ class _profileEditWidgetState extends State<profileEditWidget> {
   User _user = new User();
   UserClass userClass = new UserClass();
   final _formKey = GlobalKey<FormState>();
-  bool _autoValidate = false;
 
   @override
   void initState() {
@@ -36,6 +34,10 @@ class _profileEditWidgetState extends State<profileEditWidget> {
             color: Colors.white,
           ),
         ),
+        leading: Icon(
+          Icons.menu,
+          color: Colors.white,
+        ),
       ),
       body: StreamBuilder<DocumentSnapshot>(
           stream: Firestore.instance
@@ -49,156 +51,117 @@ class _profileEditWidgetState extends State<profileEditWidget> {
             } else if (snapshot.hasData) {
               return Form(
                 key: _formKey,
-                autovalidate: _autoValidate,
                 child: ListView(
                   controller: _scrollController,
                   children: <Widget>[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        snapshot.data['gender'] == 1
-                            ? Container(
-                                margin: EdgeInsets.only(top: 20.0),
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  //color: Colors.blue,
-                                  //image here
-                                  image: DecorationImage(
-                                    image: AssetImage('icons/Womanuser.png'),
-                                    fit: BoxFit.fill,
-                                  ),
-                                  shape: BoxShape.circle,
-                                  //borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                                ),
-                              )
-                            : Container(
-                                margin: EdgeInsets.only(top: 20.0),
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  //color: Colors.blue,
-                                  //image here
-                                  image: DecorationImage(
-                                    image: AssetImage('icons/user.jpg'),
-                                    fit: BoxFit.fill,
-                                  ),
-                                  shape: BoxShape.circle,
-                                  //borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                                ),
-                              ),
+                        Container(
+                          margin: EdgeInsets.only(top: 20.0),
+                          width: 80.0,
+                          height: 80.0,
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            //image here
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(75.0)),
+                          ),
+                        )
                       ],
                     ),
                     Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          initialValue: '${snapshot.data['name']}',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                          ),
-                          onSaved: (input) => _user.name = input,
-                          decoration: InputDecoration(
-                              //hintText: currentUser.name
-                              ),
-                          validator: validateName),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          initialValue: '${snapshot.data['country']}',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                          ),
-                          onSaved: (input) => _user.country = input,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.location_on,
-                              color: Colors.grey,
-                              size: 32.0,
+                        initialValue: '${snapshot.data['name']}',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                        ),
+                        onSaved: (input) => _user.name = input,
+                        decoration: InputDecoration(
+                            //hintText: currentUser.name
                             ),
-                          ),
-                          validator: validateCountry),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            _user.name = '${snapshot.data['name']}';
+                          }
+                          return null;
+                        },
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          initialValue: '${snapshot.data['city']}',
-                          style: TextStyle(
-                            fontSize: 18.0,
+                        initialValue: '${snapshot.data['country']}',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                        ),
+                        onSaved: (input) => _user.country = input,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.location_on,
+                            color: Colors.grey,
+                            size: 32.0,
                           ),
-                          onSaved: (input) => _user.city = input,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.location_city,
-                              color: Colors.grey,
-                              size: 32.0,
-                            ),
-                          ),
-                          validator: validateCity),
+                        ),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            _user.country = _user.country;
+                          }
+                          return null;
+                        },
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: TextFormField(
-                          keyboardType: TextInputType.phone,
-                          initialValue: '${snapshot.data['phone']}',
-                          style: TextStyle(
-                            fontSize: 18.0,
+                        initialValue: '${snapshot.data['phone']}',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                        ),
+                        onSaved: (input) => _user.phone = input,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.phone,
+                            color: Colors.grey,
+                            size: 32.0,
                           ),
-                          onSaved: (input) => _user.phone = input,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.phone,
-                              color: Colors.grey,
-                              size: 32.0,
-                            ),
-                          ),
-                          validator: validateMobile),
+                        ),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            _user.phone = '${snapshot.data['phone']}';
+                          }
+                          return null;
+                        },
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          initialValue: '${snapshot.data['weight']}',
-                          style: TextStyle(
-                            fontSize: 18.0,
+                        initialValue: '${snapshot.data['email']}',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                        ),
+                        onSaved: (input) => _user.email = input,
+                        decoration: InputDecoration(
+                          //contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                          prefixIcon: Icon(
+                            Icons.mail,
+                            color: Colors.grey,
+                            size: 32.0,
                           ),
-                          onSaved: (input) => _user.weight = input,
-                          decoration: InputDecoration(
-                            //contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                            prefixIcon: Icon(
-                              Icons.line_weight,
-                              color: Colors.grey,
-                              size: 32.0,
-                            ),
-                          ),
-                          validator: validateWeight),
+                        ),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            _user.email = '${snapshot.data['email']}';
+                          }
+                          return null;
+                        },
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          initialValue: '${snapshot.data['height']}',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                          ),
-                          onSaved: (input) => _user.height = input,
-                          decoration: InputDecoration(
-                            //contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                            prefixIcon: Icon(
-                              Icons.assessment,
-                              color: Colors.grey,
-                              size: 32.0,
-                            ),
-                          ),
-                          validator: validateHeight),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: TextFormField(
-                        keyboardType: TextInputType.datetime,
                         initialValue: '${snapshot.data['birthday']}',
                         style: TextStyle(
                           fontSize: 18.0,
@@ -260,7 +223,21 @@ class _profileEditWidgetState extends State<profileEditWidget> {
                     Container(
                       padding: const EdgeInsets.all(0.10),
                       child: RaisedButton(
-                        onPressed: _validateInputs,
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
+                            _formKey.currentState.save();
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => profileWidget(
+                                          currentUser: widget.currentUser,
+                                        )));
+                          }
+                          print('aaaaaaaaaaaaaaaaaa');
+                          print('${snapshot.data['password']}');
+                          //_user.email = currentUser.email;
+                          this.userClass.updateProfile(_user);
+                        },
                         child: Text('Submit'),
                         color: Colors.blue,
                       ),
@@ -272,105 +249,5 @@ class _profileEditWidgetState extends State<profileEditWidget> {
             return LinearProgressIndicator();
           }),
     );
-  }
-
-  String validateName(String value) {
-    String patttern = r'(^[a-zA-Z ]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Name is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Name must be a-z and A-Z";
-    }
-    return null;
-  }
-
-  String validateCountry(String value) {
-    String patttern = r'(^[a-zA-Z ]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Country is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Country must be a-z and A-Z";
-    }
-    return null;
-  }
-
-  String validateCity(String value) {
-    String patttern = r'(^[a-zA-Z ]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Country is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Country must be a-z and A-Z";
-    }
-    return null;
-  }
-
-  String validateMobile(String value) {
-    String patttern = r'(^[0-9]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Mobile is Required";
-    } else if (value.length != 11) {
-      return "Mobile number must 11 digits";
-    } else if (!regExp.hasMatch(value)) {
-      return "Mobile Number must be digits";
-    }
-    return null;
-  }
-
-  String validateWeight(String value) {
-    String patttern = r'(^[0-9]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Weight is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Weight Number must be digits";
-    }
-    return null;
-  }
-
-  String validateHeight(String value) {
-    String patttern = r'(^[0-9]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Height is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Height Number must be digits";
-    }
-    return null;
-  }
-
-  String validateEmail(String value) {
-    String pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regExp = new RegExp(pattern);
-    if (value.length == 0) {
-      return "Email is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Invalid Email";
-    } else {
-      return null;
-    }
-  }
-
-  void _validateInputs() {
-    if (_formKey.currentState.validate()) {
-//    If all data are correct then save data to out variables
-      _formKey.currentState.save();
-      this.userClass.updateProfile(_user);
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => profileWidget(
-                    currentUser: widget.currentUser,
-                  )));
-    } else {
-//    If all data are not valid then start auto validation.
-      setState(() {
-        _autoValidate = true;
-      });
-    }
   }
 }

@@ -31,7 +31,7 @@ class _loginState extends State<login> {
 
   String _email, _password;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _autoValidate = false;
+
   FacebookLogin fbLogin = new FacebookLogin();
 
   // get https => null;
@@ -48,7 +48,7 @@ class _loginState extends State<login> {
           ),
         ),
         backgroundColor: Colors.cyan,
-        leading: Icon(Icons.first_page, size: 30.0, color: Colors.white),
+        leading: Icon(Icons.dehaze, size: 30.0, color: Colors.white),
       ),
       body: Form(
         key: _formKey,
@@ -59,7 +59,11 @@ class _loginState extends State<login> {
               padding: EdgeInsets.only(
                   top: 40.0, bottom: 0.0, right: 50.0, left: 22.0),
               child: TextFormField(
-                validator: validateEmail,
+                validator: (input) {
+                  if (input.isEmpty) {
+                    return 'Please type email';
+                  }
+                },
                 onSaved: (input) => _email = input,
                 decoration: InputDecoration(
                   labelText: 'Email',
@@ -234,40 +238,7 @@ class _loginState extends State<login> {
       ),
     );
   }
-  String validateEmail(String value) {
-    String pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regExp = new RegExp(pattern);
-    if (value.length == 0) {
-      return "Email is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Invalid Email";
-    } else {
-      return null;
-    }
-  }
-    void _showDialog() {
-    // flutter defined function
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text("Error"),
-          content: new Text("Your Email or Password are incorrect"),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("Ok"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+
   Future<void> signIn() async {
     final FormState = _formKey.currentState;
 
@@ -279,14 +250,8 @@ class _loginState extends State<login> {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => HomePage(user: user.user)));
       } catch (e) {
-        _showDialog();
         print(e.message);
       }
-    }
-    else{
-      setState(() {
-        _autoValidate = true;
-      });
     }
   }
 

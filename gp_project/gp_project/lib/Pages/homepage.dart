@@ -1,13 +1,10 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_project/Classes/User.dart';
 import 'package:gp_project/Auth/line.dart';
-import 'package:gp_project/Pages/Detailsuser.dart';
 import 'package:gp_project/Pages/MeasurementGraph.dart';
-import 'package:gp_project/Pages/profileWidget.dart';
 import 'package:gp_project/Pages/profiledrawer.dart';
 import 'package:gp_project/Pages/measurementPopup.dart';
 import 'package:gp_project/Pages/moodPopup.dart';
@@ -90,12 +87,10 @@ class _HomePageState extends State<HomePage> {
     return qn.documents;
   }
 
-  navigateToDetail(DocumentSnapshot patient) {
+  navigateToDetail(DocumentSnapshot doctor) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) =>
-              detailsuser(patient: patient, currentuser: widget.user)),
+      MaterialPageRoute(builder: (context) => details(doctor: doctor)),
     );
   }
 
@@ -161,8 +156,7 @@ class _HomePageState extends State<HomePage> {
               child: Text("Loading ..."),
             );
           } else {
-            return new Text(
-                'There is no data for this user,check and try again');
+            return new Text('no data set in the userId document in firestore');
           }
         },
       );
@@ -181,16 +175,6 @@ class _HomePageState extends State<HomePage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: Text("Loading ..."),
-            );
-          } else if (!snapshot.hasData) {
-            return Center(
-              child: Text(
-                "No patients yet",
-                style: TextStyle(
-                  fontSize: 50,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
             );
           } else {
             return new Column(
@@ -294,22 +278,18 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Flexible(
                                   child: GestureDetector(
-                                    //onTap: () =>
-                                    //  navigateToDetail(snapshot.data[index]),
+                                    onTap: () =>
+                                        navigateToDetail(snapshot.data[index]),
                                     child: Container(
                                       height: 80.0,
                                       margin: EdgeInsets.only(top: 0),
                                       child: IconButton(
-                                        //onPressed: navigateToDetail(snapshot.data[index]),
                                         icon: new Icon(
                                           Icons.person,
                                           color: Colors.green,
                                         ),
+                                        onPressed: () {},
                                         iconSize: 50,
-                                        onPressed: () {
-                                          navigateToDetail(
-                                              snapshot.data[index]);
-                                        },
                                       ),
                                     ),
                                   ),
@@ -374,7 +354,6 @@ class _HomePageState extends State<HomePage> {
                     Icon(
                       Icons.list,
                       size: 35,
-                      color: Colors.white,
                     ),
                     Text(
                       '  New Measurment',
@@ -387,15 +366,9 @@ class _HomePageState extends State<HomePage> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Container(
-                            color: Colors.cyan,
-                            child: Text(
-                              'Measurement',
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
+                          title: Text('Measurement'),
                           titleTextStyle: TextStyle(
-                            //backgroundColor: Colors.cyan,
+                            backgroundColor: Colors.cyan,
                             fontSize: 25.0,
                           ),
                           content: MeasurementPopUp(currentUser: widget.user),
@@ -409,11 +382,7 @@ class _HomePageState extends State<HomePage> {
               RaisedButton(
                 child: Row(
                   children: <Widget>[
-                    Icon(
-                      Icons.fastfood,
-                      size: 35,
-                      color: Colors.white,
-                    ),
+                    Icon(Icons.fastfood, size: 35),
                     Text(
                       '  Meal Intake',
                       style: TextStyle(fontSize: 25, color: Colors.white),
@@ -437,11 +406,7 @@ class _HomePageState extends State<HomePage> {
               RaisedButton(
                 child: Row(
                   children: <Widget>[
-                    Icon(
-                      Icons.tag_faces,
-                      size: 35,
-                      color: Colors.white,
-                    ),
+                    Icon(Icons.tag_faces, size: 35),
                     Text(
                       '  Mood',
                       style: TextStyle(fontSize: 25, color: Colors.white),
@@ -453,15 +418,9 @@ class _HomePageState extends State<HomePage> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                            title: Container(
-                              color: Colors.cyan,
-                              child: Text(
-                                'Mood',
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
+                            title: Text('Mood'),
                             titleTextStyle: TextStyle(
-                              //backgroundColor: Colors.cyan,
+                              backgroundColor: Colors.cyan,
                               fontSize: 25.0,
                             ),
                             content: MoodPopUp(currentUser: widget.user));
@@ -474,27 +433,14 @@ class _HomePageState extends State<HomePage> {
               RaisedButton(
                 child: Row(
                   children: <Widget>[
-                    Icon(
-                      Icons.person,
-                      size: 35,
-                      color: Colors.white,
-                    ),
+                    Icon(Icons.person, size: 35),
                     Text(
                       '  Profile',
                       style: TextStyle(fontSize: 25, color: Colors.white),
                     )
                   ],
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => profileWidget(
-                        currentUser: widget.user,
-                      ),
-                    ),
-                  );
-                },
+                onPressed: () {},
                 color: Colors.green,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
@@ -502,7 +448,7 @@ class _HomePageState extends State<HomePage> {
               Padding(
                   padding: EdgeInsets.only(top: 10, bottom: 0),
                   child: Text(
-                    'Measurments Bar Chart',
+                    'Statistics Bar Chart',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
                   )),
               //Column(children: <Widget>[chartdisplay],),

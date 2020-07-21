@@ -12,6 +12,7 @@ class profileWidget extends StatefulWidget {
   @override
   _profileWidgetState createState() => _profileWidgetState();
   profileWidget({this.currentUser, this.user});
+  
 }
 
 class _profileWidgetState extends State<profileWidget> {
@@ -26,6 +27,7 @@ class _profileWidgetState extends State<profileWidget> {
   Widget build(BuildContext context) {
     //user = this.userClass.getCurrentUser();
     return Scaffold(
+      drawer: ProfileDrawer(currentUser: widget.currentUser),
       appBar: AppBar(
         title: Text(
           'Profile',
@@ -53,37 +55,16 @@ class _profileWidgetState extends State<profileWidget> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    snapshot.data['gender'] == 1
-                        ? Container(
-                            margin: EdgeInsets.only(top: 20.0),
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              //color: Colors.blue,
-                              //image here
-                              image: DecorationImage(
-                                image: AssetImage('icons/Womanuser.png'),
-                                fit: BoxFit.fill,
-                              ),
-                              shape: BoxShape.circle,
-                              //borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                            ),
-                          )
-                        : Container(
-                            margin: EdgeInsets.only(top: 20.0),
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              //color: Colors.blue,
-                              //image here
-                              image: DecorationImage(
-                                image: AssetImage('icons/user.jpg'),
-                                fit: BoxFit.fill,
-                              ),
-                              shape: BoxShape.circle,
-                              //borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                            ),
-                          ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20.0),
+                      width: 80.0,
+                      height: 80.0,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        //image here
+                        borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                      ),
+                    )
                   ],
                 ),
                 Row(
@@ -210,7 +191,7 @@ class _profileWidgetState extends State<profileWidget> {
                           : Container(
                               margin: EdgeInsets.only(left: 15.0),
                               child: Text(
-                                'Male',
+                                'Female',
                                 // '${gender}',
                                 style: TextStyle(
                                   fontSize: 18.0,
@@ -225,32 +206,14 @@ class _profileWidgetState extends State<profileWidget> {
                   child: Row(
                     children: <Widget>[
                       Icon(
-                        Icons.location_city,
+                        Icons.description,
                         color: Colors.grey,
                         size: 32.0,
                       ),
                       Container(
                         margin: EdgeInsets.only(left: 15.0),
                         child: Text(
-                          '${snapshot.data['country']}',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 1.0),
-                        child: Text(
-                          ',',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 5.0),
-                        child: Text(
-                          '${snapshot.data['city']}',
+                          'Lorem ipsum dolor sit amet.',
                           style: TextStyle(
                             fontSize: 18.0,
                           ),

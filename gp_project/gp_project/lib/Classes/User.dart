@@ -42,12 +42,8 @@ class UserClass {
     Firestore.instance.collection('users').document(userID).updateData({
       'name': user.name,
       'email': user.email,
-      'phone': user.phone,
+      'phone': user.country,
       'gender': user.gender,
-      'country':user.country,
-      'city':user.city,
-      'height':user.height,
-      'weight':user.weight,
       'birthday': user.birthday,
       
     });

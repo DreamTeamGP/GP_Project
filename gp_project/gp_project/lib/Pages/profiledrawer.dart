@@ -190,33 +190,15 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               child: Center(
                 child: Column(
                   children: <Widget>[
-                    snapshot.data['gender'] == 1
-                   ? Container(
+                    Container(
                       width: 100,
                       height: 100,
                       decoration: BoxDecoration(
-                        //color: Colors.blue,
-                        //image here
-                        image: DecorationImage(
-                          image: AssetImage('icons/Womanuser.png'),
-                          fit: BoxFit.fill,
-                        ),
+                        color: Colors.blue[900],
                         shape: BoxShape.circle,
-                        //borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                      ),
-                    )
-                    : Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        //color: Colors.blue,
-                        //image here
                         image: DecorationImage(
-                          image: AssetImage('icons/user.jpg'),
-                          fit: BoxFit.fill,
-                        ),
-                        shape: BoxShape.circle,
-                        //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                            image: NetworkImage('${snapshot.data['photo']}'),
+                            fit: BoxFit.fill),
                       ),
                     ),
                     Text('${snapshot.data['name']}',
@@ -227,7 +209,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
             ),
             ListTile(
               leading: Icon(
-                Icons.home,
+                Icons.person,
                 size: 25,
               ),
               title: Text(

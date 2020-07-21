@@ -197,87 +197,6 @@ class _signUp1State extends State<signUp1> {
     });
   }
 
-  String validateName(String value) {
-    String patttern = r'(^[a-zA-Z ]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Name is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Name must be a-z and A-Z";
-    }
-    return null;
-  }
-
-  String validateCountry(String value) {
-    String patttern = r'(^[a-zA-Z ]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Country is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Country must be a-z and A-Z";
-    }
-    return null;
-  }
-
-  String validateCity(String value) {
-    String patttern = r'(^[a-zA-Z ]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Country is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Country must be a-z and A-Z";
-    }
-    return null;
-  }
-
-  String validateMobile(String value) {
-    String patttern = r'(^[0-9]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Mobile is Required";
-    } else if (value.length != 11) {
-      return "Mobile number must 11 digits";
-    } else if (!regExp.hasMatch(value)) {
-      return "Mobile Number must be digits";
-    }
-    return null;
-  }
-
-  String validateWeight(String value) {
-    String patttern = r'(^[0-9]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Weight is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Weight Number must be digits";
-    }
-    return null;
-  }
-
-  String validateHeight(String value) {
-    String patttern = r'(^[0-9]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value.length == 0) {
-      return "Height is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Height Number must be digits";
-    }
-    return null;
-  }
-
-  String validateEmail(String value) {
-    String pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regExp = new RegExp(pattern);
-    if (value.length == 0) {
-      return "Email is Required";
-    } else if (!regExp.hasMatch(value)) {
-      return "Invalid Email";
-    } else {
-      return null;
-    }
-  }
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -289,6 +208,7 @@ class _signUp1State extends State<signUp1> {
           ),
         ),
         backgroundColor: Colors.cyan,
+        leading: Icon(Icons.dehaze, size: 30.0, color: Colors.white),
       ),
       body: Form(
         key: _formKey,
@@ -304,7 +224,11 @@ class _signUp1State extends State<signUp1> {
               child: TextFormField(
                 controller: _nameController,
                 autofocus: false,
-                validator: validateName,
+                validator: (input) {
+                  if (input.isEmpty) {
+                    return 'Please type your name';
+                  }
+                },
                 onSaved: (input) => _name = input,
                 decoration: InputDecoration(
                   labelText: 'Name',
@@ -321,7 +245,11 @@ class _signUp1State extends State<signUp1> {
               child: TextFormField(
                 controller: _emailController,
                 autofocus: false,
-                validator: validateEmail,
+                validator: (input) {
+                  if (input.isEmpty) {
+                    return 'Please type email';
+                  }
+                },
                 onSaved: (input) => _email = input,
                 decoration: InputDecoration(
                   labelText: 'Email',
@@ -398,7 +326,11 @@ class _signUp1State extends State<signUp1> {
                       child: TextFormField(
                         controller: _countryController,
                         autofocus: false,
-                        validator: validateCountry,
+                        validator: (input) {
+                          if (input.isEmpty) {
+                            return 'Please enter your country';
+                          }
+                        },
                         onSaved: (input) => _country = input,
                         decoration: InputDecoration(
                           labelText: 'Country',
@@ -439,10 +371,14 @@ class _signUp1State extends State<signUp1> {
               child: TextFormField(
                 controller: _phoneController,
                 autofocus: false,
-                validator: validateMobile,
+                validator: (input) {
+                  if (input.isEmpty) {
+                    return 'Please enter your phone';
+                  }
+                },
                 onSaved: (input) => _phone = input,
                 decoration: InputDecoration(
-                  labelText: 'Mobile Phone',
+                  labelText: 'Phone',
                   icon: Icon(Icons.phone),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0),
@@ -497,7 +433,11 @@ class _signUp1State extends State<signUp1> {
                     child: TextFormField(
                       controller: _weightController,
                       autofocus: false,
-                      validator: validateWeight,
+                      validator: (input) {
+                        if (input.isEmpty) {
+                          return 'Please enter your Weight';
+                        }
+                      },
                       onSaved: (input) => _weight = input,
                       decoration: InputDecoration(
                         labelText: 'Weight',
@@ -514,7 +454,11 @@ class _signUp1State extends State<signUp1> {
                     child: TextFormField(
                       controller: _heightController,
                       autofocus: false,
-                      validator: validateHeight,
+                      validator: (input) {
+                        if (input.isEmpty) {
+                          return 'Please enter your Height ';
+                        }
+                      },
                       onSaved: (input) => _height = input,
                       decoration: InputDecoration(
                         labelText: 'Height',
@@ -845,6 +789,10 @@ class _signUp1State extends State<signUp1> {
                 role: "patient",
                 context: context,
               );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => login()),
+              );
             },
             child: Text('Finish',
                 style: TextStyle(
@@ -915,10 +863,6 @@ class _signUp1State extends State<signUp1> {
         //now automatically login user too
         //await StateWidget.of(context).logInUser(email, password);
         await Navigator.pushNamed(context, '/signin');
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => login()),
-        );
       } catch (e) {
         _changeLoadingVisible();
         print("Sign Up Error: $e");

@@ -12,30 +12,26 @@ class details extends StatefulWidget {
   _detailsState createState() => _detailsState();
 }
 
+
 class _detailsState extends State<details> {
   var patientName;
-  initUser() async {
+  initUser() async{
     final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     FirebaseUser firebaseUser;
     firebaseUser = await firebaseAuth.currentUser();
     var userID = firebaseUser.uid;
-    DocumentSnapshot result = await Firestore.instance
-        .collection('users')
-        .document(userID)
-        .get()
-        .then((snapshot) {
+    DocumentSnapshot result = await Firestore.instance.collection('users').document(userID)
+    .get().then((snapshot){
       patientName = snapshot.data['name'];
       print(snapshot.data['name']);
     });
   }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     initUser();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,57 +53,28 @@ class _detailsState extends State<details> {
           ),
           onPressed: () {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => listdoc(
-                          currentUser: widget.currentuser,
-                        )));
+                context, MaterialPageRoute(builder: (context) => listdoc(currentUser: widget.currentuser,)));
           },
         ),
       ),
       body: Column(
         children: <Widget>[
-          widget.doctor.data["gender"] == "1"
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(top: 20.0),
-                      width: 80.0,
-                      height: 80.0,
-                      decoration: BoxDecoration(
-                        //color: Colors.blue,
-                        //image here
-                        image: DecorationImage(
-                          image: AssetImage('icons/Womandoctor.png'),
-                          fit: BoxFit.fill,
-                        ),
-                        shape: BoxShape.circle,
-                        //borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                      ),
-                    )
-                  ],
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(top: 20.0),
-                      width: 80.0,
-                      height: 80.0,
-                      decoration: BoxDecoration(
-                        //color: Colors.blue,
-                        //image here
-                        image: DecorationImage(
-                          image: AssetImage('icons/Doctor.png'),
-                          fit: BoxFit.fill,
-                        ),
-                        shape: BoxShape.circle,
-                        //borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                      ),
-                    )
-                  ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(top: 20.0),
+                width: 80.0,
+                height: 80.0,
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  //image here
+                  image: widget.doctor.data["photo"],
+                  borderRadius: BorderRadius.all(Radius.circular(75.0)),
                 ),
+              )
+            ],
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -124,131 +91,111 @@ class _detailsState extends State<details> {
               ),
             ],
           ),
-          widget.doctor.data["phone"] != ""
-              ? Container(
-                  margin: EdgeInsets.only(left: 15.0, top: 7.0),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.phone,
-                        color: Colors.grey,
-                        size: 32.0,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 15.0),
-                        child: Text(
-                          widget.doctor.data["phone"],
-                          style: TextStyle(
-                            fontSize: 18.0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              : Container(
-                  margin: EdgeInsets.only(left: 15.0, top: 7.0),
+          Container(
+            margin: EdgeInsets.only(left: 15.0, top: 7.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.phone,
+                  color: Colors.grey,
+                  size: 32.0,
                 ),
-          widget.doctor.data["clinicno."] != ""
-              ? Container(
-                  margin: EdgeInsets.only(left: 15.0, top: 7.0),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.home,
-                        color: Colors.grey,
-                        size: 32.0,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 15.0),
-                        child: Text(
-                          widget.doctor.data["clinicno."],
-                          style: TextStyle(
-                            fontSize: 18.0,
-                          ),
-                        ),
-                      ),
-                    ],
+                Container(
+                  margin: EdgeInsets.only(left: 15.0),
+                  child: Text(
+                    widget.doctor.data["phone"],
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
                   ),
-                )
-              : Container(
-                  margin: EdgeInsets.only(left: 15.0, top: 7.0),
                 ),
-          widget.doctor.data["email"] != ""
-              ? Container(
-                  margin: EdgeInsets.only(left: 15.0, top: 7.0),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.mail,
-                        color: Colors.grey,
-                        size: 32.0,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 15.0),
-                        child: Text(
-                          widget.doctor.data["email"],
-                          style: TextStyle(
-                            fontSize: 18.0,
-                          ),
-                        ),
-                      ),
-                    ],
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 15.0, top: 7.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.home,
+                  color: Colors.grey,
+                  size: 32.0,
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 15.0),
+                  child: Text(
+                    widget.doctor.data["clinicno."],
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
                   ),
-                )
-              : Container(
-                  margin: EdgeInsets.only(left: 15.0, top: 7.0),
                 ),
-          widget.doctor.data["university"] != ""
-              ? Container(
-                  margin: EdgeInsets.only(left: 15.0, top: 7.0),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.account_balance,
-                        color: Colors.grey,
-                        size: 32.0,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 15.0),
-                        child: Text(
-                          widget.doctor.data["university"],
-                          style: TextStyle(
-                            fontSize: 18.0,
-                          ),
-                        ),
-                      ),
-                    ],
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 15.0, top: 7.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.mail,
+                  color: Colors.grey,
+                  size: 32.0,
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 15.0),
+                  child: Text(
+                    widget.doctor.data["email"],
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
                   ),
-                )
-              : Container(
-                  margin: EdgeInsets.only(left: 15.0, top: 7.0),
                 ),
-          widget.doctor.data["address1"] != ""
-              ? Container(
-                  margin: EdgeInsets.only(left: 15.0, top: 7.0),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.location_on,
-                        color: Colors.grey,
-                        size: 32.0,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 15.0),
-                        child: Text(
-                          widget.doctor.data["address1"],
-                          style: TextStyle(
-                            fontSize: 18.0,
-                          ),
-                        ),
-                      ),
-                    ],
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 15.0, top: 7.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.account_balance,
+                  color: Colors.grey,
+                  size: 32.0,
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 15.0),
+                  child: Text(
+                    widget.doctor.data["university"],
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
                   ),
-                )
-              : Container(
-                  margin: EdgeInsets.only(left: 15.0, top: 7.0),
                 ),
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 15.0, top: 7.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.location_on,
+                  color: Colors.grey,
+                  size: 32.0,
+                ),
+                Container(
+                  margin: EdgeInsets.only(left: 15.0),
+                  child: Text(
+                    widget.doctor.data["address1"],
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           widget.doctor.data["address2"] != ""
               ? Container(
                   margin: EdgeInsets.only(left: 15.0, top: 7.0),
@@ -268,6 +215,7 @@ class _detailsState extends State<details> {
                           ),
                         ),
                       ),
+                      
                     ],
                   ),
                 )
@@ -276,7 +224,7 @@ class _detailsState extends State<details> {
                 ),
         ],
       ),
-
+      
       floatingActionButton: Container(
         width: 95.0,
         height: 95.0,
@@ -285,18 +233,13 @@ class _detailsState extends State<details> {
             Firestore.instance
                 .collection('addDoctorRequest')
                 .document()
-                .setData({
-              'doctorID': widget.doctor.data["id"],
-              'patientID': widget.currentuser.uid,
-              'patientName': patientName,
-            });
-            SnackBar(content: Text('Request has been Sent,Thank you'));
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => listdoc(
-                          currentUser: widget.currentuser,
-                        )));
+                .setData(
+                  {
+                    'doctorID':widget.doctor.data["id"],
+                    'patientID':widget.currentuser.uid,
+                    'patientName':patientName,
+                  });
+          
           },
           child: Icon(
             Icons.person_add,
