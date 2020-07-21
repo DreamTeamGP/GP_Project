@@ -177,6 +177,7 @@ class _mealsState extends State<meals> {
           'carb': FieldValue.arrayUnion(carb),
           'suger': FieldValue.arrayUnion(suger),
           'Date': getDateForTimeStamp(date),
+          'Timestamp': date,
           'UserID': user.uid,
         });
         //Firestore.instance.collection('meals').document().setData(
