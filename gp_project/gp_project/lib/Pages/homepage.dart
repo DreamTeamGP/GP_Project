@@ -101,30 +101,6 @@ class _HomePageState extends State<HomePage> {
               detailsuser(patient: patient, currentuser: widget.user)),
     );
   }
-  navigateToThreemon(DocumentSnapshot patient) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) =>
-              ThreeMonthReport(patient: patient, currentUser: widget.user)),
-    );
-  }  
-  navigateToSixmon(DocumentSnapshot patient) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) =>
-              sixMonthReport(patient: patient, currentUser: widget.user)),
-    );
-  }  
-  navigateToOneyear(DocumentSnapshot patient) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) =>
-              oneYearReport(patient: patient, currentUser: widget.user)),
-    );
-  }
 
   @override
   void initState() {
@@ -455,95 +431,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         iconSize: 50,
                                         onPressed: () {
-                                          showDialog<void>(
-                                            context: context,
-                                            barrierDismissible:
-                                                false, // user must tap button!
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title: Text('Choose Report'),
-                                                content: SingleChildScrollView(
-                                                  child: Column(
-                                                    children: <Widget>[
-                                                      Container(
-                                                        width: 500,
-                                                        child: RaisedButton(
-                                                          child: Text(
-                                                            "3-Months Report",
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                fontSize: 20,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: Colors
-                                                                    .white),
-                                                          ),
-                                                          onPressed: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                                navigateToThreemon(snapshot.data[index]);
-                                                             },
-                                                          color: Colors.cyan,
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        width: 500,
-                                                        child: RaisedButton(
-                                                          child: Text(
-                                                            "6-Months Report",
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                fontSize: 20,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: Colors
-                                                                    .white),
-                                                          ),
-                                                          onPressed: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                            navigateToSixmon(snapshot.data[index]);
-                                                          },
-                                                          color: Colors.cyan,
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        width: 500,
-                                                        child: RaisedButton(
-                                                          child: Text(
-                                                            "One Year Report",
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                fontSize: 20,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: Colors
-                                                                    .white),
-                                                          ),
-                                                          onPressed: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                            navigateToOneyear(snapshot.data[index]);
-                                                          },
-                                                          color: Colors.cyan,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          );
-                                          //_showMyDialog();
+                                          _showMyDialog();
                                         },
                                       ),
                                     ),
