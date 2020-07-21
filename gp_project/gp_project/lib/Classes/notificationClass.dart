@@ -101,7 +101,4 @@ class _MessageHandlerState extends State<MessageHandler> {
 
     );
   }
-  
-  
-
 }
