@@ -88,14 +88,22 @@ class _ThreeMonthReportState extends State<ThreeMonthReport> {
   }
 
   getDateForTimetamp(DateTime inputVal) {
-    String processedDate = DateFormat("yyyyMMdd").format(inputVal);
+    String processedDate = DateFormat("yyyy-MM-dd").format(inputVal);
     return processedDate;
   }
+
 //Future datee = getMoods();
   @override
   Widget build(BuildContext context) {
-    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+    var date1 = DateTime.parse("1995-07-20");
+    var newDate = date1.subtract(new Duration(days: 90));
+    print(newDate);
+    String formattedDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+    print(formattedDate);
     DateTime parsing = DateTime.parse(formattedDate);
+    print(parsing);
+    var parr = parsing.subtract(new Duration(days: 90));
+    print(parr);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -136,7 +144,7 @@ class _ThreeMonthReportState extends State<ThreeMonthReport> {
                 ),
               ),
             ),
-                        Padding(
+            Padding(
               padding: const EdgeInsets.only(top: 30.0),
               child: Flex(
                 direction: Axis.horizontal,
@@ -145,8 +153,8 @@ class _ThreeMonthReportState extends State<ThreeMonthReport> {
                     child: StreamBuilder<QuerySnapshot>(
                       stream: Firestore.instance
                           .collection("patientsMeasurements")
-                          .where("Date",
-                              isGreaterThanOrEqualTo: parsing.subtract(new Duration(days: 90)))
+                          // .where("Date",
+                          //     isGreaterThanOrEqualTo:parr)
                           .where('UserId', isEqualTo: widget.patient.data["id"])
                           .orderBy('Date', descending: true)
                           .snapshots(),
@@ -168,7 +176,7 @@ class _ThreeMonthReportState extends State<ThreeMonthReport> {
                                       children: <Widget>[
                                         new ListTile(
                                           title: new Text(
-                                            '${document['Date']}'    '${document['measurement']}',
+                                            '${document['Date']}   ${document['measurement']}',
                                             style: TextStyle(
                                               fontSize: 17,
                                               color: Colors.black,
@@ -279,7 +287,8 @@ class _ThreeMonthReportState extends State<ThreeMonthReport> {
                       stream: Firestore.instance
                           .collection("meals")
                           .where('Timestamp',
-                              isGreaterThanOrEqualTo: DateTime.now().subtract(new Duration(days: 90)))
+                              isGreaterThanOrEqualTo: DateTime.now()
+                                  .subtract(new Duration(days: 90)))
                           .where('UserID', isEqualTo: widget.patient.data["id"])
                           .orderBy('Timestamp', descending: true)
                           .snapshots(),

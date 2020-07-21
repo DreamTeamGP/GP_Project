@@ -144,9 +144,9 @@ class _oneYearReportState extends State<oneYearReport> {
                     child: StreamBuilder<QuerySnapshot>(
                       stream: Firestore.instance
                           .collection("patientsMeasurements")
-                          .where('Date',
-                              isGreaterThanOrEqualTo:DateTime.now()
-                                  .subtract(new Duration(days: 365)))
+                          // .where('Date',
+                          //     isGreaterThanOrEqualTo:DateTime.now()
+                          //         .subtract(new Duration(days: 365)))
                           .where('UserId', isEqualTo: widget.patient.data["id"])
                           .orderBy('Date', descending: true)
                           .snapshots(),
