@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_project/models/user.dart';
+import 'package:intl/intl.dart';
 
 class ThreeMonthReport extends StatefulWidget {
   final FirebaseUser currentUser;
@@ -16,6 +17,7 @@ class ThreeMonthReport extends StatefulWidget {
 
 class _ThreeMonthReportState extends State<ThreeMonthReport> {
   Future _mood, _meal, _measure;
+  var now = DateTime.now();
   Future getMoods() async {
     final currenttime = DateTime.now();
     final _start = DateTime(currenttime.year);
@@ -86,17 +88,14 @@ class _ThreeMonthReportState extends State<ThreeMonthReport> {
   }
 
   getDateForTimetamp(DateTime inputVal) {
-    String processedDate = inputVal.year.toString() +
-        '-' +
-        inputVal.month.toString() +
-        '-' +
-        inputVal.day.toString();
+    String processedDate = DateFormat("yyyyMMdd").format(inputVal);
     return processedDate;
   }
-
 //Future datee = getMoods();
   @override
   Widget build(BuildContext context) {
+    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+    DateTime parsing = DateTime.parse(formattedDate);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -146,9 +145,8 @@ class _ThreeMonthReportState extends State<ThreeMonthReport> {
                     child: StreamBuilder<QuerySnapshot>(
                       stream: Firestore.instance
                           .collection("patientsMeasurements")
-                          .where('Date',
-                              isGreaterThanOrEqualTo: DateTime.now()
-                                  .subtract(new Duration(days: 90)))
+                          .where("Date",
+                              isGreaterThanOrEqualTo: parsing.subtract(new Duration(days: 90)))
                           .where('UserId', isEqualTo: widget.patient.data["id"])
                           .orderBy('Date', descending: true)
                           .snapshots(),
@@ -170,9 +168,9 @@ class _ThreeMonthReportState extends State<ThreeMonthReport> {
                                       children: <Widget>[
                                         new ListTile(
                                           title: new Text(
-                                            '${document['Date']}    ${document['measurement']}',
+                                            '${document['Date']}'    '${document['measurement']}',
                                             style: TextStyle(
-                                              fontSize: 19,
+                                              fontSize: 17,
                                               color: Colors.black,
                                             ),
                                           ),
@@ -239,7 +237,7 @@ class _ThreeMonthReportState extends State<ThreeMonthReport> {
                                           title: new Text(
                                             '${document['Date']}    ${document['mood']}',
                                             style: TextStyle(
-                                              fontSize: 19,
+                                              fontSize: 17,
                                               color: Colors.black,
                                             ),
                                           ),
@@ -305,7 +303,7 @@ class _ThreeMonthReportState extends State<ThreeMonthReport> {
                                           title: new Text(
                                             '${document['Date']}  ${document['food']}',
                                             style: TextStyle(
-                                              fontSize: 19,
+                                              fontSize: 17,
                                               color: Colors.black,
                                             ),
                                           ),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../models/user.dart';
 import '../Services/measurement.dart';
 
@@ -134,11 +135,7 @@ class _MeasurementPopUp extends State<MeasurementPopUp> {
   }
 
   getDateForTimeStamp(DateTime inputVal) {
-    String processedDate = inputVal.year.toString() +
-        '-' +
-        inputVal.month.toString() +
-        '-' +
-        inputVal.day.toString();
+    String processedDate = DateFormat("yyyyMMdd").format(inputVal);
     return processedDate;
   }
 
