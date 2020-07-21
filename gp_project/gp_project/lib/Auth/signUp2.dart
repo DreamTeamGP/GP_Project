@@ -20,6 +20,7 @@ class _signup2State extends State<signup2> {
       _phone,
       _clinicno,
       _university,
+      _region,
       _address1,
       _address2;
   var items = [
@@ -41,6 +42,52 @@ class _signup2State extends State<signup2> {
     'Kafr Elshiekh',
     'El-Monofya'
   ];
+
+  var loc = [
+    'Cairo',
+    'Helwan',
+    'Elsayda zeinb',
+    'Maadi',
+    'El marg',
+    'Dar elsalam',
+    'Ein shams',
+    'Masr eladema',
+    'Madena masr',
+    'El abasia',
+    'Wst elbalad',
+    'Masr elgdeda',
+    'Garden city',
+    '5th settlement',
+    'Wst elbalad',
+    'El mataria',
+    'Shoubra',
+    'Giza',
+    'Elmohndseen',
+    'Dokki',
+    'Haram',
+    'Faisal',
+    'Elmonieb',
+    'Elshikh zayed',
+    '6 octobor',
+    'Alexandria',
+    'Roshdy',
+    'Camp sheraz',
+    'Abo keer',
+    'Agamy',
+    'Montazah',
+    'Sedy beshr',
+    'Myami',
+    'Dakhalia',
+    'Elmasoura',
+    'Sherbeen',
+    'El esmaielia',
+    'El mania',
+    'Port said',
+    'Sohag',
+    'Aswan',
+    'Louxor',
+  ];
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _nameController = new TextEditingController();
   TextEditingController _emailController = new TextEditingController();
@@ -48,6 +95,7 @@ class _signup2State extends State<signup2> {
   TextEditingController _phoneController = new TextEditingController();
   TextEditingController _clininoController = new TextEditingController();
   TextEditingController _universityController = new TextEditingController();
+  TextEditingController _regionController = new TextEditingController();
   TextEditingController _address1Controller = new TextEditingController();
   TextEditingController _address2Controller = new TextEditingController();
   bool _autoValidate = false;
@@ -223,6 +271,41 @@ class _signup2State extends State<signup2> {
             Padding(
               padding: EdgeInsets.only(
                   top: 22.0, bottom: 5.0, right: 22.0, left: 22.0),
+              child: new Row(
+                children: <Widget>[
+                  new Expanded(
+                    child: TextFormField(
+                      controller: _regionController,
+                      autofocus: false,
+                      onSaved: (input) => _region = input,
+                      decoration: InputDecoration(
+                        labelText: 'Clinic region',
+                        icon: Icon(Icons.landscape),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                      ),
+                      keyboardType: TextInputType.text,
+                    ),
+                  ),
+                  new PopupMenuButton<String>(
+                    icon: const Icon(Icons.arrow_drop_down),
+                    onSelected: (String value) {
+                      _regionController.text = value;
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return loc.map<PopupMenuItem<String>>((String value) {
+                        return new PopupMenuItem(
+                            child: new Text(value), value: value);
+                      }).toList();
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  top: 22.0, bottom: 5.0, right: 22.0, left: 22.0),
               child: TextFormField(
                 controller: _address1Controller,
                 autofocus: false,
@@ -280,6 +363,7 @@ class _signup2State extends State<signup2> {
                 address1: _address1Controller.text,
                 address2: _address2Controller.text,
                 role: "doctor",
+                region: _regionController.text,
                 context: context,
               );
               Navigator.push(
@@ -306,8 +390,7 @@ class _signup2State extends State<signup2> {
   }
 
   void _emailSignUp2(
-      {
-      String name,
+      {String name,
       String email,
       String password,
       String phone,
@@ -316,38 +399,38 @@ class _signup2State extends State<signup2> {
       String address1,
       String address2,
       String role,
-      BuildContext context
-      }
-      ) async {
+      String region,
+      BuildContext context}) async {
     //if (_formKey.currentState.validate()) {
-      try {
-        SystemChannels.textInput.invokeMethod('TextInput.hide');
-        await _changeLoadingVisible();
-        //need await so it has chance to go through error if found.
-        await Auth.signUp2(email, password).then(
-          (id) {
-            Auth.addUserSettingsDB2(
-              new Doctor(
-                dId: id,
-                name: name,
-                email: email,
-                password: password,
-                phone: phone,
-                clinicno: clinicno,
-                university: university,
-                address1: address1,
-                address2: address2,
-                role: role,
-              ),
-            );
-          },
-        );
-        await Navigator.pushNamed(context, '/login');
-      } catch (e) {
-        _changeLoadingVisible();
-        print("Sign Up Error: $e");
-      }
+    try {
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+      await _changeLoadingVisible();
+      //need await so it has chance to go through error if found.
+      await Auth.signUp2(email, password).then(
+        (id) {
+          Auth.addUserSettingsDB2(
+            new Doctor(
+              dId: id,
+              name: name,
+              email: email,
+              password: password,
+              phone: phone,
+              clinicno: clinicno,
+              university: university,
+              address1: address1,
+              address2: address2,
+              role: role,
+              region: region,
+            ),
+          );
+        },
+      );
+      await Navigator.pushNamed(context, '/login');
+    } catch (e) {
+      _changeLoadingVisible();
+      print("Sign Up Error: $e");
     }
-    // else {
-     // setState(() => _autoValidate = true);
   }
+  // else {
+  // setState(() => _autoValidate = true);
+}
