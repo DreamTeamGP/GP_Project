@@ -12,7 +12,7 @@ class LocalNotifications{
   void dailyMeasurementReminder() async{
     print('local from class');
     initializing();
-    var time = Time(1, 10, 0);
+    var time = Time(14, 21, 0);
     var androidPlatformChannelSpecifics =
         AndroidNotificationDetails('repeatDailyAtTime channel id',
             'repeatDailyAtTime channel name', 'repeatDailyAtTime description');
