@@ -98,7 +98,7 @@ class _ThreeMonthReportState extends State<ThreeMonthReport> {
     var date1 = DateTime.parse("1995-07-20");
     var newDate = date1.subtract(new Duration(days: 90));
     print(newDate);
-    String formattedDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
     print(formattedDate);
     DateTime parsing = DateTime.parse(formattedDate);
     print(parsing);
@@ -176,7 +176,7 @@ class _ThreeMonthReportState extends State<ThreeMonthReport> {
                                       children: <Widget>[
                                         new ListTile(
                                           title: new Text(
-                                            '${document['Date']}   ${document['measurement']}',
+                                            '${document['Date']}  ${document['measurement']}',
                                             style: TextStyle(
                                               fontSize: 17,
                                               color: Colors.black,
