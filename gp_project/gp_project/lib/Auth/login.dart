@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -8,20 +5,12 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:gp_project/Auth/ResetPassword.dart';
 import 'package:gp_project/Auth/line.dart';
 import 'package:gp_project/Auth/signUp1.dart';
-
-import 'package:gp_project/Classes/User.dart';
 import 'package:gp_project/Home.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:gp_project/Pages/homepage.dart';
-import 'package:gp_project/models/user.dart';
 import 'choosesignup.dart';
-import 'package:http/http.dart' as http;
-
-final _userclass = UserClass();
 
 class login extends StatefulWidget {
-  //  final FirebaseUser currentUser;
-  // const login({Key key, this.currentUser}) : super(key: key);
   @override
   _loginState createState() => _loginState();
 }
@@ -176,166 +165,117 @@ class _loginState extends State<login> {
                   ),
                   SignInButton(
                     Buttons.Google,
-                    onPressed: signInWithGoogle,
+                    onPressed: _loginWithGoogle,
                     mini: true,
                   )
                 ],
               ),
             ),
             Padding(
-                padding: EdgeInsets.only(top: 40),
-                child: Column(children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      CustomPaint(painter: Drawhorizontallinee(false)),
-                      Padding(
-                        padding: EdgeInsets.only(left: 130),
-                        // textColor: Colors.grey,
-                        // onPressed: () {
-                        //   Navigator.push(context,
-                        //       MaterialPageRoute(builder: (context) => choose()));
-                        // },
-                        child: Text(
-                          'Dont have Account?',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                      CustomPaint(painter: Drawhorizontallineee(false)),
-                    ],
+              padding: EdgeInsets.only(top: 40),
+              child: Row(
+                children: <Widget>[
+                  CustomPaint(painter: Drawhorizontallinee(false)),
+                  FlatButton(
+                    padding: EdgeInsets.only(left: 130),
+                    textColor: Colors.grey,
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => choose()));
+                    },
+                    child: Text('Dont have Account?',
+                        style: TextStyle(fontSize: 18.0)),
                   ),
-                  const SizedBox(
-                    height: 30,
-                    width: 80,
-                  ),
-                  ButtonTheme(
-                    padding: EdgeInsets.only(
-                        top: 15, bottom: 5, right: 20, left: 20),
-                    minWidth: 170,
-                    child: RaisedButton(
-                      padding: EdgeInsets.only(
-                          top: 5, bottom: 5, right: 20, left: 20),
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => choose()));
-                      },
-                      child: Text(
-                        'Sign up',
-                        style: TextStyle(
-                            fontSize: 27,
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.normal),
-                      ),
-                      color: Colors.cyan,
-                      textColor: Colors.white,
-                    ),
-                  ),
-                ])),
+                  CustomPaint(painter: Drawhorizontallineee(false)),
+                ],
+              ),
+            )
           ],
         ),
       ),
     );
   }
 
-  Future<void> signIn() async {
-    final FormState = _formKey.currentState;
+  Future<void> signIn()async{
+      final FormState = _formKey.currentState;
 
-    if (FormState.validate()) {
-      FormState.save();
-      try {
-        AuthResult user = await FirebaseAuth.instance
-            .signInWithEmailAndPassword(email: _email, password: _password);
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => HomePage(user: user.user)));
-      } catch (e) {
-        print(e.message);
-      }
+      if (FormState.validate()){
+        FormState.save();
+        try{
+          AuthResult user =  await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: _email,
+         password:_password ) ;
+         Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage(user:user.user)));
+        }
+        catch(e){
+          print(e.message);
+        }
+        
+      } 
     }
-  }
 
-  bool isLoggedIn = false;
-
-  void onLoginStatusChanged(bool isLoggedIn) {
-    setState(() {
-      this.isLoggedIn = isLoggedIn;
-    });
-  }
-
-  Future<void> loginWithFacebook() async {
-    User _use = User();
-    //FirebaseUser user = await _firebaseAuth.currentUser();
-    try {
-      var facebookLogin = new FacebookLogin();
-      var result = await facebookLogin.logIn(['email']);
-      var accessToken = result.accessToken;
-
-      if (result.status == FacebookLoginStatus.loggedIn) {
-        final AuthCredential credential = FacebookAuthProvider.getCredential(
-          accessToken: result.accessToken.token,
-        );
-        AuthResult user =
-            (await FirebaseAuth.instance.signInWithCredential(credential));
-
-        print('signed in ' + user.user.displayName);
-
-        // Firestore.instance.collection("users").document().setData({
-        //   "name": user.user.displayName,
-        //   "email": user.user.email,
-        //   "id": user.user.uid
-        // }
-
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => HomePage(user: user.user)));
-        return user;
-      }
-      if (FacebookLoginStatus.loggedIn != null) {
-        print("LoggedIn! ");
-
-        // var graphResponse = await http.get(
-        //     'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email&access_token=${accessToken.token}');
-        // var profile = jsonDecode(graphResponse.body);
-        // print(profile.toString());
-
-        // onLoginStatusChanged(true);
-      }
-    } catch (e) {
-      print(e.message);
+  Future<FirebaseUser> loginWithFacebook() async {
+    final facebookLogin = new FacebookLogin();
+    final result = await facebookLogin.logIn(['email']);
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        print(result.accessToken.token);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Home()));
+        break;
+      case FacebookLoginStatus.cancelledByUser:
+        print('CANCELED BY USER');
+        break;
+      case FacebookLoginStatus.error:
+        print(result.errorMessage);
+        break;
     }
     //Navigator.push(context, MaterialPageRoute(builder: (context)=> Home()));
   }
 
-  Firestore firestore = Firestore.instance;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = new GoogleSignIn();
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn googleSignIn = GoogleSignIn();
+  Future<FirebaseUser> _loginWithGoogle() async {
+    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
 
-  Future<String> signInWithGoogle() async {
-    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
     final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleSignInAuthentication.accessToken,
-      idToken: googleSignInAuthentication.idToken,
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
     );
-    final AuthResult authResult = await _auth.signInWithCredential(credential);
-    final FirebaseUser user = authResult.user;
-    assert(!user.isAnonymous);
-    assert(await user.getIdToken() != null);
-    final FirebaseUser currentUser = await _auth.currentUser();
-    assert(user.uid == currentUser.uid);
-    Navigator.push(
+    try {
+      AuthResult userDetails =
+          await _firebaseAuth.signInWithCredential(credential);
+      ProviderDetails providerInfo =
+          new ProviderDetails(userDetails.user.providerId);
+
+      List<ProviderDetails> providerData = new List<ProviderDetails>();
+      providerData.add(providerInfo);
+
+      UserDetails details = new UserDetails(
+        userDetails.user.providerId,
+        userDetails.user.displayName,
+        userDetails.user.photoUrl,
+        userDetails.user.email,
+        providerData,
+      );
+      Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => HomePage(
-                  user: user,
-                )));
-    return 'signInWithGoogle succeeded: $user';
+          builder: (context) => Home(),
+        ),
+      );
+    } catch (e) {
+      print(e);
+    }
+
+    //return userDetails;
   }
 
   Future sendPasswordResetEmail(String email) async {
-    return _auth.sendPasswordResetEmail(email: email);
+    return _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 }
 
