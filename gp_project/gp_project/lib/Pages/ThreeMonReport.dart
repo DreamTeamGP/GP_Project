@@ -196,7 +196,7 @@ class _ThreeMonthReportState extends State<ThreeMonthReport> {
                 softWrap: true,
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 22,
+                  fontSize: 21,
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.normal,
                 ),
