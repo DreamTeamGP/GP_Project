@@ -56,15 +56,10 @@
     </activity>
     </application>
 <<<<<<< HEAD
-<<<<<<< HEAD
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.VIBRATE" />
 </manifest>
-=======
-  <uses-permission android:name="android.permission.INTERNET"/>
-</manifest>
->>>>>>> parent of 21bf0b7... Revert "Revert "Merge branch 'atef-el-senior'""
 =======
   <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
