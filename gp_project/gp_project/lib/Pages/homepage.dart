@@ -4,15 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_project/Classes/User.dart';
 import 'package:gp_project/Auth/line.dart';
-import 'package:gp_project/Pages/MeasurementGraph.dart';
 import 'package:gp_project/Pages/profiledrawer.dart';
 import 'package:gp_project/Pages/measurementPopup.dart';
 import 'package:gp_project/Pages/moodPopup.dart';
 import 'package:gp_project/models/user.dart';
-import 'package:simple_animations/simple_animations.dart';
 import 'Detailsdoctor.dart';
-import 'meals.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+import '../Classes/notificationClass.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key, this.user}) : super(key: key);
@@ -23,60 +20,61 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  
   var mood = ['mood'];
   var month = ['month'];
 
+  final List<String> _dropdownValues = [
+    "One",
+    "Two",
+    "Three",
+    "Four",
+    "Five"
+  ]; //The list of values we want on the dropdown
   UserClass userClass = new UserClass();
   User user = new User();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   FirebaseUser firebaseUser;
   User currentUser = new User();
-
-  initUser() async {
-    //firebaseUser = await _firebaseAuth.currentUser();
-    //userID = firebaseUser.uid;
-    currentUser = this.userClass.getCurrentUser();
-    setState(() {});
+  void measurementAlert(String patientName, String patientDoctor){
+    
+    Firestore.instance
+                .collection('patientAlert')
+                .document()
+                .setData(
+                  {
+                    'doctorID':patientDoctor,
+                    'patientID':widget.user.uid,
+                    'patientName':patientName,
+                    'state':"the measurments are upnormal for three days please take care",
+                  });
   }
+  initUser() async {
+    DocumentSnapshot measurementAlertResult = await Firestore.instance
+    .collection('patientsMeasurements')
+        .where('UserId', isEqualTo: widget.user.uid)
+        // .where('UserId', isGreaterThan: widget.user.uid)
+        .getDocuments().then((snapshot){
+          print(snapshot.documents);
+    });
 
-  // ignore: deprecated_member_use
-  ControlledAnimation bar(final double height, final String label) {
-    final int _baseDurationMs = 1000;
-    final double _maxElementHeight = 100;
-    // ignore: deprecated_member_use
-    return ControlledAnimation(
-      duration: Duration(milliseconds: (height * _baseDurationMs).round()),
-      tween: Tween(begin: 0.0, end: height),
-      builder: (context, animatedHeight) {
-        return Expanded(
-            child: Column(
-          children: <Widget>[
-            Container(
-              width: 60,
-              height: animatedHeight * _maxElementHeight,
-              color: Colors.cyan,
-            ),
-            Text(label)
-          ],
-        ));
-      },
-    );
+    DocumentSnapshot result = await Firestore.instance.collection('users').document(widget.user.uid
+     )
+    .get().then((snapshot){
+      if(snapshot.data['role']=="patient"){
+        measurementAlert(snapshot.data['name'], snapshot.data['doctorId']);
+      }
+      
+    });
+    
+    setState(() {});
+    MessageHandler();
   }
 
   User patient = new User();
   ScrollController _scrollController = new ScrollController();
   final _formKey = GlobalKey<FormState>();
   Future _data;
-  Future _data2;
-  Future getMeasurements() async {
-    var firestore = Firestore.instance;
-    QuerySnapshot qn = await firestore
-        .collection("patientsMeasurements")
-        .where('UserId', isEqualTo: widget.user.uid)
-        .getDocuments();
-    return qn.documents;
-  }
-
   Future getPatients() async {
     var firestore = Firestore.instance;
     QuerySnapshot qn = await firestore
@@ -97,9 +95,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    
+    
     initUser();
     _data = getPatients();
-    _data2 = getMeasurements();
+    
   }
 
   @override
@@ -371,7 +371,7 @@ class _HomePageState extends State<HomePage> {
                             backgroundColor: Colors.cyan,
                             fontSize: 25.0,
                           ),
-                          content: MeasurementPopUp(currentUser: widget.user),
+                          content: MeasurementPopUp(),
                         );
                       });
                 },
@@ -389,16 +389,7 @@ class _HomePageState extends State<HomePage> {
                     )
                   ],
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => meals(
-                        currentUser: widget.user,
-                      ),
-                    ),
-                  );
-                },
+                onPressed: () {},
                 color: Colors.red,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
@@ -418,12 +409,12 @@ class _HomePageState extends State<HomePage> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                            title: Text('Mood'),
+                            title: Text('Measurement'),
                             titleTextStyle: TextStyle(
                               backgroundColor: Colors.cyan,
                               fontSize: 25.0,
                             ),
-                            content: MoodPopUp(currentUser: widget.user));
+                            content: MoodPopUp());
                       });
                 },
                 color: Colors.yellow,
@@ -451,147 +442,32 @@ class _HomePageState extends State<HomePage> {
                     'Statistics Bar Chart',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
                   )),
-              //Column(children: <Widget>[chartdisplay],),
-
-              FutureBuilder(
-                future: _data2,
-                builder: (context, snapshot) {
-                  Map<String, dynamic> myMap = new Map<String, dynamic>();
-                  List<dynamic> myList = new List<dynamic>();
-                  for (int i = 0; i < snapshot.data.length; i++) {
-                    myMap = Map<String, dynamic>.from(snapshot.data[i].data);
-                    print(myMap);
-                  }
-
-                  print('break');
-
-                  //بتجيب القيم بتاعت الماب ممبر بالاندكس بتاعه كانهم ليستت قيم
-                  for (int i = 0; i < snapshot.data.length; i++) {
-                    Map<String, dynamic>.from(snapshot.data[i].data)
-                        .forEach((key, value) {
-                      myList.add(value);
-                    });
-                  }
-
-                  double fastingValue() {
-                    List<dynamic> arrayedValues = new List<dynamic>();
-                    for (int i = 0; i < myList.length; i++) {
-                      if (myList[i] != myList[i].toString()) {
-                        arrayedValues.add(myList[i]);
-                      }
-                    }
-                    List<dynamic> rawValues = new List<dynamic>();
-                    List<dynamic> fasting = new List<dynamic>();
-                    for (int i = 0; i < arrayedValues.length; i++) {
-                      for (int j = 0; j < arrayedValues[i].length; j++) {
-                        rawValues.add(arrayedValues[i].elementAt(j));
-                        if (arrayedValues[i].elementAt(j) ==
-                            'Fasting blood glucose') {
-                          fasting.add(arrayedValues[i + 1].elementAt(j));
-                        }
-                      }
-                    }
-                    int sum = 0;
-                    fasting.forEach((element) {
-                      sum = sum + int.parse(element);
-                    });
-                    double avg = sum / fasting.length;
-                    double avgModified = avg / 200;
-                    return avg;
-                  }
-
-                  print(fastingValue());
-
-                  double postprandialValue() {
-                    List<dynamic> arrayedValues = new List<dynamic>();
-                    for (int i = 0; i < myList.length; i++) {
-                      if (myList[i] != myList[i].toString()) {
-                        arrayedValues.add(myList[i]);
-                      }
-                    }
-                    List<dynamic> rawValues = new List<dynamic>();
-                    List<dynamic> postPrandial = new List<dynamic>();
-                    for (int i = 0; i < arrayedValues.length; i++) {
-                      for (int j = 0; j < arrayedValues[i].length; j++) {
-                        rawValues.add(arrayedValues[i].elementAt(j));
-                        if (arrayedValues[i].elementAt(j) ==
-                            'Post prandial blood glucose') {
-                          postPrandial.add(arrayedValues[i + 1].elementAt(j));
-                        }
-                      }
-                    }
-                    int sum = 0;
-                    postPrandial.forEach((element) {
-                      sum = sum + int.parse(element);
-                    });
-                    double avg = sum / postPrandial.length;
-                    double avgModified = avg / 200;
-                    return avg;
-                  }
-
-                  print(postprandialValue());
-
-                  // myList.forEach((element) {
-                  //   if (element != element.toString()) {
-                  //     i++;
-                  //   }
-                  // });
-
-                  //بترجع الليستات اللي في اول خمسة ممبر في الليست وبأكسس اللي جواهم ب سطر البرنت
-                  // for (int i = 3; i < 5; i++) {
-                  //   if (myList[i] != myList[i].toString()) {
-                  //     y++;
-                  //     print(myList[i].elementAt(1));
-                  //   }
-                  // }
-
-                  print('break2');
-                  var data = [
-                    ClicksPerYear(
-                        'Fasting blood glucose', fastingValue(), Colors.cyan),
-                    ClicksPerYear('Post prandial blood glucose',
-                        postprandialValue(), Colors.cyan),
-                  ];
-
-                  var series = [
-                    charts.Series(
-                      domainFn: (ClicksPerYear clickData, _) => clickData.year,
-                      measureFn: (ClicksPerYear clickData, _) =>
-                          clickData.value,
-                      colorFn: (ClicksPerYear clickData, _) => clickData.color,
-                      id: 'Clicks',
-                      data: data,
-                    ),
-                  ];
-
-                  var chart = charts.BarChart(
-                    series,
-                    animate: true,
-                    animationDuration: Duration(milliseconds: 1000),
-                  );
-
-                  var chartWidget = Padding(
-                    padding: EdgeInsets.only(top: 30, right: 15, left: 15),
-                    child: SizedBox(
-                      height: 280.0,
-                      child: chart,
-                    ),
-                  );
-
-                  if (snapshot.hasData) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          chartWidget,
-                        ],
-                      ),
-                    );
-                  } else {
-                    return Text('Loading...');
-                  }
-                },
+             Row(
+                children: <Widget>[
+                  Expanded(
+                      child: DropdownButton<String>(
+                    items: mood.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    value: 'mood',
+                    // onChanged: (){},
+                  )),
+                  Expanded(
+                      child: DropdownButton<String>(
+                    items: month.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                   //onChanged: (){},
+                  )),
+                ],
               ),
+              //Column(children: <Widget>[chartdisplay],),
             ],
           ),
         );
