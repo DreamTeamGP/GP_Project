@@ -152,75 +152,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Choose Report'),
-          content: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  width: 500,
-                  child: RaisedButton(
-                    child: Text(
-                      "3-Months Report",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    color: Colors.cyan,
-                  ),
-                ),
-                Container(
-                  width: 500,
-                  child: RaisedButton(
-                    child: Text(
-                      "6-Months Report",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    color: Colors.cyan,
-                  ),
-                ),
-                Container(
-                  width: 500,
-                  child: RaisedButton(
-                    child: Text(
-                      "One Year Report",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    color: Colors.cyan,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   FutureBuilder checkRole(DocumentSnapshot snapshot) {
     if (snapshot.data == null) {
       return FutureBuilder(
@@ -389,8 +320,8 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Flexible(
                                   child: GestureDetector(
-                                    // onTap: () =>
-                                    //   showDialog(context: context),
+                                    onTap: () =>
+                                        navigateToDetail(snapshot.data[index]),
                                     child: Container(
                                       height: 80.0,
                                       margin: EdgeInsets.only(top: 10),
@@ -399,10 +330,8 @@ class _HomePageState extends State<HomePage> {
                                           Icons.print,
                                           color: Colors.blue,
                                         ),
+                                        onPressed: () {},
                                         iconSize: 50,
-                                        onPressed: () {
-                                          _showMyDialog();
-                                        },
                                       ),
                                     ),
                                   ),

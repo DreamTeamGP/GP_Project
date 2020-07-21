@@ -68,7 +68,7 @@ class _detailsState extends State<detailsuser> {
       ),
       body: Column(
         children: <Widget>[
-          widget.patient.data["gender"] == 1
+          widget.patient.data["gender"] == "1"
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -175,7 +175,7 @@ class _detailsState extends State<detailsuser> {
               : Container(
                   margin: EdgeInsets.only(left: 15.0, top: 7.0),
                 ),
-          widget.patient.data["email"] != null
+          widget.patient.data["email"] != ""
               ? Container(
                   margin: EdgeInsets.only(left: 15.0, top: 7.0),
                   child: Row(
