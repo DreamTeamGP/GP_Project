@@ -3,16 +3,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_project/Pages/Listdoctors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gp_project/Pages/homepage.dart';
 
-class details extends StatefulWidget {
+class detailsuser extends StatefulWidget {
   final FirebaseUser currentuser;
-  final DocumentSnapshot doctor;
-  details({this.doctor, this.currentuser});
+  final DocumentSnapshot patient;
+  detailsuser({this.patient, this.currentuser});
   @override
   _detailsState createState() => _detailsState();
 }
- 
-class _detailsState extends State<details> {
+
+class _detailsState extends State<detailsuser> {
   var patientName;
   initUser() async {
     final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -41,7 +42,7 @@ class _detailsState extends State<details> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.doctor.data["name"],
+          widget.patient.data["name"],
           style: TextStyle(
             color: Colors.white,
             fontSize: 25,
@@ -59,15 +60,15 @@ class _detailsState extends State<details> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => listdoc(
-                          currentUser: widget.currentuser,
+                    builder: (context) => HomePage(
+                          user: widget.currentuser,
                         )));
           },
         ),
       ),
       body: Column(
         children: <Widget>[
-          widget.doctor.data["gender"] == "1"
+          widget.patient.data["gender"] == 1
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -79,7 +80,7 @@ class _detailsState extends State<details> {
                         //color: Colors.blue,
                         //image here
                         image: DecorationImage(
-                          image: AssetImage('icons/Womandoctor.png'),
+                          image: AssetImage('icons/Womanuser.png'),
                           fit: BoxFit.fill,
                         ),
                         shape: BoxShape.circle,
@@ -99,7 +100,7 @@ class _detailsState extends State<details> {
                         //color: Colors.blue,
                         //image here
                         image: DecorationImage(
-                          image: AssetImage('icons/Doctor.png'),
+                          image: AssetImage('icons/user.jpg'),
                           fit: BoxFit.fill,
                         ),
                         shape: BoxShape.circle,
@@ -114,7 +115,7 @@ class _detailsState extends State<details> {
               Container(
                 margin: EdgeInsets.all(15.0),
                 child: new Text(
-                  widget.doctor.data["name"],
+                  widget.patient.data["name"],
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.black,
@@ -124,7 +125,7 @@ class _detailsState extends State<details> {
               ),
             ],
           ),
-          widget.doctor.data["phone"] != ""
+          widget.patient.data["phone"] != ""
               ? Container(
                   margin: EdgeInsets.only(left: 15.0, top: 7.0),
                   child: Row(
@@ -137,7 +138,7 @@ class _detailsState extends State<details> {
                       Container(
                         margin: EdgeInsets.only(left: 15.0),
                         child: Text(
-                          widget.doctor.data["phone"],
+                          widget.patient.data["phone"],
                           style: TextStyle(
                             fontSize: 18.0,
                           ),
@@ -149,7 +150,7 @@ class _detailsState extends State<details> {
               : Container(
                   margin: EdgeInsets.only(left: 15.0, top: 7.0),
                 ),
-          widget.doctor.data["clinicno."] != ""
+          widget.patient.data["city"] != ""
               ? Container(
                   margin: EdgeInsets.only(left: 15.0, top: 7.0),
                   child: Row(
@@ -162,7 +163,7 @@ class _detailsState extends State<details> {
                       Container(
                         margin: EdgeInsets.only(left: 15.0),
                         child: Text(
-                          widget.doctor.data["clinicno."],
+                          widget.patient.data["city"],
                           style: TextStyle(
                             fontSize: 18.0,
                           ),
@@ -174,7 +175,7 @@ class _detailsState extends State<details> {
               : Container(
                   margin: EdgeInsets.only(left: 15.0, top: 7.0),
                 ),
-          widget.doctor.data["email"] != ""
+          widget.patient.data["email"] != null
               ? Container(
                   margin: EdgeInsets.only(left: 15.0, top: 7.0),
                   child: Row(
@@ -187,7 +188,7 @@ class _detailsState extends State<details> {
                       Container(
                         margin: EdgeInsets.only(left: 15.0),
                         child: Text(
-                          widget.doctor.data["email"],
+                          widget.patient.data["email"],
                           style: TextStyle(
                             fontSize: 18.0,
                           ),
@@ -199,20 +200,29 @@ class _detailsState extends State<details> {
               : Container(
                   margin: EdgeInsets.only(left: 15.0, top: 7.0),
                 ),
-          widget.doctor.data["university"] != ""
+          widget.patient.data["weight"] != ""
               ? Container(
                   margin: EdgeInsets.only(left: 15.0, top: 7.0),
                   child: Row(
                     children: <Widget>[
                       Icon(
-                        Icons.account_balance,
+                        Icons.line_weight,
                         color: Colors.grey,
                         size: 32.0,
                       ),
                       Container(
                         margin: EdgeInsets.only(left: 15.0),
                         child: Text(
-                          widget.doctor.data["university"],
+                          widget.patient.data["weight"],
+                          style: TextStyle(
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 15.0),
+                        child: Text(
+                          "Kg",
                           style: TextStyle(
                             fontSize: 18.0,
                           ),
@@ -224,20 +234,29 @@ class _detailsState extends State<details> {
               : Container(
                   margin: EdgeInsets.only(left: 15.0, top: 7.0),
                 ),
-          widget.doctor.data["address1"] != ""
+          widget.patient.data["height"] != ""
               ? Container(
                   margin: EdgeInsets.only(left: 15.0, top: 7.0),
                   child: Row(
                     children: <Widget>[
                       Icon(
-                        Icons.location_on,
+                        Icons.assessment,
                         color: Colors.grey,
                         size: 32.0,
                       ),
                       Container(
                         margin: EdgeInsets.only(left: 15.0),
                         child: Text(
-                          widget.doctor.data["address1"],
+                          widget.patient.data["height"],
+                          style: TextStyle(
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 15.0),
+                        child: Text(
+                          "cm",
                           style: TextStyle(
                             fontSize: 18.0,
                           ),
@@ -249,20 +268,20 @@ class _detailsState extends State<details> {
               : Container(
                   margin: EdgeInsets.only(left: 15.0, top: 7.0),
                 ),
-          widget.doctor.data["address2"] != ""
+          widget.patient.data["birthday"] != ""
               ? Container(
                   margin: EdgeInsets.only(left: 15.0, top: 7.0),
                   child: Row(
                     children: <Widget>[
                       Icon(
-                        Icons.add_location,
+                        Icons.calendar_today,
                         color: Colors.grey,
                         size: 32.0,
                       ),
                       Container(
                         margin: EdgeInsets.only(left: 15.0),
                         child: Text(
-                          widget.doctor.data["address2"],
+                          widget.patient.data["birthday"],
                           style: TextStyle(
                             fontSize: 18.0,
                           ),
@@ -274,39 +293,102 @@ class _detailsState extends State<details> {
               : Container(
                   margin: EdgeInsets.only(left: 15.0, top: 7.0),
                 ),
+          widget.patient.data["diabetesType"] == 0
+              ? Container(
+                  margin: EdgeInsets.only(left: 15.0, top: 7.0),
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.merge_type,
+                        color: Colors.grey,
+                        size: 32.0,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 15.0),
+                        child: Text(
+                          "Type 1",
+                          style: TextStyle(
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : widget.patient.data["diabetesType"] == 1
+                  ? Container(
+                      margin: EdgeInsets.only(left: 15.0, top: 7.0),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.merge_type,
+                            color: Colors.grey,
+                            size: 32.0,
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 15.0),
+                            child: Text(
+                              "Type 2",
+                              style: TextStyle(
+                                fontSize: 18.0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Container(
+                      margin: EdgeInsets.only(left: 15.0, top: 7.0),
+                    ),
+          widget.patient.data["treatType"] == 0
+              ? Container(
+                  margin: EdgeInsets.only(left: 15.0, top: 7.0),
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.accessibility,
+                        color: Colors.grey,
+                        size: 32.0,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 15.0),
+                        child: Text(
+                          "Pills",
+                          style: TextStyle(
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : widget.patient.data["treatType"] == 1
+                  ? Container(
+                      margin: EdgeInsets.only(left: 15.0, top: 7.0),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.accessibility,
+                            color: Colors.grey,
+                            size: 32.0,
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 15.0),
+                            child: Text(
+                              "Insluin Injection",
+                              style: TextStyle(
+                                fontSize: 18.0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Container(
+                      margin: EdgeInsets.only(left: 15.0, top: 7.0),
+                    ),
         ],
       ),
-
-      floatingActionButton: Container(
-        width: 95.0,
-        height: 95.0,
-        child: FloatingActionButton(
-          onPressed: () {
-            Firestore.instance
-                .collection('addDoctorRequest')
-                .document()
-                .setData({
-              'doctorID': widget.doctor.data["id"],
-              'patientID': widget.currentuser.uid,
-              'patientName': patientName,
-              'approved': 0,
-            });
-            SnackBar(content: Text('Request has been Sent,Thank you'));
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => listdoc(
-                          currentUser: widget.currentuser,
-                        )));
-          },
-          child: Icon(
-            Icons.person_add,
-            color: Colors.white,
-            size: 50.0,
-          ),
-        ),
-      ),
-      //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

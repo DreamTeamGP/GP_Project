@@ -22,7 +22,7 @@ class _listdocState extends State<listdoc> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future _data;
-
+ 
   Future getDoctors() async {
     var firestore = Firestore.instance;
     QuerySnapshot qn = await firestore
@@ -93,18 +93,39 @@ class _listdocState extends State<listdoc> {
                           top: 0.0, bottom: 10.0, right: 10.0, left: 10.0),
                       child: Row(
                         children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(top: 20.0),
-                            width: 80.0,
-                            height: 80.0,
-                            decoration: BoxDecoration(
-                              color: Colors.blue,
-                              //image here
-                              image: snapshot.data[index].data["photo"],
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(75.0)),
-                            ),
-                          ),
+                          snapshot.data[index].data["gender"] == "1"
+                              ? Container(
+                                  margin: EdgeInsets.only(top: 20.0),
+                                  width: 80.0,
+                                  height: 80.0,
+                                  decoration: BoxDecoration(
+                                    //color: Colors.blue,
+                                    //image here
+                                    image: DecorationImage(
+                                      image:
+                                          AssetImage('icons/Womandoctor.png'),
+                                      fit: BoxFit.fill,
+                                    ),
+                                    shape: BoxShape.circle,
+                                    //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                                  ),
+                                )
+                              : Container(
+                                  margin: EdgeInsets.only(top: 20.0),
+                                  width: 80.0,
+                                  height: 80.0,
+                                  decoration: BoxDecoration(
+                                    //color: Colors.blue,
+                                    //image here
+                                    image: DecorationImage(
+                                      image:
+                                          AssetImage('icons/Doctor.png'),
+                                      fit: BoxFit.fill,
+                                    ),
+                                    shape: BoxShape.circle,
+                                    //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                                  ),
+                                ),
                           Container(
                             width: 20,
                           ),

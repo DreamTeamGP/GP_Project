@@ -1,26 +1,41 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:gp_project/Pages/profiledrawer.dart';
-import '../models/user.dart';
-import '../Pages/profileEditWidget.dart';
+import 'package:gp_project/Pages/Listdoctors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class profileWidget extends StatefulWidget {
-  final FirebaseUser currentUser;
-  final User user;
+class patientDetails extends StatefulWidget {
+  final FirebaseUser currentuser;
+  //final DocumentSnapshot doctor;
+  final String patientID;
+  final documentID;
+  patientDetails({this.patientID, this.currentuser, this.documentID});
   @override
-  _profileWidgetState createState() => _profileWidgetState();
-  profileWidget({this.currentUser, this.user});
+  _patientDetailsState createState() => _patientDetailsState();
 }
 
-class _profileWidgetState extends State<profileWidget> {
-  String gender;
+class _patientDetailsState extends State<patientDetails> {
+  var patientName;
+  initUser() async {
+    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    FirebaseUser firebaseUser;
+    firebaseUser = await firebaseAuth.currentUser();
+    var userID = firebaseUser.uid;
+    DocumentSnapshot result = await Firestore.instance
+        .collection('users')
+        .document(widget.patientID)
+        .get()
+        .then((snapshot) {
+      patientName = snapshot.data['name'];
+      print(snapshot.data['name']);
+    });
+  }
+
   @override
   void initState() {
-    //widget.user.gender == 1 ? gender = 'female' : gender = 'male';
+    // TODO: implement initState
     super.initState();
-    
+    initUser();
   }
 
   @override
@@ -42,7 +57,7 @@ class _profileWidgetState extends State<profileWidget> {
       body: StreamBuilder<DocumentSnapshot>(
         stream: Firestore.instance
             .collection("users")
-            .document(widget.currentUser.uid)
+            .document(widget.patientID)
             .snapshots(),
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -103,6 +118,65 @@ class _profileWidgetState extends State<profileWidget> {
                       ),
                     ),
                   ],
+                ),
+                Container(
+                  // margin: EdgeInsets.all(20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        child: ButtonTheme(
+                        minWidth: 120,
+                        child: RaisedButton(
+                          padding: EdgeInsets.only(
+                              top: 5, bottom: 5, right: 20, left: 20),
+                          onPressed: (){
+                            Firestore.instance.collection("addDoctorRequest")
+                            .document(widget.documentID).updateData({"approved": 1});
+
+                            // Firestore.instance.collection("users")
+                            // .where("id", isEqualTo: widget.patientID)
+                            // ' '
+                          },
+                          child: Text(
+                            'Accept',
+                            style: TextStyle(
+                                fontSize: 27,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.normal),
+                          ),
+                          color: Colors.green,
+                          textColor: Colors.white,
+                        ),
+                    ),
+                      ),
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      child: ButtonTheme(
+                        minWidth: 120,
+                        child: RaisedButton(
+                          padding: EdgeInsets.only(
+                              top: 5, bottom: 5, right: 20, left: 20),
+                          onPressed: (){
+                            Firestore.instance.collection("addDoctorRequest")
+                            .document(widget.documentID).delete();
+                          },
+                          child: Text(
+                            'Reject',
+                            style: TextStyle(
+                                fontSize: 27,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.normal),
+                          ),
+                          color: Colors.red,
+                          textColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                    ],
+                  ),
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 15.0, top: 7.0),
@@ -266,24 +340,7 @@ class _profileWidgetState extends State<profileWidget> {
           return LinearProgressIndicator();
         },
       ),
-      floatingActionButton: Container(
-          width: 85.0,
-          height: 85.0,
-          child: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => profileEditWidget(
-                            currentUser: widget.currentUser,
-                          )));
-            },
-            child: Icon(
-              Icons.edit,
-              color: Colors.white,
-              size: 50.0,
-            ),
-          )),
+
     );
   }
 }

@@ -32,6 +32,7 @@ class UserClass {
     this.getUserData();
     userModel.phone;
     return userModel;
+    
   }
 
   //update profile
@@ -42,8 +43,12 @@ class UserClass {
     Firestore.instance.collection('users').document(userID).updateData({
       'name': user.name,
       'email': user.email,
-      'phone': user.country,
+      'phone': user.phone,
       'gender': user.gender,
+      'country':user.country,
+      'city':user.city,
+      'height':user.height,
+      'weight':user.weight,
       'birthday': user.birthday,
       
     });

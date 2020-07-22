@@ -162,6 +162,21 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.5"
+  flutter_local_notifications:
+    dependency: "direct main"
+    description:
+      name: flutter_local_notifications
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.4.4+2"
+  flutter_local_notifications_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_local_notifications_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
+>>>>>>> 2699cef4889d83f942560b82e4189e0237bedc3a
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -244,6 +259,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.16.0"
+    version: "0.16.1"
   logging:
     dependency: transitive
     description:

@@ -5,12 +5,13 @@ import 'package:gp_project/Pages/Calendar.dart';
 import 'package:gp_project/Pages/Listdoctors.dart';
 import 'package:gp_project/Pages/contactUs.dart';
 import 'package:gp_project/Pages/homepage.dart';
+import 'package:gp_project/Pages/doctorNotification.dart';
 import 'package:gp_project/Pages/notification.dart';
 import 'package:gp_project/Pages/profileWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gp_project/Pages/Maps.dart';
-
+import 'Detailsdoctor.dart';
 
 import 'Search.dart';
 
@@ -27,7 +28,31 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
     await prefs.clear();
     FirebaseAuth.instance.signOut();
   }
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  FirebaseUser firebaseUser;
+  var resultedDoctor;
+  var patientDocID;
+  getDoctorData() async {
+    firebaseUser = await _firebaseAuth.currentUser();
+    var userID = firebaseUser.uid;
+    DocumentSnapshot resultUser = await Firestore.instance.collection('users').document(userID)
+    .get().then((snapshot){
+      patientDocID = snapshot['doctorId'];
+      print('patientDocID '+ patientDocID);
+    });
 
+    DocumentSnapshot resultDoctor =  await Firestore.instance.collection('users').document(patientDocID)
+    .get().then((snapshot){
+      print('doctor dataaa '+ snapshot.data['name']);
+      resultedDoctor = snapshot;
+    });
+    //return resultDoctor;
+  }
+
+  @override void initState(){
+    getDoctorData();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     //FirebaseUser user;
@@ -75,15 +100,33 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               child: Center(
                 child: Column(
                   children: <Widget>[
-                    Container(
+                     snapshot.data['gender'] == 1
+                   ? Container(
                       width: 100,
                       height: 100,
                       decoration: BoxDecoration(
-                        color: Colors.blue[900],
-                        shape: BoxShape.circle,
+                        //color: Colors.blue,
+                        //image here
                         image: DecorationImage(
-                            image: NetworkImage('${snapshot.data['photo']}'),
-                            fit: BoxFit.fill),
+                          image: AssetImage('icons/Womandoctor.png'),
+                          fit: BoxFit.fill,
+                        ),
+                        shape: BoxShape.circle,
+                        //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                      ),
+                    )
+                    : Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        //color: Colors.blue,
+                        //image here
+                        image: DecorationImage(
+                          image: AssetImage('icons/Doctor.png'),
+                          fit: BoxFit.fill,
+                        ),
+                        shape: BoxShape.circle,
+                        //borderRadius: BorderRadius.all(Radius.circular(75.0)),
                       ),
                     ),
                     Text('${snapshot.data['name']}',
@@ -128,7 +171,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               ),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => notification(currentUser: widget.currentUser,)));
+                    MaterialPageRoute(builder: (context) => doctorNotification(currentUser: widget.currentUser,)));
               },
             ),
             ListTile(
@@ -190,15 +233,33 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               child: Center(
                 child: Column(
                   children: <Widget>[
-                    Container(
+                    snapshot.data['gender'] == 1
+                   ? Container(
                       width: 100,
                       height: 100,
                       decoration: BoxDecoration(
-                        color: Colors.blue[900],
-                        shape: BoxShape.circle,
+                        //color: Colors.blue,
+                        //image here
                         image: DecorationImage(
-                            image: NetworkImage('${snapshot.data['photo']}'),
-                            fit: BoxFit.fill),
+                          image: AssetImage('icons/Womanuser.png'),
+                          fit: BoxFit.fill,
+                        ),
+                        shape: BoxShape.circle,
+                        //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                      ),
+                    )
+                    : Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        //color: Colors.blue,
+                        //image here
+                        image: DecorationImage(
+                          image: AssetImage('icons/user.jpg'),
+                          fit: BoxFit.fill,
+                        ),
+                        shape: BoxShape.circle,
+                        //borderRadius: BorderRadius.all(Radius.circular(75.0)),
                       ),
                     ),
                     Text('${snapshot.data['name']}',
@@ -209,7 +270,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
             ),
             ListTile(
               leading: Icon(
-                Icons.person,
+                Icons.home,
                 size: 25,
               ),
               title: Text(
@@ -257,16 +318,31 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               ),
               onTap: () {},
             ),
-            ListTile(
-              leading: Icon(Icons.perm_identity),
-              title: Text(
-                'My Doctor',
-                style: TextStyle(fontSize: 22),
-              ),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => listdoc(currentUser: widget.currentUser,)));},
+            
+              ListTile(
+                leading: Icon(Icons.perm_identity),
+                title: Text(
+                  'My Doctor',
+                  style: TextStyle(fontSize: 22),
+                ),
+                onTap: () {
+                  if(patientDocID == ""){
+                    print('no doctooooor');
+                    Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => listdoc(currentUser: widget.currentUser,)));
+                  }else{
+                    print('yes doctooooor');
+                    
+                    Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => details(doctor: resultedDoctor, currentuser: widget.currentUser)));
+                    
+                    
+                  }
+                  
+                  }    
             ),
+            
+            
             ListTile(
               leading: Icon(Icons.search),
               title: Text(
