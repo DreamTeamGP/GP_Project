@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gp_project/Classes/User.dart';
 import 'package:gp_project/Pages/profileWidget.dart';
+import 'package:image_picker/image_picker.dart';
 import '../models/user.dart';
 
 class profileEditWidget extends StatefulWidget {
@@ -14,6 +18,21 @@ class profileEditWidget extends StatefulWidget {
 }
 
 class _profileEditWidgetState extends State<profileEditWidget> {
+  Future<File> imageFile;
+  File _image;
+  String _uploadedFileURL;
+
+  pickImageFromGallery(ImageSource source) {
+    setState(() {
+      imageFile =
+          ImagePicker.pickImage(source: ImageSource.gallery).then((image) {
+        setState(() {
+          _image = image;
+        });
+      });
+    });
+  }
+
   var userID;
   ScrollController _scrollController = new ScrollController();
   User _user = new User();
@@ -53,40 +72,68 @@ class _profileEditWidgetState extends State<profileEditWidget> {
                 child: ListView(
                   controller: _scrollController,
                   children: <Widget>[
-                    Row(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        snapshot.data['gender'] == 1
+                        // snapshot.data['gender'] == 1
+                        //     ? Container(
+                        //         margin: EdgeInsets.only(top: 20.0),
+                        //         width: 100,
+                        //         height: 100,
+                        //         decoration: BoxDecoration(
+                        //           //color: Colors.blue,
+                        //           //image here
+
+                        //           image: DecorationImage(
+                        //             image: AssetImage('icons/Womanuser.png'),
+                        //             fit: BoxFit.fill,
+                        //           ),
+                        //           shape: BoxShape.circle,
+                        //           //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                        //         ),
+                        //       )
+                        //     : Container(
+                        //         margin: EdgeInsets.only(top: 20.0),
+                        //         width: 100,
+                        //         height: 100,
+                        //         decoration: BoxDecoration(
+                        //           //color: Colors.blue,
+                        //           //image here
+                        //           image: DecorationImage(
+                        //             image: AssetImage('icons/user.jpg'),
+                        //             fit: BoxFit.fill,
+                        //           ),
+                        //           shape: BoxShape.circle,
+                        //           //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                        //         ),
+                        //       ),
+
+                        _image != null
                             ? Container(
-                                margin: EdgeInsets.only(top: 20.0),
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  //color: Colors.blue,
-                                  //image here
-                                  image: DecorationImage(
-                                    image: AssetImage('icons/Womanuser.png'),
-                                    fit: BoxFit.fill,
-                                  ),
-                                  shape: BoxShape.circle,
-                                  //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                                child: Image.asset(
+                                  _image.path,
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.fill,
                                 ),
                               )
                             : Container(
-                                margin: EdgeInsets.only(top: 20.0),
                                 width: 100,
                                 height: 100,
-                                decoration: BoxDecoration(
-                                  //color: Colors.blue,
-                                  //image here
-                                  image: DecorationImage(
-                                    image: AssetImage('icons/user.jpg'),
-                                    fit: BoxFit.fill,
-                                  ),
-                                  shape: BoxShape.circle,
-                                  //borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                                ),
                               ),
+                        _image == null
+                            ? RaisedButton(
+                                child: Text(
+                                  "Change photo",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 23),
+                                ),
+                                color: Colors.blue,
+                                onPressed: () {
+                                  pickImageFromGallery(ImageSource.gallery);
+                                },
+                              )
+                            : Container(),
                       ],
                     ),
                     Padding(
@@ -260,7 +307,7 @@ class _profileEditWidgetState extends State<profileEditWidget> {
                     Container(
                       padding: const EdgeInsets.all(0.10),
                       child: RaisedButton(
-                        onPressed: _validateInputs,
+                        onPressed: _validateInputs2,
                         child: Text('Submit'),
                         color: Colors.blue,
                       ),
@@ -359,6 +406,54 @@ class _profileEditWidgetState extends State<profileEditWidget> {
     if (_formKey.currentState.validate()) {
 //    If all data are correct then save data to out variables
       _formKey.currentState.save();
+      this.userClass.updateProfile(_user);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => profileWidget(
+                    currentUser: widget.currentUser,
+                  )));
+    } else {
+//    If all data are not valid then start auto validation.
+      setState(() {
+        _autoValidate = true;
+      });
+    }
+  }
+
+  Future ImageUpload() async {
+    StorageReference storageReference =
+        FirebaseStorage.instance.ref().child('${(_image.path)}}');
+    StorageUploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask.onComplete;
+    print('File Uploaded');
+    storageReference.getDownloadURL().then((fileURL) {
+      setState(() {
+        _uploadedFileURL = fileURL;
+      });
+    });
+    StorageTaskSnapshot snapshot =
+        await storage.ref().child("${_image.path}").putFile(_image).onComplete;
+    FirebaseUser firebaseUser;
+    //var userID = firebaseUser.uid;
+
+    final String downloadUrl = await snapshot.ref.getDownloadURL();
+    //await Firestore.instance.collection("users").add({"photo": downloadUrl});
+    await Firestore.instance
+        .collection("users")
+        .document(widget.currentUser.uid)
+        .updateData({'photo': downloadUrl});
+
+    return downloadUrl;
+  }
+
+  var storage = FirebaseStorage.instance;
+  Future<void> _validateInputs2() async {
+    if (_formKey.currentState.validate()) {
+//    If all data are correct then save data to out variables
+      _formKey.currentState.save();
+      ImageUpload();
+
       this.userClass.updateProfile(_user);
       Navigator.push(
           context,

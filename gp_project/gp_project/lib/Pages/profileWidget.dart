@@ -53,37 +53,43 @@ class _profileWidgetState extends State<profileWidget> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    snapshot.data['gender'] == 1
-                        ? Container(
-                            margin: EdgeInsets.only(top: 20.0),
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              //color: Colors.blue,
-                              //image here
-                              image: DecorationImage(
-                                image: AssetImage('icons/Womanuser.png'),
-                                fit: BoxFit.fill,
-                              ),
-                              shape: BoxShape.circle,
-                              //borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                            ),
-                          )
-                        : Container(
-                            margin: EdgeInsets.only(top: 20.0),
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              //color: Colors.blue,
-                              //image here
-                              image: DecorationImage(
-                                image: AssetImage('icons/user.jpg'),
-                                fit: BoxFit.fill,
-                              ),
-                              shape: BoxShape.circle,
-                              //borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                            ),
-                          ),
+                    // snapshot.data['gender'] == 1
+                    //     ? Container(
+                    //         margin: EdgeInsets.only(top: 20.0),
+                    //         width: 100,
+                    //         height: 100,
+                    //         decoration: BoxDecoration(
+                    //           //color: Colors.blue,
+                    //           //image here
+                    //           image: DecorationImage(
+                    //             image: AssetImage('icons/Womanuser.png'),
+                    //             fit: BoxFit.fill,
+                    //           ),
+                    //           shape: BoxShape.circle,
+                    //           //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                    //         ),
+                    //       )
+                    //     : Container(
+                    //         margin: EdgeInsets.only(top: 20.0),
+                    //         width: 100,
+                    //         height: 100,
+                    //         decoration: BoxDecoration(
+                    //           //color: Colors.blue,
+                    //           //image here
+                    //           image: DecorationImage(
+                    //             image: AssetImage('icons/user.jpg'),
+                    //             fit: BoxFit.fill,
+                    //           ),
+                    //           shape: BoxShape.circle,
+                    //           //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                    //         ),
+                    //       ),
+                    CircleAvatar(
+                      radius: 80.0,
+                      backgroundImage: NetworkImage(
+                        snapshot.data['photo'],
+                      ),
+                    ),
                   ],
                 ),
                 Row(
