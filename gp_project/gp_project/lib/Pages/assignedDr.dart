@@ -7,15 +7,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'homepage.dart';
 
-class details extends StatefulWidget {
+class assignedDr extends StatefulWidget {
   final FirebaseUser currentuser;
   final DocumentSnapshot doctor;
-  details({this.doctor, this.currentuser});
+  assignedDr({this.doctor, this.currentuser});
   @override
-  _detailsState createState() => _detailsState();
+  _assignedDrState createState() => _assignedDrState();
 }
- 
-class _detailsState extends State<details> {
+
+class _assignedDrState extends State<assignedDr> {
   double rating = 0;
   var patientName;
   initUser() async {
@@ -71,33 +71,27 @@ class _detailsState extends State<details> {
       ),
       body: Column(
         children: <Widget>[
-          widget.doctor['photo'] != null
-              ? CircleAvatar(
-                  radius: 80.0,
-                  backgroundImage: NetworkImage(
-                    widget.doctor['photo'],
-                  ),
+          widget.doctor.data["gender"] == "1"
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(top: 20.0),
+                      width: 80.0,
+                      height: 80.0,
+                      decoration: BoxDecoration(
+                        //color: Colors.blue,
+                        //image here
+                        image: DecorationImage(
+                          image: AssetImage('icons/Womandoctor.png'),
+                          fit: BoxFit.fill,
+                        ),
+                        shape: BoxShape.circle,
+                        //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                      ),
+                    )
+                  ],
                 )
-              //  Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: <Widget>[
-              //       Container(
-              //         margin: EdgeInsets.only(top: 20.0),
-              //         width: 80.0,
-              //         height: 80.0,
-              //         decoration: BoxDecoration(
-              //           //color: Colors.blue,
-              //           //image here
-              //           image: DecorationImage(
-              //             image: AssetImage('icons/Womandoctor.png'),
-              //             fit: BoxFit.fill,
-              //           ),
-              //           shape: BoxShape.circle,
-              //           //borderRadius: BorderRadius.all(Radius.circular(75.0)),
-              //         ),
-              //       )
-              //     ],
-              //   )
               : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -131,6 +125,30 @@ class _detailsState extends State<details> {
                     fontSize: 25.0,
                   ),
                 ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                child: StarRating(
+                    size: 30.0,
+                    rating: rating,
+                    color: Colors.yellow[600],
+                    borderColor: Colors.black,
+                    starCount: 5,
+                    onRatingChanged: (rating) => setState(
+                          () {
+                            this.rating = rating;
+                            Firestore.instance
+                                .collection('rate')
+                                .document(widget.currentuser.uid)
+                                .setData({
+                              'rating': rating,
+                            });
+                          },
+                        )),
               ),
             ],
           ),
@@ -286,37 +304,6 @@ class _detailsState extends State<details> {
                 ),
         ],
       ),
-
-      floatingActionButton: Container(
-        width: 95.0,
-        height: 95.0,
-        child: FloatingActionButton(
-          onPressed: () {
-            Firestore.instance
-                .collection('addDoctorRequest')
-                .document()
-                .setData({
-              'doctorID': widget.doctor.data["id"],
-              'patientID': widget.currentuser.uid,
-              'patientName': patientName,
-              'approved': 0,
-            });
-            SnackBar(content: Text('Request has been Sent,Thank you'));
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => listdoc(
-                          currentUser: widget.currentuser,
-                        )));
-          },
-          child: Icon(
-            Icons.person_add,
-            color: Colors.white,
-            size: 50.0,
-          ),
-        ),
-      ),
-      //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

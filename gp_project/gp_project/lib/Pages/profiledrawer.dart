@@ -13,8 +13,8 @@ import 'package:gp_project/Pages/profileWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gp_project/Pages/Maps.dart';
+import 'assignedDr.dart';
 
-import 'Detailsdoctor.dart';
 import 'Search.dart';
 
 class ProfileDrawer extends StatefulWidget {
@@ -400,32 +400,31 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               onTap: () {},
             ),
             ListTile(
-              leading: Icon(Icons.perm_identity),
-              title: Text(
-                'My Doctor',
-                style: TextStyle(fontSize: 22),
-              ),
-              onTap: () {
-                if (patientDocID == "") {
-                  print('no doctooooor');
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => listdoc(
-                                currentUser: widget.currentUser,
-                              )));
-                } else {
-                  print('yes doctooooor');
+                leading: Icon(Icons.perm_identity),
+                title: Text(
+                  'My Doctor',
+                  style: TextStyle(fontSize: 22),
+                ),
+                onTap: () {
+                  if (patientDocID == "") {
+                    print('no doctooooor');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => listdoc(
+                                  currentUser: widget.currentUser,
+                                )));
+                  } else {
+                    print('yes doctooooor');
 
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => details(
-                              doctor: resultedDoctor,
-                              currentuser: widget.currentUser)));
-                }
-              },
-            ),
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => assignedDr(
+                                doctor: resultedDoctor,
+                                currentuser: widget.currentUser)));
+                  }
+                }),
             ListTile(
               leading: Icon(Icons.search),
               title: Text(

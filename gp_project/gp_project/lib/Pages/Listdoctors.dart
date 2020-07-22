@@ -22,7 +22,7 @@ class _listdocState extends State<listdoc> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future _data;
- 
+
   Future getDoctors() async {
     var firestore = Firestore.instance;
     QuerySnapshot qn = await firestore
