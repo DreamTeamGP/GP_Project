@@ -128,6 +128,11 @@ class _calenderPageState extends State<calenderPage> {
       return processedDate;
     }
 
+    getMeasurementDate(DateTime inputVal) {
+      String processedDate = DateFormat("yyyy-MM-dd").format(inputVal);
+      return processedDate;
+    }
+
 //   getDateForMoo(DateTime date){
 //      date = timestamp.toDate();
 //  return DateFormat("yyyy-MM-dd").format(date);
@@ -265,7 +270,7 @@ class _calenderPageState extends State<calenderPage> {
                       child: StreamBuilder<QuerySnapshot>(
                     stream: Firestore.instance
                         .collection("patientsMeasurements")
-                        .where("Date", isEqualTo: getDateForTimetamp(day))
+                        .where("Date", isEqualTo: getMeasurementDate(day))
                         .where("UserId", isEqualTo: widget.user.uid)
                         .snapshots(),
                     builder: (BuildContext context,
