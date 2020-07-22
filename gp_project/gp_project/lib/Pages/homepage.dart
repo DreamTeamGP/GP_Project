@@ -418,7 +418,7 @@ class _HomePageState extends State<HomePage> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                            title: Text('Mood'),
+                            title: Text('Measurement'),
                             titleTextStyle: TextStyle(
                               backgroundColor: Colors.cyan,
                               fontSize: 25.0,

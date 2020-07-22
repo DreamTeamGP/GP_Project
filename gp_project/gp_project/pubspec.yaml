@@ -32,13 +32,19 @@ dependencies:
   shared_preferences: ^0.5.3+5
   simple_animations: ^2.2.1
   charts_flutter: ^0.9.0
-  flushbar: ^1.9.1
   flutter_datetime_picker: ^1.2.8
   intl: ^0.16.0
   flutter_calendar_carousel: ^1.4.2
   table_calendar: ^2.1.0
   firebase_messaging: ^5.0.2
   scheduled_notifications: ^1.0.0
+  flutter_launcher_icons: ^0.7.5
+  splashscreen: ^1.2.0
+  flutter_rating: ^0.0.2
+  flushbar:
+    git:
+      url: git://github.com/valterh4ck3r/flushbar
+      ref: master
   
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -49,7 +55,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
+flutter_icons:
+ android: "launcher_icon"
+ ios: true
+ image_path: "assets/icon/icon.png"
+ adaptive_icon_background: "assets/icon/iconBG.png"
+ 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -60,6 +71,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/icon.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

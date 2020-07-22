@@ -135,9 +135,7 @@ class _MeasurementPopUp extends State<MeasurementPopUp> {
 
   getDateForTimeStamp(DateTime inputVal) {
     String processedDate = inputVal.year.toString() +
-        '-' +
         inputVal.month.toString() +
-        '-' +
         inputVal.day.toString();
     return processedDate;
   }

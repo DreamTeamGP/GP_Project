@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_rating/flutter_rating.dart';
 import 'package:gp_project/Auth/line.dart';
 import 'Detailsdoctor.dart';
 import '../models/doctor.dart';
@@ -34,7 +35,9 @@ class _listdocState extends State<listdoc> {
   navigateToDetail(DocumentSnapshot doctor) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => details(doctor: doctor, currentuser:widget.currentUser)),
+      MaterialPageRoute(
+          builder: (context) =>
+              details(doctor: doctor, currentuser: widget.currentUser)),
     );
   }
 
@@ -64,7 +67,11 @@ class _listdocState extends State<listdoc> {
           ),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => HomePage(user: widget.currentUser,)));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomePage(
+                          user: widget.currentUser,
+                        )));
           },
         ),
       ),
@@ -101,8 +108,8 @@ class _listdocState extends State<listdoc> {
                           Container(
                             width: 20,
                           ),
-                          Flexible(
-                            child: GestureDetector(
+                          Column(children: <Widget>[
+                            GestureDetector(
                               onTap: () =>
                                   navigateToDetail(snapshot.data[index]),
                               child: Container(
@@ -117,7 +124,25 @@ class _listdocState extends State<listdoc> {
                                 ),
                               ),
                             ),
-                          ),
+                            StarRating(
+                              size: 25.0,
+                              rating: 2.3,
+                              color: Colors.yellow[600],
+                              borderColor: Colors.black,
+                              starCount: 5,
+                            ),
+                          ]),
+                          // Column(
+                          //   children: <Widget>[
+                          //     StarRating(
+                          //       size: 25.0,
+                          //       rating: 2.3,
+                          //       color: Colors.yellow[600],
+                          //       borderColor: Colors.black,
+                          //       starCount: 5,
+                          //     ),
+                          //   ],
+                          // ),
                         ],
                       ),
                     ),
