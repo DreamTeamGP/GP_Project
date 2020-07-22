@@ -22,7 +22,7 @@ class _listdocState extends State<listdoc> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future _data;
- 
+
   Future getDoctors() async {
     var firestore = Firestore.instance;
     QuerySnapshot qn = await firestore
@@ -118,8 +118,7 @@ class _listdocState extends State<listdoc> {
                                     //color: Colors.blue,
                                     //image here
                                     image: DecorationImage(
-                                      image:
-                                          AssetImage('icons/Doctor.png'),
+                                      image: AssetImage('icons/Doctor.png'),
                                       fit: BoxFit.fill,
                                     ),
                                     shape: BoxShape.circle,
@@ -153,17 +152,6 @@ class _listdocState extends State<listdoc> {
                               starCount: 5,
                             ),
                           ]),
-                          // Column(
-                          //   children: <Widget>[
-                          //     StarRating(
-                          //       size: 25.0,
-                          //       rating: 2.3,
-                          //       color: Colors.yellow[600],
-                          //       borderColor: Colors.black,
-                          //       starCount: 5,
-                          //     ),
-                          //   ],
-                          // ),
                         ],
                       ),
                     ),

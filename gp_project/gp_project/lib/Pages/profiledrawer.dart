@@ -11,7 +11,7 @@ import 'package:gp_project/Pages/profileWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gp_project/Pages/Maps.dart';
-import 'Detailsdoctor.dart';
+import 'assignedDr.dart';
 
 import 'Search.dart';
 
@@ -28,6 +28,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
     await prefs.clear();
     FirebaseAuth.instance.signOut();
   }
+
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   FirebaseUser firebaseUser;
   var resultedDoctor;
@@ -35,24 +36,32 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
   getDoctorData() async {
     firebaseUser = await _firebaseAuth.currentUser();
     var userID = firebaseUser.uid;
-    DocumentSnapshot resultUser = await Firestore.instance.collection('users').document(userID)
-    .get().then((snapshot){
+    DocumentSnapshot resultUser = await Firestore.instance
+        .collection('users')
+        .document(userID)
+        .get()
+        .then((snapshot) {
       patientDocID = snapshot['doctorId'];
-      print('patientDocID '+ patientDocID);
+      print('patientDocID ' + patientDocID);
     });
 
-    DocumentSnapshot resultDoctor =  await Firestore.instance.collection('users').document(patientDocID)
-    .get().then((snapshot){
-      print('doctor dataaa '+ snapshot.data['name']);
+    DocumentSnapshot resultDoctor = await Firestore.instance
+        .collection('users')
+        .document(patientDocID)
+        .get()
+        .then((snapshot) {
+      print('doctor dataaa ' + snapshot.data['name']);
       resultedDoctor = snapshot;
     });
     //return resultDoctor;
   }
 
-  @override void initState(){
+  @override
+  void initState() {
     getDoctorData();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     //FirebaseUser user;
@@ -100,35 +109,35 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               child: Center(
                 child: Column(
                   children: <Widget>[
-                     snapshot.data['gender'] == 1
-                   ? Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        //color: Colors.blue,
-                        //image here
-                        image: DecorationImage(
-                          image: AssetImage('icons/Womandoctor.png'),
-                          fit: BoxFit.fill,
-                        ),
-                        shape: BoxShape.circle,
-                        //borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                      ),
-                    )
-                    : Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        //color: Colors.blue,
-                        //image here
-                        image: DecorationImage(
-                          image: AssetImage('icons/Doctor.png'),
-                          fit: BoxFit.fill,
-                        ),
-                        shape: BoxShape.circle,
-                        //borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                      ),
-                    ),
+                    snapshot.data['gender'] == 1
+                        ? Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              //color: Colors.blue,
+                              //image here
+                              image: DecorationImage(
+                                image: AssetImage('icons/Womandoctor.png'),
+                                fit: BoxFit.fill,
+                              ),
+                              shape: BoxShape.circle,
+                              //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                            ),
+                          )
+                        : Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              //color: Colors.blue,
+                              //image here
+                              image: DecorationImage(
+                                image: AssetImage('icons/Doctor.png'),
+                                fit: BoxFit.fill,
+                              ),
+                              shape: BoxShape.circle,
+                              //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                            ),
+                          ),
                     Text('${snapshot.data['name']}',
                         style: TextStyle(fontSize: 22, color: Colors.white)),
                   ],
@@ -145,8 +154,12 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 style: TextStyle(fontSize: 22),
               ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage(user: widget.currentUser,)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomePage(
+                              user: widget.currentUser,
+                            )));
               },
             ),
             ListTile(
@@ -159,8 +172,12 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 style: TextStyle(fontSize: 22),
               ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => profileWidget(currentUser: widget.currentUser,)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => profileWidget(
+                              currentUser: widget.currentUser,
+                            )));
               },
             ),
             ListTile(
@@ -170,8 +187,12 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 style: TextStyle(fontSize: 22),
               ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => doctorNotification(currentUser: widget.currentUser,)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => doctorNotification(
+                              currentUser: widget.currentUser,
+                            )));
               },
             ),
             ListTile(
@@ -197,8 +218,12 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 style: TextStyle(fontSize: 22),
               ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => contactUs(user: widget.currentUser,)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => contactUs(
+                              user: widget.currentUser,
+                            )));
               },
             ),
             ListTile(
@@ -234,34 +259,34 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 child: Column(
                   children: <Widget>[
                     snapshot.data['gender'] == 1
-                   ? Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        //color: Colors.blue,
-                        //image here
-                        image: DecorationImage(
-                          image: AssetImage('icons/Womanuser.png'),
-                          fit: BoxFit.fill,
-                        ),
-                        shape: BoxShape.circle,
-                        //borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                      ),
-                    )
-                    : Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        //color: Colors.blue,
-                        //image here
-                        image: DecorationImage(
-                          image: AssetImage('icons/user.jpg'),
-                          fit: BoxFit.fill,
-                        ),
-                        shape: BoxShape.circle,
-                        //borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                      ),
-                    ),
+                        ? Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              //color: Colors.blue,
+                              //image here
+                              image: DecorationImage(
+                                image: AssetImage('icons/Womanuser.png'),
+                                fit: BoxFit.fill,
+                              ),
+                              shape: BoxShape.circle,
+                              //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                            ),
+                          )
+                        : Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              //color: Colors.blue,
+                              //image here
+                              image: DecorationImage(
+                                image: AssetImage('icons/user.jpg'),
+                                fit: BoxFit.fill,
+                              ),
+                              shape: BoxShape.circle,
+                              //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                            ),
+                          ),
                     Text('${snapshot.data['name']}',
                         style: TextStyle(fontSize: 22, color: Colors.white)),
                   ],
@@ -278,8 +303,12 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 style: TextStyle(fontSize: 22),
               ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage(user: widget.currentUser,)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomePage(
+                              user: widget.currentUser,
+                            )));
               },
             ),
             ListTile(
@@ -295,8 +324,9 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            profileWidget(currentUser: widget.currentUser,)));
+                        builder: (context) => profileWidget(
+                              currentUser: widget.currentUser,
+                            )));
               },
             ),
             ListTile(
@@ -306,8 +336,12 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 style: TextStyle(fontSize: 22),
               ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => notification(currentUser: widget.currentUser,)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => notification(
+                              currentUser: widget.currentUser,
+                            )));
               },
             ),
             ListTile(
@@ -318,31 +352,32 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               ),
               onTap: () {},
             ),
-            
-              ListTile(
+            ListTile(
                 leading: Icon(Icons.perm_identity),
                 title: Text(
                   'My Doctor',
                   style: TextStyle(fontSize: 22),
                 ),
                 onTap: () {
-                  if(patientDocID == ""){
+                  if (patientDocID == "") {
                     print('no doctooooor');
-                    Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => listdoc(currentUser: widget.currentUser,)));
-                  }else{
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => listdoc(
+                                  currentUser: widget.currentUser,
+                                )));
+                  } else {
                     print('yes doctooooor');
-                    
-                    Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => details(doctor: resultedDoctor, currentuser: widget.currentUser)));
-                    
-                    
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => assignedDr(
+                                doctor: resultedDoctor,
+                                currentuser: widget.currentUser)));
                   }
-                  
-                  }    
-            ),
-            
-            
+                }),
             ListTile(
               leading: Icon(Icons.search),
               title: Text(
@@ -350,8 +385,13 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 style: TextStyle(fontSize: 22),
               ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => searchByName(currentUser: widget.currentUser,)));},
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => searchByName(
+                              currentUser: widget.currentUser,
+                            )));
+              },
             ),
             ListTile(
               leading: Icon(Icons.map),
@@ -360,8 +400,10 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 style: TextStyle(fontSize: 22),
               ),
               onTap: () {
-                Navigator.push(context,
-                   MaterialPageRoute(builder: (context) => Map(user: widget.currentUser)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Map(user: widget.currentUser)));
               },
             ),
             ListTile(
@@ -371,8 +413,12 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 style: TextStyle(fontSize: 22),
               ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => calenderPage(user: widget.currentUser,)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => calenderPage(
+                              user: widget.currentUser,
+                            )));
               },
             ),
             ListTile(
@@ -398,8 +444,12 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 style: TextStyle(fontSize: 22),
               ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => contactUs(user: widget.currentUser,)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => contactUs(
+                              user: widget.currentUser,
+                            )));
               },
             ),
             ListTile(

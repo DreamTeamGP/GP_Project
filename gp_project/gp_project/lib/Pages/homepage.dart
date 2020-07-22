@@ -35,9 +35,9 @@ class _HomePageState extends State<HomePage> {
   LocalNotifications localNotifications = new LocalNotifications();
   var mood = ['mood'];
   var month = ['month'];
-final Firestore _db = Firestore.instance;
+  final Firestore _db = Firestore.instance;
   final FirebaseMessaging _fcm = FirebaseMessaging();
-  
+
   StreamSubscription iosSubscription;
   _saveDeviceToken() async {
     // Get the current user
@@ -58,58 +58,61 @@ final Firestore _db = Firestore.instance;
       });
     }
   }
-  @override
-    void initState() {
-      super.initState();
-      initUser();
-      _data = getPatients();
-      _data2 = getMeasurements();
-      localNotifications.dailyMeasurementReminder();
-      _data = getPatients();
-      if (Platform.isIOS) {
-        iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
-          print(data);
-          _saveDeviceToken();   
-        });
 
-        _fcm.requestNotificationPermissions(IosNotificationSettings());
-      } else {
+  @override
+  void initState() {
+    super.initState();
+    initUser();
+    _data = getPatients();
+    _data2 = getMeasurements();
+    localNotifications.dailyMeasurementReminder();
+    _data = getPatients();
+    if (Platform.isIOS) {
+      iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
+        print(data);
         _saveDeviceToken();
-      }
-      _fcm.configure(
-          onMessage: (Map<String, dynamic> message) async {
-            print("onMessage: $message");
-            showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                        content: ListTile(
-                        title: Text(message['notification']['title']),
-                        subtitle: Text(message['notification']['body']),
-                        ),
-                        actions: <Widget>[
-                        FlatButton(
-                            child: Text('Ok'),
-                            onPressed: () => Navigator.of(context).pop(),
-                        ),
-                    ],
-                ),
-            );
-        },
-        onLaunch: (Map<String, dynamic> message) async {
-            print("onLaunch: $message");
-            // TODO optional
-        },
-        onResume: (Map<String, dynamic> message) async {
-            print("onResume: $message");
-            // TODO optional
-        },
-      );
+      });
+
+      _fcm.requestNotificationPermissions(IosNotificationSettings());
+    } else {
+      _saveDeviceToken();
     }
+    _fcm.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: ListTile(
+              title: Text(message['notification']['title']),
+              subtitle: Text(message['notification']['body']),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        // TODO optional
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        // TODO optional
+      },
+    );
+  }
+
   @override
   void dispose() {
     if (iosSubscription != null) iosSubscription.cancel();
     super.dispose();
   }
+
 //
   UserClass userClass = new UserClass();
   User user = new User();
@@ -180,6 +183,7 @@ final Firestore _db = Firestore.instance;
               detailsuser(patient: patient, currentuser: widget.user)),
     );
   }
+
   navigateToThreemon(DocumentSnapshot patient) {
     Navigator.push(
       context,
@@ -187,7 +191,8 @@ final Firestore _db = Firestore.instance;
           builder: (context) =>
               ThreeMonthReport(patient: patient, currentUser: widget.user)),
     );
-  }  
+  }
+
   navigateToSixmon(DocumentSnapshot patient) {
     Navigator.push(
       context,
@@ -195,7 +200,8 @@ final Firestore _db = Firestore.instance;
           builder: (context) =>
               sixMonthReport(patient: patient, currentUser: widget.user)),
     );
-  }  
+  }
+
   navigateToOneyear(DocumentSnapshot patient) {
     Navigator.push(
       context,
@@ -204,8 +210,6 @@ final Firestore _db = Firestore.instance;
               oneYearReport(patient: patient, currentUser: widget.user)),
     );
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -502,7 +506,7 @@ final Firestore _db = Firestore.instance;
                                           Icons.person,
                                           color: Colors.green,
                                         ),
-                                        onPressed: () {},
+
                                         iconSize: 50,
                                         onPressed: () {
                                           navigateToDetail(
@@ -528,7 +532,6 @@ final Firestore _db = Firestore.instance;
                                           Icons.print,
                                           color: Colors.blue,
                                         ),
-                                        onPressed: () {},
                                         iconSize: 50,
                                         onPressed: () {
                                           showDialog<void>(
@@ -560,8 +563,10 @@ final Firestore _db = Firestore.instance;
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
-                                                                navigateToThreemon(snapshot.data[index]);
-                                                             },
+                                                            navigateToThreemon(
+                                                                snapshot.data[
+                                                                    index]);
+                                                          },
                                                           color: Colors.cyan,
                                                         ),
                                                       ),
@@ -584,7 +589,9 @@ final Firestore _db = Firestore.instance;
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
-                                                            navigateToSixmon(snapshot.data[index]);
+                                                            navigateToSixmon(
+                                                                snapshot.data[
+                                                                    index]);
                                                           },
                                                           color: Colors.cyan,
                                                         ),
@@ -608,7 +615,9 @@ final Firestore _db = Firestore.instance;
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
-                                                            navigateToOneyear(snapshot.data[index]);
+                                                            navigateToOneyear(
+                                                                snapshot.data[
+                                                                    index]);
                                                           },
                                                           color: Colors.cyan,
                                                         ),
@@ -676,7 +685,6 @@ final Firestore _db = Firestore.instance;
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('Measurement'),
                           title: Container(
                             color: Colors.cyan,
                             child: Text(
@@ -699,7 +707,6 @@ final Firestore _db = Firestore.instance;
               RaisedButton(
                 child: Row(
                   children: <Widget>[
-                    Icon(Icons.fastfood, size: 35),
                     Icon(
                       Icons.fastfood,
                       size: 35,
@@ -728,7 +735,6 @@ final Firestore _db = Firestore.instance;
               RaisedButton(
                 child: Row(
                   children: <Widget>[
-                    Icon(Icons.tag_faces, size: 35),
                     Icon(
                       Icons.tag_faces,
                       size: 35,
@@ -745,7 +751,6 @@ final Firestore _db = Firestore.instance;
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                            title: Text('Measurement'),
                             title: Container(
                               color: Colors.cyan,
                               child: Text(
@@ -767,7 +772,6 @@ final Firestore _db = Firestore.instance;
               RaisedButton(
                 child: Row(
                   children: <Widget>[
-                    Icon(Icons.person, size: 35),
                     Icon(
                       Icons.person,
                       size: 35,
@@ -779,7 +783,6 @@ final Firestore _db = Firestore.instance;
                     )
                   ],
                 ),
-                onPressed: () {},
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -797,7 +800,6 @@ final Firestore _db = Firestore.instance;
               Padding(
                   padding: EdgeInsets.only(top: 10, bottom: 0),
                   child: Text(
-                    'Statistics Bar Chart',
                     'Measurments Bar Chart',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
                   )),
@@ -948,5 +950,4 @@ final Firestore _db = Firestore.instance;
       },
     );
   }
-
 }

@@ -135,9 +135,9 @@ class _MeasurementPopUp extends State<MeasurementPopUp> {
   }
 
   getDateForTimeStamp(DateTime inputVal) {
-    String processedDate = inputVal.year.toString() +
-        inputVal.month.toString() +
-        inputVal.day.toString();
+    // String processedDate = inputVal.year.toString() +
+    //     inputVal.month.toString() +
+    //     inputVal.day.toString();
     String processedDate = DateFormat("yyyy-MM-dd").format(inputVal);
     return processedDate;
   }
@@ -212,8 +212,8 @@ class _MeasurementPopUp extends State<MeasurementPopUp> {
     //else a new doc will get create
     else {
       if (measruringTypedropdownValue == "Fasting blood glucose") {
-        if (int.parse(_measurementController.text) > 90 &&
-            int.parse(_measurementController.text) < 140) {
+        if (int.parse(_measurementController.text) > 30 &&
+            int.parse(_measurementController.text) < 500) {
           databaseReference
               .collection('patientsMeasurements')
               .document()
@@ -228,8 +228,8 @@ class _MeasurementPopUp extends State<MeasurementPopUp> {
           print("no measurement");
         }
       } else if (measruringTypedropdownValue == "Post prandial blood glucose") {
-        if (int.parse(_measurementController.text) > 140 &&
-            int.parse(_measurementController.text) < 180) {
+        if (int.parse(_measurementController.text) > 80 &&
+            int.parse(_measurementController.text) < 500) {
           databaseReference
               .collection('patientsMeasurements')
               .document()
