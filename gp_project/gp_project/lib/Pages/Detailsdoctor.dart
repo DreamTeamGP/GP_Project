@@ -11,7 +11,7 @@ class details extends StatefulWidget {
   @override
   _detailsState createState() => _detailsState();
 }
-
+ 
 class _detailsState extends State<details> {
   var patientName;
   initUser() async {
@@ -67,27 +67,33 @@ class _detailsState extends State<details> {
       ),
       body: Column(
         children: <Widget>[
-          widget.doctor.data["gender"] == "1"
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(top: 20.0),
-                      width: 80.0,
-                      height: 80.0,
-                      decoration: BoxDecoration(
-                        //color: Colors.blue,
-                        //image here
-                        image: DecorationImage(
-                          image: AssetImage('icons/Womandoctor.png'),
-                          fit: BoxFit.fill,
-                        ),
-                        shape: BoxShape.circle,
-                        //borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                      ),
-                    )
-                  ],
+          widget.doctor['photo'] != null
+              ? CircleAvatar(
+                  radius: 80.0,
+                  backgroundImage: NetworkImage(
+                    widget.doctor['photo'],
+                  ),
                 )
+              //  Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: <Widget>[
+              //       Container(
+              //         margin: EdgeInsets.only(top: 20.0),
+              //         width: 80.0,
+              //         height: 80.0,
+              //         decoration: BoxDecoration(
+              //           //color: Colors.blue,
+              //           //image here
+              //           image: DecorationImage(
+              //             image: AssetImage('icons/Womandoctor.png'),
+              //             fit: BoxFit.fill,
+              //           ),
+              //           shape: BoxShape.circle,
+              //           //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+              //         ),
+              //       )
+              //     ],
+              //   )
               : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -289,6 +295,7 @@ class _detailsState extends State<details> {
               'doctorID': widget.doctor.data["id"],
               'patientID': widget.currentuser.uid,
               'patientName': patientName,
+              'approved': 0,
             });
             SnackBar(content: Text('Request has been Sent,Thank you'));
             Navigator.push(

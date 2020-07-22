@@ -32,6 +32,7 @@ class UserClass {
     this.getUserData();
     userModel.phone;
     return userModel;
+    
   }
 
   //update profile

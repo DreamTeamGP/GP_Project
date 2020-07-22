@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_project/Classes/User.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'dart:io';
 import 'package:gp_project/Auth/line.dart';
 import 'package:gp_project/Pages/Detailsuser.dart';
 import 'package:gp_project/Pages/MeasurementGraph.dart';
@@ -16,6 +18,7 @@ import 'package:gp_project/Pages/measurementPopup.dart';
 import 'package:gp_project/Pages/moodPopup.dart';
 import 'package:gp_project/models/user.dart';
 import 'package:simple_animations/simple_animations.dart';
+import '../Classes/LocalNotification.dart';
 import 'Detailsdoctor.dart';
 import 'meals.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -29,9 +32,88 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  LocalNotifications localNotifications = new LocalNotifications();
   var mood = ['mood'];
   var month = ['month'];
+  final Firestore _db = Firestore.instance;
+  final FirebaseMessaging _fcm = FirebaseMessaging();
 
+  StreamSubscription iosSubscription;
+  _saveDeviceToken() async {
+    // Get the current user
+    String uid = widget.user.uid;
+    String fcmToken = await _fcm.getToken();
+    // Save it to Firestore
+    if (fcmToken != null) {
+      var tokens = _db
+          .collection('users')
+          .document(uid)
+          .collection('tokens')
+          .document(fcmToken);
+
+      await tokens.setData({
+        'token': fcmToken,
+        'createdAt': FieldValue.serverTimestamp(), // optional
+        'platform': Platform.operatingSystem // optional
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initUser();
+    _data = getPatients();
+    _data2 = getMeasurements();
+    localNotifications.dailyMeasurementReminder();
+    _data = getPatients();
+    if (Platform.isIOS) {
+      iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
+        print(data);
+        _saveDeviceToken();
+      });
+
+      _fcm.requestNotificationPermissions(IosNotificationSettings());
+    } else {
+      _saveDeviceToken();
+    }
+    _fcm.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: ListTile(
+              title: Text(message['notification']['title']),
+              subtitle: Text(message['notification']['body']),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        // TODO optional
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        // TODO optional
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    if (iosSubscription != null) iosSubscription.cancel();
+    super.dispose();
+  }
+
+//
   UserClass userClass = new UserClass();
   User user = new User();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -101,6 +183,7 @@ class _HomePageState extends State<HomePage> {
               detailsuser(patient: patient, currentuser: widget.user)),
     );
   }
+
   navigateToThreemon(DocumentSnapshot patient) {
     Navigator.push(
       context,
@@ -108,7 +191,8 @@ class _HomePageState extends State<HomePage> {
           builder: (context) =>
               ThreeMonthReport(patient: patient, currentUser: widget.user)),
     );
-  }  
+  }
+
   navigateToSixmon(DocumentSnapshot patient) {
     Navigator.push(
       context,
@@ -116,7 +200,8 @@ class _HomePageState extends State<HomePage> {
           builder: (context) =>
               sixMonthReport(patient: patient, currentUser: widget.user)),
     );
-  }  
+  }
+
   navigateToOneyear(DocumentSnapshot patient) {
     Navigator.push(
       context,
@@ -124,14 +209,6 @@ class _HomePageState extends State<HomePage> {
           builder: (context) =>
               oneYearReport(patient: patient, currentUser: widget.user)),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    initUser();
-    _data = getPatients();
-    _data2 = getMeasurements();
   }
 
   @override
@@ -284,6 +361,7 @@ class _HomePageState extends State<HomePage> {
               child: Text("Loading ..."),
             );
           } else {
+            return new Text('no data set in the userId document in firestore');
             return new Text(
                 'There is no data for this user,check and try again');
           }
@@ -428,6 +506,7 @@ class _HomePageState extends State<HomePage> {
                                           Icons.person,
                                           color: Colors.green,
                                         ),
+
                                         iconSize: 50,
                                         onPressed: () {
                                           navigateToDetail(
@@ -484,8 +563,10 @@ class _HomePageState extends State<HomePage> {
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
-                                                                navigateToThreemon(snapshot.data[index]);
-                                                             },
+                                                            navigateToThreemon(
+                                                                snapshot.data[
+                                                                    index]);
+                                                          },
                                                           color: Colors.cyan,
                                                         ),
                                                       ),
@@ -508,7 +589,9 @@ class _HomePageState extends State<HomePage> {
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
-                                                            navigateToSixmon(snapshot.data[index]);
+                                                            navigateToSixmon(
+                                                                snapshot.data[
+                                                                    index]);
                                                           },
                                                           color: Colors.cyan,
                                                         ),
@@ -532,7 +615,9 @@ class _HomePageState extends State<HomePage> {
                                                             Navigator.of(
                                                                     context)
                                                                 .pop();
-                                                            navigateToOneyear(snapshot.data[index]);
+                                                            navigateToOneyear(
+                                                                snapshot.data[
+                                                                    index]);
                                                           },
                                                           color: Colors.cyan,
                                                         ),
@@ -622,6 +707,7 @@ class _HomePageState extends State<HomePage> {
               RaisedButton(
                 child: Row(
                   children: <Widget>[
+                    Icon(Icons.fastfood, size: 35),
                     Icon(
                       Icons.fastfood,
                       size: 35,
@@ -650,6 +736,7 @@ class _HomePageState extends State<HomePage> {
               RaisedButton(
                 child: Row(
                   children: <Widget>[
+                    Icon(Icons.tag_faces, size: 35),
                     Icon(
                       Icons.tag_faces,
                       size: 35,
@@ -687,6 +774,7 @@ class _HomePageState extends State<HomePage> {
               RaisedButton(
                 child: Row(
                   children: <Widget>[
+                    Icon(Icons.person, size: 35),
                     Icon(
                       Icons.person,
                       size: 35,

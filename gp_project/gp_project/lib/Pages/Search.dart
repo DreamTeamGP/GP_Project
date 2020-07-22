@@ -1,9 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_project/Pages/Detailsdoctor.dart';
 import 'package:gp_project/Pages/homepage.dart';
-
 
 // class searchDoctor extends StatefulWidget {
 //   final FirebaseUser currentUser;
@@ -87,6 +88,7 @@ class _searchByNameState extends State<searchByName> {
   String name = "";
   String _currentlySelected;
   Future data;
+  File _image;
 
   navigateToDetail(DocumentSnapshot doctor) {
     Navigator.push(
@@ -213,16 +215,19 @@ class _searchByNameState extends State<searchByName> {
             dropdownWidget()
           ],
           leading: new IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            size: 30.0,
-            color: Colors.white,
+            icon: Icon(
+              Icons.arrow_back_ios,
+              size: 30.0,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          HomePage(user: widget.currentUser)));
+            },
           ),
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => HomePage(user:widget.currentUser)));
-          },
-        ),
         ),
         body: Center(
           child: Column(
@@ -285,18 +290,29 @@ class _searchByNameState extends State<searchByName> {
                                     right: 10.0,
                                     left: 10.0),
                                 child: Row(children: <Widget>[
-                                  Container(
-                                    margin: EdgeInsets.only(top: 20.0),
-                                    width: 80.0,
-                                    height: 80.0,
-                                    decoration: BoxDecoration(
-                                      color: Colors.blue,
-                                      //image here
-                                      image: document["photo"],
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(75.0)),
-                                    ),
-                                  ),
+                                  document['photo'] != null
+                                      ? CircleAvatar(
+                                          radius: 50.0,
+                                          backgroundImage: NetworkImage(
+                                            document['photo'],
+                                          ),
+                                        )
+                                      : Container(
+                                          margin: EdgeInsets.only(top: 20.0),
+                                          width: 100,
+                                          height: 100,
+                                          decoration: BoxDecoration(
+                                            //color: Colors.blue,
+                                            //image here
+                                            image: DecorationImage(
+                                              image:
+                                                  AssetImage('icons/user.jpg'),
+                                              fit: BoxFit.fill,
+                                            ),
+                                            shape: BoxShape.circle,
+                                            //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                                          ),
+                                        ),
                                   Container(
                                     width: 20,
                                   ),

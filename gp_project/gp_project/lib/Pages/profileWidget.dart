@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +18,12 @@ class profileWidget extends StatefulWidget {
 
 class _profileWidgetState extends State<profileWidget> {
   String gender;
+  File _image;
   @override
   void initState() {
     //widget.user.gender == 1 ? gender = 'female' : gender = 'male';
     super.initState();
+    
   }
 
   @override
@@ -84,12 +88,28 @@ class _profileWidgetState extends State<profileWidget> {
                     //           //borderRadius: BorderRadius.all(Radius.circular(75.0)),
                     //         ),
                     //       ),
-                    CircleAvatar(
-                      radius: 80.0,
-                      backgroundImage: NetworkImage(
-                        snapshot.data['photo'],
-                      ),
-                    ),
+                    snapshot.data['photo'] != null
+                        ? CircleAvatar(
+                            radius: 80.0,
+                            backgroundImage: NetworkImage(
+                              snapshot.data['photo'],
+                            ),
+                          )
+                        : Container(
+                            margin: EdgeInsets.only(top: 20.0),
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              //color: Colors.blue,
+                              //image here
+                              image: DecorationImage(
+                                image: AssetImage('icons/user.jpg'),
+                                fit: BoxFit.fill,
+                              ),
+                              shape: BoxShape.circle,
+                              //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                            ),
+                          ),
                   ],
                 ),
                 Row(

@@ -68,26 +68,32 @@ class _detailsState extends State<detailsuser> {
       ),
       body: Column(
         children: <Widget>[
-          widget.patient.data["gender"] == 1
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(top: 20.0),
-                      width: 80.0,
-                      height: 80.0,
-                      decoration: BoxDecoration(
-                        //color: Colors.blue,
-                        //image here
-                        image: DecorationImage(
-                          image: AssetImage('icons/Womanuser.png'),
-                          fit: BoxFit.fill,
-                        ),
-                        shape: BoxShape.circle,
-                        //borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                      ),
-                    )
-                  ],
+          widget.patient['photo'] != null
+              //widget.patient.data["gender"] == 1
+              ? CircleAvatar(
+                  radius: 80.0,
+                  backgroundImage: NetworkImage(
+                    widget.patient['photo'],
+                  ),
+
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  // children: <Widget>[
+                  //   Container(
+                  //     margin: EdgeInsets.only(top: 20.0),
+                  //     width: 80.0,
+                  //     height: 80.0,
+                  //     decoration: BoxDecoration(
+                  //       //color: Colors.blue,
+                  //       //image here
+                  //       image: DecorationImage(
+                  //         image: AssetImage('icons/Womanuser.png'),
+                  //         fit: BoxFit.fill,
+                  //       ),
+                  //       shape: BoxShape.circle,
+                  //       //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                  //     ),
+                  //   )
+                  // ],
                 )
               : Row(
                   mainAxisAlignment: MainAxisAlignment.center,

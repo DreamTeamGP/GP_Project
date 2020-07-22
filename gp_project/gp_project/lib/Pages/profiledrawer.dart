@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_project/Auth/login.dart';
@@ -5,12 +7,14 @@ import 'package:gp_project/Pages/Calendar.dart';
 import 'package:gp_project/Pages/Listdoctors.dart';
 import 'package:gp_project/Pages/contactUs.dart';
 import 'package:gp_project/Pages/homepage.dart';
+import 'package:gp_project/Pages/doctorNotification.dart';
 import 'package:gp_project/Pages/notification.dart';
 import 'package:gp_project/Pages/profileWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gp_project/Pages/Maps.dart';
 
+import 'Detailsdoctor.dart';
 import 'Search.dart';
 
 class ProfileDrawer extends StatefulWidget {
@@ -21,10 +25,44 @@ class ProfileDrawer extends StatefulWidget {
 }
 
 class _ProfileDrawerState extends State<ProfileDrawer> {
+  File _image;
   static Future<void> signOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
     FirebaseAuth.instance.signOut();
+  }
+
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  FirebaseUser firebaseUser;
+  var resultedDoctor;
+  var patientDocID;
+  getDoctorData() async {
+    firebaseUser = await _firebaseAuth.currentUser();
+    var userID = firebaseUser.uid;
+    DocumentSnapshot resultUser = await Firestore.instance
+        .collection('users')
+        .document(userID)
+        .get()
+        .then((snapshot) {
+      patientDocID = snapshot['doctorId'];
+      print('patientDocID ' + patientDocID);
+    });
+
+    DocumentSnapshot resultDoctor = await Firestore.instance
+        .collection('users')
+        .document(patientDocID)
+        .get()
+        .then((snapshot) {
+      print('doctor dataaa ' + snapshot.data['name']);
+      resultedDoctor = snapshot;
+    });
+    //return resultDoctor;
+  }
+
+  @override
+  void initState() {
+    getDoctorData();
+    super.initState();
   }
 
   @override
@@ -103,12 +141,28 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                     //           //borderRadius: BorderRadius.all(Radius.circular(75.0)),
                     //         ),
                     //       ),
-                    CircleAvatar(
-                      radius: 60.0,
-                      backgroundImage: NetworkImage(
-                        snapshot.data['photo'],
-                      ),
-                    ),
+                    _image != null
+                        ? CircleAvatar(
+                            radius: 80.0,
+                            backgroundImage: NetworkImage(
+                              snapshot.data['photo'],
+                            ),
+                          )
+                        : Container(
+                            margin: EdgeInsets.only(top: 20.0),
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              //color: Colors.blue,
+                              //image here
+                              image: DecorationImage(
+                                image: AssetImage('icons/user.jpg'),
+                                fit: BoxFit.fill,
+                              ),
+                              shape: BoxShape.circle,
+                              //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                            ),
+                          ),
                     Text('${snapshot.data['name']}',
                         style: TextStyle(fontSize: 22, color: Colors.white)),
                   ],
@@ -161,7 +215,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => notification(
+                        builder: (context) => doctorNotification(
                               currentUser: widget.currentUser,
                             )));
               },
@@ -258,12 +312,28 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                     //       //borderRadius: BorderRadius.all(Radius.circular(75.0)),
                     //     ),
                     //   ),
-                    CircleAvatar(
-                      radius: 60.0,
-                      backgroundImage: NetworkImage(
-                        snapshot.data['photo'],
-                      ),
-                    ),
+                    snapshot.data['photo'] != null
+                        ? CircleAvatar(
+                            radius: 80.0,
+                            backgroundImage: NetworkImage(
+                              snapshot.data['photo'],
+                            ),
+                          )
+                        : Container(
+                            margin: EdgeInsets.only(top: 20.0),
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              //color: Colors.blue,
+                              //image here
+                              image: DecorationImage(
+                                image: AssetImage('icons/user.jpg'),
+                                fit: BoxFit.fill,
+                              ),
+                              shape: BoxShape.circle,
+                              //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                            ),
+                          ),
                     Text('${snapshot.data['name']}',
                         style: TextStyle(fontSize: 22, color: Colors.white)),
                   ],
@@ -336,12 +406,24 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 style: TextStyle(fontSize: 22),
               ),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => listdoc(
-                              currentUser: widget.currentUser,
-                            )));
+                if (patientDocID == "") {
+                  print('no doctooooor');
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => listdoc(
+                                currentUser: widget.currentUser,
+                              )));
+                } else {
+                  print('yes doctooooor');
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => details(
+                              doctor: resultedDoctor,
+                              currentuser: widget.currentUser)));
+                }
               },
             ),
             ListTile(

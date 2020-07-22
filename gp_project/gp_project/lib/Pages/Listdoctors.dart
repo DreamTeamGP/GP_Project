@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_rating/flutter_rating.dart';
 import 'package:gp_project/Auth/line.dart';
 import 'Detailsdoctor.dart';
 import '../models/doctor.dart';
@@ -21,7 +22,7 @@ class _listdocState extends State<listdoc> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future _data;
-
+ 
   Future getDoctors() async {
     var firestore = Firestore.instance;
     QuerySnapshot qn = await firestore
@@ -92,21 +93,11 @@ class _listdocState extends State<listdoc> {
                           top: 0.0, bottom: 10.0, right: 10.0, left: 10.0),
                       child: Row(
                         children: <Widget>[
-                          snapshot.data[index].data["gender"] == "1"
-                              ? Container(
-                                  margin: EdgeInsets.only(top: 20.0),
-                                  width: 80.0,
-                                  height: 80.0,
-                                  decoration: BoxDecoration(
-                                    //color: Colors.blue,
-                                    //image here
-                                    image: DecorationImage(
-                                      image:
-                                          AssetImage('icons/Womandoctor.png'),
-                                      fit: BoxFit.fill,
-                                    ),
-                                    shape: BoxShape.circle,
-                                    //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                          snapshot.data[index].data["photo"] != null
+                              ? CircleAvatar(
+                                  radius: 40.0,
+                                  backgroundImage: NetworkImage(
+                                    snapshot.data[index].data["photo"],
                                   ),
                                 )
                               : Container(
@@ -117,8 +108,7 @@ class _listdocState extends State<listdoc> {
                                     //color: Colors.blue,
                                     //image here
                                     image: DecorationImage(
-                                      image:
-                                          AssetImage('icons/Doctor.png'),
+                                      image: AssetImage('icons/Doctor.png'),
                                       fit: BoxFit.fill,
                                     ),
                                     shape: BoxShape.circle,
@@ -128,8 +118,8 @@ class _listdocState extends State<listdoc> {
                           Container(
                             width: 20,
                           ),
-                          Flexible(
-                            child: GestureDetector(
+                          Column(children: <Widget>[
+                            GestureDetector(
                               onTap: () =>
                                   navigateToDetail(snapshot.data[index]),
                               child: Container(
@@ -144,7 +134,25 @@ class _listdocState extends State<listdoc> {
                                 ),
                               ),
                             ),
-                          ),
+                            StarRating(
+                              size: 25.0,
+                              rating: 2.3,
+                              color: Colors.yellow[600],
+                              borderColor: Colors.black,
+                              starCount: 5,
+                            ),
+                          ]),
+                          // Column(
+                          //   children: <Widget>[
+                          //     StarRating(
+                          //       size: 25.0,
+                          //       rating: 2.3,
+                          //       color: Colors.yellow[600],
+                          //       borderColor: Colors.black,
+                          //       starCount: 5,
+                          //     ),
+                          //   ],
+                          // ),
                         ],
                       ),
                     ),
