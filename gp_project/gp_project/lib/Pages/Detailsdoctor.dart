@@ -11,7 +11,7 @@ class details extends StatefulWidget {
   @override
   _detailsState createState() => _detailsState();
 }
-
+ 
 class _detailsState extends State<details> {
   var patientName;
   initUser() async {
@@ -289,6 +289,7 @@ class _detailsState extends State<details> {
               'doctorID': widget.doctor.data["id"],
               'patientID': widget.currentuser.uid,
               'patientName': patientName,
+              'approved': 0,
             });
             SnackBar(content: Text('Request has been Sent,Thank you'));
             Navigator.push(
