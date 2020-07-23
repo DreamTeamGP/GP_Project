@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:gp_project/Pages/Listdoctors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gp_project/Pages/homepage.dart';
-
 class detailsuser extends StatefulWidget {
   final FirebaseUser currentuser;
   final DocumentSnapshot patient;

@@ -326,7 +326,11 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                   style: TextStyle(fontSize: 22),
                 ),
                 onTap: () {
+<<<<<<< Updated upstream
                   if(patientDocID == ""){
+=======
+                  if (patientDocID == ""|| patientDocID==null) {
+>>>>>>> Stashed changes
                     print('no doctooooor');
                     Navigator.push(context,
                       MaterialPageRoute(builder: (context) => listdoc(currentUser: widget.currentUser,)));

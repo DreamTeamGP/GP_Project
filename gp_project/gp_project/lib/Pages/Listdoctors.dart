@@ -1,6 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+<<<<<<< Updated upstream
+=======
+import 'package:flutter_rating/flutter_rating.dart';
+
+>>>>>>> Stashed changes
 import 'package:gp_project/Auth/line.dart';
 import 'Detailsdoctor.dart';
 import '../models/doctor.dart';
@@ -29,7 +34,7 @@ class _listdocState extends State<listdoc> {
         .where('role', isEqualTo: "doctor")
         .getDocuments();
     return qn.documents;
-  }
+  } 
 
   navigateToDetail(DocumentSnapshot doctor) {
     Navigator.push(

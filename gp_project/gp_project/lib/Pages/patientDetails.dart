@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gp_project/Pages/Listdoctors.dart';
+import 'package:gp_project/Pages/doctorNotification.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class patientDetails extends StatefulWidget {
@@ -44,7 +45,7 @@ class _patientDetailsState extends State<patientDetails> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Profile',
+          'Patient details',
           style: TextStyle(
             color: Colors.white,
           ),
@@ -135,10 +136,17 @@ class _patientDetailsState extends State<patientDetails> {
                           onPressed: (){
                             Firestore.instance.collection("addDoctorRequest")
                             .document(widget.documentID).updateData({"approved": 1});
-
-                            // Firestore.instance.collection("users")
-                            // .where("id", isEqualTo: widget.patientID)
-                            // ' '
+                            // connectDoctor();
+                            Firestore.instance.collection('users').document(widget.patientID)
+                            .updateData({"doctorId": widget.currentuser.uid});
+                            print(widget.currentuser);
+                            SnackBar(content: Text('Request has been accepted'));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => doctorNotification(
+                                          currentUser: widget.currentuser,
+                                        )));
                           },
                           child: Text(
                             'Accept',
@@ -162,6 +170,13 @@ class _patientDetailsState extends State<patientDetails> {
                           onPressed: (){
                             Firestore.instance.collection("addDoctorRequest")
                             .document(widget.documentID).delete();
+                            SnackBar(content: Text('Request has been deleted'));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => doctorNotification(
+                                          currentUser: widget.currentuser,
+                                        )));
                           },
                           child: Text(
                             'Reject',

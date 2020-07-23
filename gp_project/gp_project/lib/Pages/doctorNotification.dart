@@ -27,7 +27,11 @@ class _doctorNotificationState extends State<doctorNotification> {
     QuerySnapshot qn = await firestore
         .collection("addDoctorRequest")
         .where('doctorID', isEqualTo: widget.currentUser.uid,)
+<<<<<<< Updated upstream
         .where('approved', isEqualTo: "0",)
+=======
+        .where('approved', isEqualTo: 0,)
+>>>>>>> Stashed changes
         .getDocuments();
     return qn.documents;
   }
@@ -44,6 +48,7 @@ class _doctorNotificationState extends State<doctorNotification> {
   void initState() {
     super.initState();
     _data = getNotifications();
+    
   }
 
   @override
