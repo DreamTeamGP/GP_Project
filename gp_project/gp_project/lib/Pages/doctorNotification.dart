@@ -26,17 +26,26 @@ class _doctorNotificationState extends State<doctorNotification> {
     var firestore = Firestore.instance;
     QuerySnapshot qn = await firestore
         .collection("addDoctorRequest")
-        .where('doctorID', isEqualTo: widget.currentUser.uid,)
-        .where('approved', isEqualTo: "0",)
+        .where(
+          'doctorID',
+          isEqualTo: widget.currentUser.uid,
+        )
+        .where(
+          'approved',
+          isEqualTo: "0",
+        )
         .getDocuments();
     return qn.documents;
   }
 
   navigateToDetail(String patientID, var documentID) {
-
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => patientDetails(patientID: patientID, currentuser:widget.currentUser, documentID: documentID)),
+      MaterialPageRoute(
+          builder: (context) => patientDetails(
+              patientID: patientID,
+              currentuser: widget.currentUser,
+              documentID: documentID)),
     );
   }
 
@@ -54,19 +63,23 @@ class _doctorNotificationState extends State<doctorNotification> {
           'Notification',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 25.0,
+            fontSize: 28.0,
           ),
         ),
         backgroundColor: Colors.cyan,
         leading: new IconButton(
           icon: Icon(
-            Icons.arrow_back_ios,
+            Icons.arrow_back,
             size: 30.0,
             color: Colors.white,
           ),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => HomePage(user: widget.currentUser,)));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomePage(
+                          user: widget.currentUser,
+                        )));
           },
         ),
       ),
@@ -92,15 +105,19 @@ class _doctorNotificationState extends State<doctorNotification> {
                             margin: EdgeInsets.only(top: 20.0),
                             width: 30.0,
                             height: 30.0,
-                            child: Icon(Icons.notifications, color: Colors.blueAccent,),
+                            child: Icon(
+                              Icons.notifications,
+                              color: Colors.blueAccent,
+                            ),
                           ),
                           Container(
                             width: 20,
                           ),
                           Flexible(
                             child: GestureDetector(
-                              onTap: () =>
-                                  navigateToDetail(snapshot.data[index].data['patientID'], snapshot.data[index].documentID),
+                              onTap: () => navigateToDetail(
+                                  snapshot.data[index].data['patientID'],
+                                  snapshot.data[index].documentID),
                               child: Container(
                                 margin: EdgeInsets.only(top: 15),
                                 child: Text(

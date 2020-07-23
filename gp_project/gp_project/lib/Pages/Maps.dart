@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:gp_project/Pages/profiledrawer.dart';
+import 'homepage.dart';
 
 class Map extends StatefulWidget {
   final FirebaseUser user;
@@ -30,6 +31,21 @@ class _MapState extends State<Map> {
               style: TextStyle(fontSize: 28),
             ),
             backgroundColor: Colors.cyan,
+            leading: new IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                size: 30.0,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomePage(
+                              user: widget.user,
+                            )));
+              },
+            ),
           ),
           body: Column(
             children: <Widget>[

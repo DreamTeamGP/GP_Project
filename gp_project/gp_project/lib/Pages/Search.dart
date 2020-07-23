@@ -206,7 +206,7 @@ class _searchByNameState extends State<searchByName> {
             'Find Doctor',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 25,
+              fontSize: 28,
             ),
           ),
           backgroundColor: Colors.cyan,
@@ -216,7 +216,7 @@ class _searchByNameState extends State<searchByName> {
           ],
           leading: new IconButton(
             icon: Icon(
-              Icons.arrow_back_ios,
+              Icons.arrow_back,
               size: 30.0,
               color: Colors.white,
             ),

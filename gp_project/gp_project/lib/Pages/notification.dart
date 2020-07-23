@@ -34,7 +34,9 @@ class _notificationState extends State<notification> {
   navigateToDetail(DocumentSnapshot doctor) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => details(doctor: doctor, currentuser:widget.currentUser)),
+      MaterialPageRoute(
+          builder: (context) =>
+              details(doctor: doctor, currentuser: widget.currentUser)),
     );
   }
 
@@ -52,19 +54,23 @@ class _notificationState extends State<notification> {
           'Notification',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 25.0,
+            fontSize: 28.0,
           ),
         ),
         backgroundColor: Colors.cyan,
         leading: new IconButton(
           icon: Icon(
-            Icons.arrow_back_ios,
+            Icons.arrow_back,
             size: 30.0,
             color: Colors.white,
           ),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => HomePage(user: widget.currentUser,)));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomePage(
+                          user: widget.currentUser,
+                        )));
           },
         ),
       ),
@@ -90,7 +96,10 @@ class _notificationState extends State<notification> {
                             margin: EdgeInsets.only(top: 20.0),
                             width: 30.0,
                             height: 30.0,
-                            child: Icon(Icons.notifications, color: Colors.blueAccent,),
+                            child: Icon(
+                              Icons.notifications,
+                              color: Colors.cyan,
+                            ),
                           ),
                           Container(
                             width: 20,

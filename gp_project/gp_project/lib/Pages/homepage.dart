@@ -22,6 +22,8 @@ import '../Classes/LocalNotification.dart';
 import 'Detailsdoctor.dart';
 import 'meals.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'doctorNotification.dart';
+import 'notification.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key, this.user}) : super(key: key);
@@ -221,7 +223,7 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: Text(
             'Home',
-            style: TextStyle(fontSize: 30),
+            style: TextStyle(fontSize: 28),
           ),
           backgroundColor: Colors.cyan,
           actions: <Widget>[
@@ -233,7 +235,7 @@ class _HomePageState extends State<HomePage> {
             IconButton(
               icon: new Icon(Icons.notifications_none),
               onPressed: () {},
-              iconSize: 30,
+              iconSize: 40,
             )
           ],
         ),
@@ -707,7 +709,6 @@ class _HomePageState extends State<HomePage> {
               RaisedButton(
                 child: Row(
                   children: <Widget>[
-                    Icon(Icons.fastfood, size: 35),
                     Icon(
                       Icons.fastfood,
                       size: 35,
@@ -736,7 +737,6 @@ class _HomePageState extends State<HomePage> {
               RaisedButton(
                 child: Row(
                   children: <Widget>[
-                    Icon(Icons.tag_faces, size: 35),
                     Icon(
                       Icons.tag_faces,
                       size: 35,
@@ -774,7 +774,6 @@ class _HomePageState extends State<HomePage> {
               RaisedButton(
                 child: Row(
                   children: <Widget>[
-                    Icon(Icons.person, size: 35),
                     Icon(
                       Icons.person,
                       size: 35,
@@ -811,129 +810,131 @@ class _HomePageState extends State<HomePage> {
               FutureBuilder(
                 future: _data2,
                 builder: (context, snapshot) {
-                  Map<String, dynamic> myMap = new Map<String, dynamic>();
-                  List<dynamic> myList = new List<dynamic>();
-                  for (int i = 0; i < snapshot.data.length; i++) {
-                    myMap = Map<String, dynamic>.from(snapshot.data[i].data);
-                    print(myMap);
-                  }
-
-                  print('break');
-
-                  //بتجيب القيم بتاعت الماب ممبر بالاندكس بتاعه كانهم ليستت قيم
-                  for (int i = 0; i < snapshot.data.length; i++) {
-                    Map<String, dynamic>.from(snapshot.data[i].data)
-                        .forEach((key, value) {
-                      myList.add(value);
-                    });
-                  }
-
-                  double fastingValue() {
-                    List<dynamic> arrayedValues = new List<dynamic>();
-                    for (int i = 0; i < myList.length; i++) {
-                      if (myList[i] != myList[i].toString()) {
-                        arrayedValues.add(myList[i]);
-                      }
-                    }
-                    List<dynamic> rawValues = new List<dynamic>();
-                    List<dynamic> fasting = new List<dynamic>();
-                    for (int i = 0; i < arrayedValues.length; i++) {
-                      for (int j = 0; j < arrayedValues[i].length; j++) {
-                        rawValues.add(arrayedValues[i].elementAt(j));
-                        if (arrayedValues[i].elementAt(j) ==
-                            'Fasting blood glucose') {
-                          fasting.add(arrayedValues[i + 1].elementAt(j));
-                        }
-                      }
-                    }
-                    int sum = 0;
-                    fasting.forEach((element) {
-                      sum = sum + int.parse(element);
-                    });
-                    double avg = sum / fasting.length;
-                    double avgModified = avg / 200;
-                    return avg;
-                  }
-
-                  print(fastingValue());
-
-                  double postprandialValue() {
-                    List<dynamic> arrayedValues = new List<dynamic>();
-                    for (int i = 0; i < myList.length; i++) {
-                      if (myList[i] != myList[i].toString()) {
-                        arrayedValues.add(myList[i]);
-                      }
-                    }
-                    List<dynamic> rawValues = new List<dynamic>();
-                    List<dynamic> postPrandial = new List<dynamic>();
-                    for (int i = 0; i < arrayedValues.length; i++) {
-                      for (int j = 0; j < arrayedValues[i].length; j++) {
-                        rawValues.add(arrayedValues[i].elementAt(j));
-                        if (arrayedValues[i].elementAt(j) ==
-                            'Post prandial blood glucose') {
-                          postPrandial.add(arrayedValues[i + 1].elementAt(j));
-                        }
-                      }
-                    }
-                    int sum = 0;
-                    postPrandial.forEach((element) {
-                      sum = sum + int.parse(element);
-                    });
-                    double avg = sum / postPrandial.length;
-                    double avgModified = avg / 200;
-                    return avg;
-                  }
-
-                  print(postprandialValue());
-
-                  // myList.forEach((element) {
-                  //   if (element != element.toString()) {
-                  //     i++;
-                  //   }
-                  // });
-
-                  //بترجع الليستات اللي في اول خمسة ممبر في الليست وبأكسس اللي جواهم ب سطر البرنت
-                  // for (int i = 3; i < 5; i++) {
-                  //   if (myList[i] != myList[i].toString()) {
-                  //     y++;
-                  //     print(myList[i].elementAt(1));
-                  //   }
-                  // }
-
-                  print('break2');
-                  var data = [
-                    ClicksPerYear(
-                        'Fasting blood glucose', fastingValue(), Colors.cyan),
-                    ClicksPerYear('Post prandial blood glucose',
-                        postprandialValue(), Colors.cyan),
-                  ];
-
-                  var series = [
-                    charts.Series(
-                      domainFn: (ClicksPerYear clickData, _) => clickData.year,
-                      measureFn: (ClicksPerYear clickData, _) =>
-                          clickData.value,
-                      colorFn: (ClicksPerYear clickData, _) => clickData.color,
-                      id: 'Clicks',
-                      data: data,
-                    ),
-                  ];
-
-                  var chart = charts.BarChart(
-                    series,
-                    animate: true,
-                    animationDuration: Duration(milliseconds: 1000),
-                  );
-
-                  var chartWidget = Padding(
-                    padding: EdgeInsets.only(top: 30, right: 15, left: 15),
-                    child: SizedBox(
-                      height: 280.0,
-                      child: chart,
-                    ),
-                  );
-
                   if (snapshot.hasData) {
+                    Map<String, dynamic> myMap = new Map<String, dynamic>();
+                    List<dynamic> myList = new List<dynamic>();
+                    for (int i = 0; i < snapshot.data.length; i++) {
+                      myMap = Map<String, dynamic>.from(snapshot.data[i].data);
+                      print(myMap);
+                    }
+
+                    print('break');
+
+                    //بتجيب القيم بتاعت الماب ممبر بالاندكس بتاعه كانهم ليستت قيم
+                    for (int i = 0; i < snapshot.data.length; i++) {
+                      Map<String, dynamic>.from(snapshot.data[i].data)
+                          .forEach((key, value) {
+                        myList.add(value);
+                      });
+                    }
+
+                    double fastingValue() {
+                      List<dynamic> arrayedValues = new List<dynamic>();
+                      for (int i = 0; i < myList.length; i++) {
+                        if (myList[i] != myList[i].toString()) {
+                          arrayedValues.add(myList[i]);
+                        }
+                      }
+                      List<dynamic> rawValues = new List<dynamic>();
+                      List<dynamic> fasting = new List<dynamic>();
+                      for (int i = 0; i < arrayedValues.length; i++) {
+                        for (int j = 0; j < arrayedValues[i].length; j++) {
+                          rawValues.add(arrayedValues[i].elementAt(j));
+                          if (arrayedValues[i].elementAt(j) ==
+                              'Fasting blood glucose') {
+                            fasting.add(arrayedValues[i + 1].elementAt(j));
+                          }
+                        }
+                      }
+                      int sum = 0;
+                      fasting.forEach((element) {
+                        sum = sum + int.parse(element);
+                      });
+                      double avg = sum / fasting.length;
+                      double avgModified = avg / 200;
+                      return avg;
+                    }
+
+                    print(fastingValue());
+
+                    double postprandialValue() {
+                      List<dynamic> arrayedValues = new List<dynamic>();
+                      for (int i = 0; i < myList.length; i++) {
+                        if (myList[i] != myList[i].toString()) {
+                          arrayedValues.add(myList[i]);
+                        }
+                      }
+                      List<dynamic> rawValues = new List<dynamic>();
+                      List<dynamic> postPrandial = new List<dynamic>();
+                      for (int i = 0; i < arrayedValues.length; i++) {
+                        for (int j = 0; j < arrayedValues[i].length; j++) {
+                          rawValues.add(arrayedValues[i].elementAt(j));
+                          if (arrayedValues[i].elementAt(j) ==
+                              'Post prandial blood glucose') {
+                            postPrandial.add(arrayedValues[i + 1].elementAt(j));
+                          }
+                        }
+                      }
+                      int sum = 0;
+                      postPrandial.forEach((element) {
+                        sum = sum + int.parse(element);
+                      });
+                      double avg = sum / postPrandial.length;
+                      double avgModified = avg / 200;
+                      return avg;
+                    }
+
+                    print(postprandialValue());
+
+                    // myList.forEach((element) {
+                    //   if (element != element.toString()) {
+                    //     i++;
+                    //   }
+                    // });
+
+                    //بترجع الليستات اللي في اول خمسة ممبر في الليست وبأكسس اللي جواهم ب سطر البرنت
+                    // for (int i = 3; i < 5; i++) {
+                    //   if (myList[i] != myList[i].toString()) {
+                    //     y++;
+                    //     print(myList[i].elementAt(1));
+                    //   }
+                    // }
+
+                    print('break2');
+                    var data = [
+                      ClicksPerYear(
+                          'Fasting blood glucose', fastingValue(), Colors.cyan),
+                      ClicksPerYear('Post prandial blood glucose',
+                          postprandialValue(), Colors.cyan),
+                    ];
+
+                    var series = [
+                      charts.Series(
+                        domainFn: (ClicksPerYear clickData, _) =>
+                            clickData.year,
+                        measureFn: (ClicksPerYear clickData, _) =>
+                            clickData.value,
+                        colorFn: (ClicksPerYear clickData, _) =>
+                            clickData.color,
+                        id: 'Clicks',
+                        data: data,
+                      ),
+                    ];
+
+                    var chart = charts.BarChart(
+                      series,
+                      animate: true,
+                      animationDuration: Duration(milliseconds: 1000),
+                    );
+
+                    var chartWidget = Padding(
+                      padding: EdgeInsets.only(top: 30, right: 15, left: 15),
+                      child: SizedBox(
+                        height: 280.0,
+                        child: chart,
+                      ),
+                    );
+
                     return Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,

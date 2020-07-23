@@ -108,7 +108,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
             Container(
               width: double.infinity,
               padding: EdgeInsets.all(20),
-              color: Theme.of(context).primaryColor,
+              color: Colors.cyan,
               child: Center(
                 child: Column(
                   children: <Widget>[
@@ -144,6 +144,8 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                     _image != null
                         ? CircleAvatar(
                             radius: 80.0,
+                            foregroundColor: Colors.cyan,
+                            backgroundColor: Colors.cyan,
                             backgroundImage: NetworkImage(
                               snapshot.data['photo'],
                             ),
@@ -163,8 +165,9 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                               //borderRadius: BorderRadius.all(Radius.circular(75.0)),
                             ),
                           ),
+                    Text(''),
                     Text('${snapshot.data['name']}',
-                        style: TextStyle(fontSize: 22, color: Colors.white)),
+                        style: TextStyle(fontSize: 26, color: Colors.white)),
                   ],
                 ),
               ),
@@ -279,7 +282,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
             Container(
               width: double.infinity,
               padding: EdgeInsets.all(20),
-              color: Theme.of(context).primaryColor,
+              color: Colors.cyan,
               child: Center(
                 child: Column(
                   children: <Widget>[
@@ -315,6 +318,8 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                     snapshot.data['photo'] != null
                         ? CircleAvatar(
                             radius: 80.0,
+                            backgroundColor: Colors.cyan,
+                            foregroundColor: Colors.cyan,
                             backgroundImage: NetworkImage(
                               snapshot.data['photo'],
                             ),
@@ -334,8 +339,9 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                               //borderRadius: BorderRadius.all(Radius.circular(75.0)),
                             ),
                           ),
+                    Text(''),
                     Text('${snapshot.data['name']}',
-                        style: TextStyle(fontSize: 22, color: Colors.white)),
+                        style: TextStyle(fontSize: 26, color: Colors.white)),
                   ],
                 ),
               ),

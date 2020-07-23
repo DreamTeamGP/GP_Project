@@ -5,6 +5,7 @@ import 'package:gp_project/models/meal.dart';
 import 'package:gp_project/models/user.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'homepage.dart';
 
 class calenderPage extends StatefulWidget {
   final FirebaseUser user;
@@ -54,8 +55,26 @@ class _calenderPageState extends State<calenderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Calendar'),
+        title: Text(
+          'My Calendar',
+          style: TextStyle(fontSize: 28),
+        ),
         backgroundColor: Colors.cyan,
+        leading: new IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            size: 30.0,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomePage(
+                          user: widget.user,
+                        )));
+          },
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(

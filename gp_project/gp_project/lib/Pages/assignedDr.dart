@@ -33,11 +33,22 @@ class _assignedDrState extends State<assignedDr> {
     });
   }
 
+  Future _data;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     initUser();
+    _data = getTheRate();
+  }
+
+  Future getTheRate() async {
+    QuerySnapshot result = await Firestore.instance
+        .collection("users")
+        .where("id", isEqualTo: widget.currentuser.uid)
+        .getDocuments();
+    return result.documents;
   }
 
   @override
@@ -48,14 +59,14 @@ class _assignedDrState extends State<assignedDr> {
           widget.doctor.data["name"],
           style: TextStyle(
             color: Colors.white,
-            fontSize: 25,
+            fontSize: 28,
           ),
         ),
         centerTitle: true,
         backgroundColor: Colors.cyan,
         leading: new IconButton(
           icon: Icon(
-            Icons.arrow_back_ios,
+            Icons.arrow_back,
             size: 30.0,
             color: Colors.white,
           ),
@@ -69,7 +80,7 @@ class _assignedDrState extends State<assignedDr> {
           },
         ),
       ),
-      body: Column(
+      body: ListView(
         children: <Widget>[
           widget.doctor.data["gender"] == "1"
               ? Row(
@@ -128,29 +139,47 @@ class _assignedDrState extends State<assignedDr> {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                child: StarRating(
-                    size: 30.0,
-                    rating: rating,
-                    color: Colors.yellow[600],
-                    borderColor: Colors.black,
-                    starCount: 5,
-                    onRatingChanged: (rating) => setState(
-                          () {
-                            this.rating = rating;
-                            Firestore.instance
-                                .collection('rate')
-                                .document(widget.currentuser.uid)
-                                .setData({
-                              'rating': rating,
-                            });
-                          },
-                        )),
-              ),
-            ],
+          SingleChildScrollView(
+            child: FutureBuilder(
+                future: _data,
+                builder: (_, snapshot) {
+                  // String x = snapshot.data.data['rating'];
+                  // print(x);
+
+                  if (snapshot.hasData) {
+                    List<dynamic> myList = new List<dynamic>();
+                    for (int i = 0; i < snapshot.data.length; i++) {
+                      Map<String, dynamic>.from(snapshot.data[i].data)
+                          .forEach((key, value) {
+                        myList.add(value);
+                      });
+                    }
+                    //rating = myList[1];
+
+                    var drId = myList[13];
+
+                    return StarRating(
+                        size: 30.0,
+                        rating: rating,
+                        color: Colors.yellow[600],
+                        borderColor: Colors.black,
+                        starCount: 5,
+                        onRatingChanged: (rating2) => setState(
+                              () {
+                                rating = rating2;
+                                Firestore.instance
+                                    .collection('rate')
+                                    .document(widget.currentuser.uid)
+                                    .setData({
+                                  'drId': drId,
+                                  'rating': rating,
+                                });
+                              },
+                            ));
+                  } else {
+                    return Text('Loading...');
+                  }
+                }),
           ),
           widget.doctor.data["phone"] != ""
               ? Container(

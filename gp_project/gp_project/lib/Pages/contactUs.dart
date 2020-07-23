@@ -33,10 +33,25 @@ class _contactUsState extends State<contactUs> {
           'Contact Us',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 25.0,
+            fontSize: 28.0,
           ),
         ),
         backgroundColor: Colors.cyan,
+        leading: new IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            size: 30.0,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomePage(
+                          user: widget.user,
+                        )));
+          },
+        ),
       ),
       body: Form(
         key: _formKey,

@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:gp_project/Pages/profiledrawer.dart';
 import '../models/user.dart';
 import '../Pages/profileEditWidget.dart';
+import 'homepage.dart';
 
 class profileWidget extends StatefulWidget {
   final FirebaseUser currentUser;
@@ -23,7 +24,6 @@ class _profileWidgetState extends State<profileWidget> {
   void initState() {
     //widget.user.gender == 1 ? gender = 'female' : gender = 'male';
     super.initState();
-    
   }
 
   @override
@@ -35,12 +35,30 @@ class _profileWidgetState extends State<profileWidget> {
           'Profile',
           style: TextStyle(
             color: Colors.white,
+            fontSize: 28,
           ),
         ),
-/*         leading: Icon(
-          Icons.menu,
-          color: Colors.white,
-        ), */
+        backgroundColor: Colors.cyan,
+        leading: new IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            size: 30.0,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomePage(
+                          user: widget.currentUser,
+                        )));
+          },
+        ),
+        // leading: Icon(
+        //   Icons.menu,
+        //   size: 30,
+        //   color: Colors.white,
+        // ),
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: Firestore.instance
@@ -295,6 +313,7 @@ class _profileWidgetState extends State<profileWidget> {
           width: 85.0,
           height: 85.0,
           child: FloatingActionButton(
+            backgroundColor: Colors.cyan,
             onPressed: () {
               Navigator.push(
                   context,
