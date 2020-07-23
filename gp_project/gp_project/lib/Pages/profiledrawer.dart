@@ -412,7 +412,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                   style: TextStyle(fontSize: 22),
                 ),
                 onTap: () {
-                  if (patientDocID == "") {
+                  if (patientDocID == ""|| patientDocID==null){
                     print('no doctooooor');
                     Navigator.push(
                         context,

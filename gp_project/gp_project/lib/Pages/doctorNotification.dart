@@ -32,7 +32,7 @@ class _doctorNotificationState extends State<doctorNotification> {
         )
         .where(
           'approved',
-          isEqualTo: "0",
+          isEqualTo: 0,
         )
         .getDocuments();
     return qn.documents;
