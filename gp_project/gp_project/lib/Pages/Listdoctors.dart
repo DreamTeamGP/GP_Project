@@ -29,7 +29,8 @@ class _listdocState extends State<listdoc> {
         .collection("users")
         .where('role', isEqualTo: "doctor")
         .getDocuments();
-    return qn.documents;
+    QuerySnapshot qn2 = await firestore.collection('rate').getDocuments();
+    return qn.documents + qn2.documents;
   }
 
   navigateToDetail(DocumentSnapshot doctor) {
@@ -55,13 +56,13 @@ class _listdocState extends State<listdoc> {
           'Doctors',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 25.0,
+            fontSize: 28.0,
           ),
         ),
         backgroundColor: Colors.cyan,
         leading: new IconButton(
           icon: Icon(
-            Icons.arrow_back_ios,
+            Icons.arrow_back,
             size: 30.0,
             color: Colors.white,
           ),
@@ -83,6 +84,32 @@ class _listdocState extends State<listdoc> {
               child: Text("Loading ..."),
             );
           } else {
+            List<dynamic> myList = new List<dynamic>();
+            for (int i = 0; i < snapshot.data.length; i++) {
+              Map<String, dynamic>.from(snapshot.data[i].data)
+                  .forEach((key, value) {
+                myList.add(value);
+              });
+            }
+
+            // myList.forEach((element) {
+            //   print(element);
+            // });
+
+            String drIdOfRate = myList[myList.length - 2];
+            double rateFromDb = myList[myList.length - 1];
+            double sum = 0;
+            double r = 0;
+            for (int i = 0; i < myList.length; i++) {
+              if (myList[i] == drIdOfRate) {
+                r++;
+              }
+            }
+            for (int j = 0; j < 1; j++) {
+              sum = sum + rateFromDb;
+            }
+            double rateAvg = sum / (r - 1);
+            print(rateAvg);
             return ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (_, index) {

@@ -14,7 +14,7 @@ class details extends StatefulWidget {
   @override
   _detailsState createState() => _detailsState();
 }
- 
+
 class _detailsState extends State<details> {
   double rating = 0;
   var patientName;
@@ -48,14 +48,14 @@ class _detailsState extends State<details> {
           widget.doctor.data["name"],
           style: TextStyle(
             color: Colors.white,
-            fontSize: 25,
+            fontSize: 28,
           ),
         ),
         centerTitle: true,
         backgroundColor: Colors.cyan,
         leading: new IconButton(
           icon: Icon(
-            Icons.arrow_back_ios,
+            Icons.arrow_back,
             size: 30.0,
             color: Colors.white,
           ),
@@ -291,6 +291,7 @@ class _detailsState extends State<details> {
         width: 95.0,
         height: 95.0,
         child: FloatingActionButton(
+          backgroundColor: Colors.cyan,
           onPressed: () {
             Firestore.instance
                 .collection('addDoctorRequest')

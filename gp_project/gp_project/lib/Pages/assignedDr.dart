@@ -48,7 +48,9 @@ class _assignedDrState extends State<assignedDr> {
         .collection("users")
         .where("id", isEqualTo: widget.currentuser.uid)
         .getDocuments();
-    return result.documents;
+    QuerySnapshot test =
+        await Firestore.instance.collection("rate").getDocuments();
+    return result.documents + test.documents;
   }
 
   @override
@@ -154,30 +156,53 @@ class _assignedDrState extends State<assignedDr> {
                         myList.add(value);
                       });
                     }
-                    //rating = myList[1];
 
+                    // myList.forEach((element) {
+                    //   print(element);
+                    // });
+
+                    print(myList[21]); //qemet el rate fel db
+
+                    var rateFromDB = myList[21];
                     var drId = myList[13];
+
+                    double ratingVal() {
+                      if (rating == 0) {
+                        double rat = rating + rateFromDB;
+                        return rat;
+                      } else {
+                        double rat = rating;
+                        return rat;
+                      }
+                    }
 
                     return StarRating(
                         size: 30.0,
-                        rating: rating,
+                        rating: ratingVal(),
                         color: Colors.yellow[600],
                         borderColor: Colors.black,
                         starCount: 5,
                         onRatingChanged: (rating2) => setState(
                               () {
-                                rating = rating2;
-                                Firestore.instance
-                                    .collection('rate')
-                                    .document(widget.currentuser.uid)
-                                    .setData({
-                                  'drId': drId,
-                                  'rating': rating,
-                                });
+                                if (rating2 == rateFromDB) {
+                                  print('no change');
+                                } else {
+                                  rating = rating2;
+                                  Firestore.instance
+                                      .collection('rate')
+                                      .document(widget.currentuser.uid)
+                                      .setData({
+                                    'drId': drId,
+                                    'rating': rating2,
+                                  });
+                                }
                               },
                             ));
                   } else {
-                    return Text('Loading...');
+                    return Text(
+                      'Loading...',
+                      textAlign: TextAlign.center,
+                    );
                   }
                 }),
           ),
