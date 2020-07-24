@@ -182,7 +182,9 @@ class _listdocState extends State<listdoc> {
                                               snapshot.data[i].data['rating']);
                                         }
 
-                                        double rateFromDb;
+                                        List<double> ratesforAVG =
+                                            new List<double>();
+                                        //double rateFromDb;
                                         double ratingVal() {
                                           for (int i = 0; i < iDs.length; i++) {
                                             for (int j = 0;
@@ -190,13 +192,27 @@ class _listdocState extends State<listdoc> {
                                                 j++) {
                                               if (idList[j] == iDs[i] &&
                                                   iDs[i] == currentId) {
-                                                rateFromDb = rateList[j];
+                                                ratesforAVG.add(rateList[j]);
                                               }
                                             }
                                           }
-                                          if (rateFromDb != null) {
-                                            return rateFromDb;
+
+                                          double sum = 0;
+                                          ratesforAVG.forEach((element) {
+                                            sum += element;
+                                          });
+
+                                          double avg = 0;
+
+                                          if (sum != 0) {
+                                            avg = sum / ratesforAVG.length;
                                           }
+
+                                          print(avg);
+                                          if (avg != null) {
+                                            return avg;
+                                          }
+
                                           return 0;
                                         }
 
