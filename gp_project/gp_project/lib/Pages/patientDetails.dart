@@ -48,7 +48,24 @@ class _patientDetailsState extends State<patientDetails> {
           'Patient details',
           style: TextStyle(
             color: Colors.white,
+            fontSize: 28,
           ),
+        ),
+        backgroundColor: Colors.cyan,
+        leading: new IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            size: 30.0,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => doctorNotification(
+                          currentUser: widget.currentuser,
+                        )));
+          },
         ),
 /*         leading: Icon(
           Icons.menu,
@@ -125,73 +142,79 @@ class _patientDetailsState extends State<patientDetails> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      
                       Container(
                         margin: EdgeInsets.all(10),
                         child: ButtonTheme(
-                        minWidth: 120,
-                        child: RaisedButton(
-                          padding: EdgeInsets.only(
-                              top: 5, bottom: 5, right: 20, left: 20),
-                          
-                        onPressed: (){
-                            Firestore.instance.collection("addDoctorRequest")
-                            .document(widget.documentID).updateData({"approved": 1});
-                            // connectDoctor();
-                            Firestore.instance.collection('users').document(widget.patientID)
-                            .updateData({"doctorId": widget.currentuser.uid});
-                            print(widget.currentuser);
-                            SnackBar(content: Text('Request has been accepted'));
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => doctorNotification(
-                                          currentUser: widget.currentuser,
-                                        )));
-                          },
-
-                          child: Text(
-                            'Accept',
-                            style: TextStyle(
-                                fontSize: 27,
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.normal),
+                          minWidth: 120,
+                          child: RaisedButton(
+                            padding: EdgeInsets.only(
+                                top: 5, bottom: 5, right: 20, left: 20),
+                            onPressed: () {
+                              Firestore.instance
+                                  .collection("addDoctorRequest")
+                                  .document(widget.documentID)
+                                  .updateData({"approved": 1});
+                              // connectDoctor();
+                              Firestore.instance
+                                  .collection('users')
+                                  .document(widget.patientID)
+                                  .updateData(
+                                      {"doctorId": widget.currentuser.uid});
+                              print(widget.currentuser);
+                              SnackBar(
+                                  content: Text('Request has been accepted'));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => doctorNotification(
+                                            currentUser: widget.currentuser,
+                                          )));
+                            },
+                            child: Text(
+                              'Accept',
+                              style: TextStyle(
+                                  fontSize: 27,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.normal),
+                            ),
+                            color: Colors.green,
+                            textColor: Colors.white,
                           ),
-                          color: Colors.green,
-                          textColor: Colors.white,
-                        ),
-                    ),
-                      ),
-                    Container(
-                      margin: EdgeInsets.all(10),
-                      child: ButtonTheme(
-                        minWidth: 120,
-                        child: RaisedButton(
-                          padding: EdgeInsets.only(
-                              top: 5, bottom: 5, right: 20, left: 20),
-                          onPressed: (){
-                            Firestore.instance.collection("addDoctorRequest")
-                            .document(widget.documentID).delete();
-                            SnackBar(content: Text('Request has been deleted'));
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => doctorNotification(
-                                          currentUser: widget.currentuser,
-                                        )));
-                          },
-                          child: Text(
-                            'Reject',
-                            style: TextStyle(
-                                fontSize: 27,
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.normal),
-                          ),
-                          color: Colors.red,
-                          textColor: Colors.white,
                         ),
                       ),
-                    ),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        child: ButtonTheme(
+                          minWidth: 120,
+                          child: RaisedButton(
+                            padding: EdgeInsets.only(
+                                top: 5, bottom: 5, right: 20, left: 20),
+                            onPressed: () {
+                              Firestore.instance
+                                  .collection("addDoctorRequest")
+                                  .document(widget.documentID)
+                                  .delete();
+                              SnackBar(
+                                  content: Text('Request has been deleted'));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => doctorNotification(
+                                            currentUser: widget.currentuser,
+                                          )));
+                            },
+                            child: Text(
+                              'Reject',
+                              style: TextStyle(
+                                  fontSize: 27,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.normal),
+                            ),
+                            color: Colors.red,
+                            textColor: Colors.white,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -357,7 +380,6 @@ class _patientDetailsState extends State<patientDetails> {
           return LinearProgressIndicator();
         },
       ),
-
     );
   }
 }

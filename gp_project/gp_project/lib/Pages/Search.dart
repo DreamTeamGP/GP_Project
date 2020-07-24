@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating/flutter_rating.dart';
 import 'package:gp_project/Pages/Detailsdoctor.dart';
 import 'package:gp_project/Pages/homepage.dart';
 
@@ -155,6 +156,8 @@ class _searchByNameState extends State<searchByName> {
     'Louxor',
   ];
 
+  Future _data;
+
   getData() {
     Firestore.instance
         .collection('users')
@@ -162,6 +165,12 @@ class _searchByNameState extends State<searchByName> {
         .snapshots();
 
     //return qn ;
+  }
+
+  Future getRates() async {
+    var firestore = Firestore.instance;
+    QuerySnapshot qn = await firestore.collection("rate").getDocuments();
+    return qn.documents;
   }
 
   Widget dropdownWidget() {
@@ -195,6 +204,7 @@ class _searchByNameState extends State<searchByName> {
     // _dropdownMenuItems = buildDropdownMenuItems(_loc);
     //  _selectedCompany = _dropdownMenuItems[0].value;
     super.initState();
+    _data = getRates();
   }
 
   @override
@@ -329,8 +339,55 @@ class _searchByNameState extends State<searchByName> {
                                           color: Colors.black,
                                         ),
                                       ),
-                                    )
-                                  ]))
+                                    ),
+                                  ])),
+                                  SingleChildScrollView(
+                                      child: FutureBuilder(
+                                          future: _data,
+                                          builder: (_, snapshot) {
+                                            if (snapshot.hasData) {
+                                              List<dynamic> idList =
+                                                  new List<dynamic>();
+                                              List<dynamic> rateList =
+                                                  new List<dynamic>();
+                                              for (int i = 0;
+                                                  i < snapshot.data.length;
+                                                  i++) {
+                                                idList.add(snapshot
+                                                    .data[i].data['drId']);
+                                                rateList.add(snapshot
+                                                    .data[i].data['rating']);
+                                              }
+                                              String drId = document['id'];
+                                              double rateFromDb;
+                                              double ratingVal() {
+                                                for (int i = 0;
+                                                    i < idList.length;
+                                                    i++) {
+                                                  if (idList[i] == drId) {
+                                                    rateFromDb = rateList[i];
+                                                  }
+                                                }
+                                                if (rateFromDb != null) {
+                                                  return rateFromDb;
+                                                }
+                                                return 0;
+                                              }
+
+                                              return StarRating(
+                                                size: 20.0,
+                                                rating: ratingVal(),
+                                                color: Colors.yellow[600],
+                                                borderColor: Colors.black,
+                                                starCount: 5,
+                                              );
+                                            } else {
+                                              return Text(
+                                                'Loading...',
+                                                textAlign: TextAlign.center,
+                                              );
+                                            }
+                                          })),
                                 ]))
                           ]);
                         }).toList(),

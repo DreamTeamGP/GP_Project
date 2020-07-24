@@ -22,6 +22,8 @@ class _listdocState extends State<listdoc> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future _data;
+  Future _data2;
+  double rating = 0;
 
   Future getDoctors() async {
     var firestore = Firestore.instance;
@@ -29,8 +31,13 @@ class _listdocState extends State<listdoc> {
         .collection("users")
         .where('role', isEqualTo: "doctor")
         .getDocuments();
-    QuerySnapshot qn2 = await firestore.collection('rate').getDocuments();
-    return qn.documents + qn2.documents;
+    return qn.documents;
+  }
+
+  Future getRates() async {
+    var firestore = Firestore.instance;
+    QuerySnapshot qn = await firestore.collection("rate").getDocuments();
+    return qn.documents;
   }
 
   navigateToDetail(DocumentSnapshot doctor) {
@@ -46,8 +53,10 @@ class _listdocState extends State<listdoc> {
   void initState() {
     super.initState();
     _data = getDoctors();
+    _data2 = getRates();
   }
 
+  List<String> iDs = new List<String>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,23 +105,17 @@ class _listdocState extends State<listdoc> {
             //   print(element);
             // });
 
-            String drIdOfRate = myList[myList.length - 2];
-            double rateFromDb = myList[myList.length - 1];
-            double sum = 0;
-            double r = 0;
             for (int i = 0; i < myList.length; i++) {
-              if (myList[i] == drIdOfRate) {
-                r++;
+              for (int j = 0; j < snapshot.data.length; j++) {
+                if (myList[i] == snapshot.data[j].data['id']) {
+                  iDs.add(myList[i]);
+                }
               }
             }
-            for (int j = 0; j < 1; j++) {
-              sum = sum + rateFromDb;
-            }
-            double rateAvg = sum / (r - 1);
-            print(rateAvg);
             return ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (_, index) {
+                String currentId = snapshot.data[index].data["id"];
                 return Column(
                   children: <Widget>[
                     Padding(
@@ -161,25 +164,57 @@ class _listdocState extends State<listdoc> {
                                 ),
                               ),
                             ),
-                            StarRating(
-                              size: 25.0,
-                              rating: 2.3,
-                              color: Colors.yellow[600],
-                              borderColor: Colors.black,
-                              starCount: 5,
-                            ),
+                            SingleChildScrollView(
+                                child: FutureBuilder(
+                                    future: _data2,
+                                    builder: (_, snapshot) {
+                                      if (snapshot.hasData) {
+                                        List<dynamic> idList =
+                                            new List<dynamic>();
+                                        List<dynamic> rateList =
+                                            new List<dynamic>();
+                                        for (int i = 0;
+                                            i < snapshot.data.length;
+                                            i++) {
+                                          idList.add(
+                                              snapshot.data[i].data['drId']);
+                                          rateList.add(
+                                              snapshot.data[i].data['rating']);
+                                        }
+
+                                        double rateFromDb;
+                                        double ratingVal() {
+                                          for (int i = 0; i < iDs.length; i++) {
+                                            for (int j = 0;
+                                                j < idList.length;
+                                                j++) {
+                                              if (idList[j] == iDs[i] &&
+                                                  iDs[i] == currentId) {
+                                                rateFromDb = rateList[j];
+                                              }
+                                            }
+                                          }
+                                          if (rateFromDb != null) {
+                                            return rateFromDb;
+                                          }
+                                          return 0;
+                                        }
+
+                                        return StarRating(
+                                          size: 30.0,
+                                          rating: ratingVal(),
+                                          color: Colors.yellow[600],
+                                          borderColor: Colors.black,
+                                          starCount: 5,
+                                        );
+                                      } else {
+                                        return Text(
+                                          'Loading...',
+                                          textAlign: TextAlign.center,
+                                        );
+                                      }
+                                    })),
                           ]),
-                          // Column(
-                          //   children: <Widget>[
-                          //     StarRating(
-                          //       size: 25.0,
-                          //       rating: 2.3,
-                          //       color: Colors.yellow[600],
-                          //       borderColor: Colors.black,
-                          //       starCount: 5,
-                          //     ),
-                          //   ],
-                          // ),
                         ],
                       ),
                     ),
