@@ -360,17 +360,35 @@ class _searchByNameState extends State<searchByName> {
                                               }
                                               String drId = document['id'];
                                               double rateFromDb;
+                                              List<double> ratesforAVG =
+                                                  new List<double>();
                                               double ratingVal() {
                                                 for (int i = 0;
                                                     i < idList.length;
                                                     i++) {
                                                   if (idList[i] == drId) {
-                                                    rateFromDb = rateList[i];
+                                                    ratesforAVG
+                                                        .add(rateList[i]);
                                                   }
                                                 }
-                                                if (rateFromDb != null) {
-                                                  return rateFromDb;
+
+                                                double sum = 0;
+                                                ratesforAVG.forEach((element) {
+                                                  sum += element;
+                                                });
+
+                                                double avg = 0;
+
+                                                if (sum != 0) {
+                                                  avg =
+                                                      sum / ratesforAVG.length;
                                                 }
+
+                                                print(avg);
+                                                if (avg != null) {
+                                                  return avg;
+                                                }
+
                                                 return 0;
                                               }
 
