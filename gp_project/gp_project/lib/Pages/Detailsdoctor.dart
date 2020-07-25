@@ -289,8 +289,7 @@ class _detailsState extends State<details> {
                 ),
         ],
       ),
-      floatingActionButton:
-          Container(
+      floatingActionButton: Container(
               width: 95.0,
               height: 95.0,
               child: FloatingActionButton(

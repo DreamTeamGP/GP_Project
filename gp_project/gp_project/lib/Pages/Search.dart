@@ -199,12 +199,28 @@ class _searchByNameState extends State<searchByName> {
     );
   }
 
+  var patientDoctorId;
+  initUser() async {
+    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    FirebaseUser firebaseUser;
+    firebaseUser = await firebaseAuth.currentUser();
+    var userID = firebaseUser.uid;
+    DocumentSnapshot result = await Firestore.instance
+        .collection('users')
+        .document(userID)
+        .get()
+        .then((snapshot) {
+      patientDoctorId = snapshot.data['doctorId'];
+    });
+  }
+
   @override
   void initState() {
     // _dropdownMenuItems = buildDropdownMenuItems(_loc);
     //  _selectedCompany = _dropdownMenuItems[0].value;
     super.initState();
     _data = getRates();
+    initUser();
   }
 
   @override
@@ -292,122 +308,127 @@ class _searchByNameState extends State<searchByName> {
                       return ListView(
                         children: snapshot.data.documents
                             .map((DocumentSnapshot document) {
-                          return Column(children: <Widget>[
-                            Padding(
-                                padding: EdgeInsets.only(
-                                    top: 0.0,
-                                    bottom: 10.0,
-                                    right: 10.0,
-                                    left: 10.0),
-                                child: Row(children: <Widget>[
-                                  document['photo'] != null
-                                      ? CircleAvatar(
-                                          radius: 50.0,
-                                          backgroundImage: NetworkImage(
-                                            document['photo'],
-                                          ),
-                                        )
-                                      : Container(
-                                          margin: EdgeInsets.only(top: 20.0),
-                                          width: 100,
-                                          height: 100,
-                                          decoration: BoxDecoration(
-                                            //color: Colors.blue,
-                                            //image here
-                                            image: DecorationImage(
-                                              image:
-                                                  AssetImage('icons/user.jpg'),
-                                              fit: BoxFit.fill,
+                          if (document['id'] == patientDoctorId) {
+                            return Text('');
+                          } else {
+                            return Column(children: <Widget>[
+                              Padding(
+                                  padding: EdgeInsets.only(
+                                      top: 0.0,
+                                      bottom: 10.0,
+                                      right: 10.0,
+                                      left: 10.0),
+                                  child: Row(children: <Widget>[
+                                    document['photo'] != null
+                                        ? CircleAvatar(
+                                            radius: 50.0,
+                                            backgroundImage: NetworkImage(
+                                              document['photo'],
                                             ),
-                                            shape: BoxShape.circle,
-                                            //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                                          )
+                                        : Container(
+                                            margin: EdgeInsets.only(top: 20.0),
+                                            width: 100,
+                                            height: 100,
+                                            decoration: BoxDecoration(
+                                              //color: Colors.blue,
+                                              //image here
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                    'icons/user.jpg'),
+                                                fit: BoxFit.fill,
+                                              ),
+                                              shape: BoxShape.circle,
+                                              //borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                                            ),
                                           ),
-                                        ),
-                                  Container(
-                                    width: 20,
-                                  ),
-                                  //Row(
-                                  //  children: <Widget>[
-                                  Flexible(
-                                      child: Column(children: <Widget>[
-                                    new ListTile(
-                                      onTap: () => navigateToDetail(document),
-                                      title: new Text(
-                                        '${document['name']}',
-                                        style: TextStyle(
-                                          fontSize: 21,
-                                          color: Colors.black,
+                                    Container(
+                                      width: 20,
+                                    ),
+                                    //Row(
+                                    //  children: <Widget>[
+                                    Flexible(
+                                        child: Column(children: <Widget>[
+                                      new ListTile(
+                                        onTap: () => navigateToDetail(document),
+                                        title: new Text(
+                                          '${document['name']}',
+                                          style: TextStyle(
+                                            fontSize: 21,
+                                            color: Colors.black,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ])),
-                                  SingleChildScrollView(
-                                      child: FutureBuilder(
-                                          future: _data,
-                                          builder: (_, snapshot) {
-                                            if (snapshot.hasData) {
-                                              List<dynamic> idList =
-                                                  new List<dynamic>();
-                                              List<dynamic> rateList =
-                                                  new List<dynamic>();
-                                              for (int i = 0;
-                                                  i < snapshot.data.length;
-                                                  i++) {
-                                                idList.add(snapshot
-                                                    .data[i].data['drId']);
-                                                rateList.add(snapshot
-                                                    .data[i].data['rating']);
-                                              }
-                                              String drId = document['id'];
-                                              double rateFromDb;
-                                              List<double> ratesforAVG =
-                                                  new List<double>();
-                                              double ratingVal() {
+                                    ])),
+                                    SingleChildScrollView(
+                                        child: FutureBuilder(
+                                            future: _data,
+                                            builder: (_, snapshot) {
+                                              if (snapshot.hasData) {
+                                                List<dynamic> idList =
+                                                    new List<dynamic>();
+                                                List<dynamic> rateList =
+                                                    new List<dynamic>();
                                                 for (int i = 0;
-                                                    i < idList.length;
+                                                    i < snapshot.data.length;
                                                     i++) {
-                                                  if (idList[i] == drId) {
-                                                    ratesforAVG
-                                                        .add(rateList[i]);
+                                                  idList.add(snapshot
+                                                      .data[i].data['drId']);
+                                                  rateList.add(snapshot
+                                                      .data[i].data['rating']);
+                                                }
+                                                String drId = document['id'];
+                                                double rateFromDb;
+                                                List<double> ratesforAVG =
+                                                    new List<double>();
+                                                double ratingVal() {
+                                                  for (int i = 0;
+                                                      i < idList.length;
+                                                      i++) {
+                                                    if (idList[i] == drId) {
+                                                      ratesforAVG
+                                                          .add(rateList[i]);
+                                                    }
                                                   }
+
+                                                  double sum = 0;
+                                                  ratesforAVG
+                                                      .forEach((element) {
+                                                    sum += element;
+                                                  });
+
+                                                  double avg = 0;
+
+                                                  if (sum != 0) {
+                                                    avg = sum /
+                                                        ratesforAVG.length;
+                                                  }
+
+                                                  print(avg);
+                                                  if (avg != null) {
+                                                    return avg;
+                                                  }
+
+                                                  return 0;
                                                 }
 
-                                                double sum = 0;
-                                                ratesforAVG.forEach((element) {
-                                                  sum += element;
-                                                });
-
-                                                double avg = 0;
-
-                                                if (sum != 0) {
-                                                  avg =
-                                                      sum / ratesforAVG.length;
-                                                }
-
-                                                print(avg);
-                                                if (avg != null) {
-                                                  return avg;
-                                                }
-
-                                                return 0;
+                                                return StarRating(
+                                                  size: 20.0,
+                                                  rating: ratingVal(),
+                                                  color: Colors.yellow[600],
+                                                  borderColor: Colors.black,
+                                                  starCount: 5,
+                                                );
+                                              } else {
+                                                return Text(
+                                                  'Loading...',
+                                                  textAlign: TextAlign.center,
+                                                );
                                               }
-
-                                              return StarRating(
-                                                size: 20.0,
-                                                rating: ratingVal(),
-                                                color: Colors.yellow[600],
-                                                borderColor: Colors.black,
-                                                starCount: 5,
-                                              );
-                                            } else {
-                                              return Text(
-                                                'Loading...',
-                                                textAlign: TextAlign.center,
-                                              );
-                                            }
-                                          })),
-                                ]))
-                          ]);
+                                            })),
+                                  ]))
+                            ]);
+                          }
                         }).toList(),
                       );
                   }
