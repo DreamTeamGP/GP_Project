@@ -308,12 +308,12 @@ class _searchByNameState extends State<searchByName> {
                       return ListView(
                         children: snapshot.data.documents
                             .map((DocumentSnapshot document) {
-                          document['id'] != patientDoctorId
-                            ? Column(
-                              children: <Widget>[
-                              ],
-                            )
-                           : Column(children: <Widget>[
+                          if (document['id'] == patientDoctorId) {
+                            return Column(children: <Widget>[
+
+                            ],);
+                          } else {
+                            return Column(children: <Widget>[
                               Padding(
                                   padding: EdgeInsets.only(
                                       top: 0.0,
@@ -337,7 +337,7 @@ class _searchByNameState extends State<searchByName> {
                                               //image here
                                               image: DecorationImage(
                                                 image: AssetImage(
-                                                    'icons/user.jpg'),
+                                                    'icons/Doctor.png'),
                                                 fit: BoxFit.fill,
                                               ),
                                               shape: BoxShape.circle,
@@ -430,7 +430,7 @@ class _searchByNameState extends State<searchByName> {
                                             })),
                                   ]))
                             ]);
-                          
+                          }
                         }).toList(),
                       );
                   }

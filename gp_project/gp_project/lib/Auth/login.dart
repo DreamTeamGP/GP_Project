@@ -234,6 +234,7 @@ class _loginState extends State<login> {
       ),
     );
   }
+
   String validateEmail(String value) {
     String pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -246,7 +247,8 @@ class _loginState extends State<login> {
       return null;
     }
   }
-    void _showDialog() {
+
+  void _showDialog() {
     // flutter defined function
     showDialog(
       context: context,
@@ -268,6 +270,7 @@ class _loginState extends State<login> {
       },
     );
   }
+
   Future<void> signIn() async {
     final FormState = _formKey.currentState;
 
@@ -276,14 +279,17 @@ class _loginState extends State<login> {
       try {
         AuthResult user = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: _email, password: _password);
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => HomePage(user: user.user)));
+        if (user.user != null) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => HomePage(user: user.user)));
+        }
       } catch (e) {
         _showDialog();
         print(e.message);
       }
-    }
-    else{
+    } else {
       setState(() {
         _autoValidate = true;
       });

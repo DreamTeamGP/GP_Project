@@ -16,7 +16,7 @@ import 'package:gp_project/Pages/Maps.dart';
 import 'assignedDr.dart';
 import 'PatientReport.dart';
 import 'Search.dart';
-
+import 'DoctorProfile.dart';
 class ProfileDrawer extends StatefulWidget {
   final FirebaseUser currentUser;
   const ProfileDrawer({Key key, this.currentUser}) : super(key: key);
@@ -158,7 +158,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                               //color: Colors.blue,
                               //image here
                               image: DecorationImage(
-                                image: AssetImage('icons/user.jpg'),
+                                image: AssetImage('icons/Doctor.png'),
                                 fit: BoxFit.fill,
                               ),
                               shape: BoxShape.circle,
@@ -203,7 +203,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => profileWidget(
+                        builder: (context) => DoctorProfile(
                               currentUser: widget.currentUser,
                             )));
               },

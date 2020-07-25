@@ -8,16 +8,17 @@ import 'package:gp_project/Pages/profiledrawer.dart';
 import '../models/user.dart';
 import '../Pages/profileEditWidget.dart';
 import 'homepage.dart';
-
-class profileWidget extends StatefulWidget {
+import 'DoctorEditProfile.dart';
+import '../models/doctor.dart';
+class DoctorProfile extends StatefulWidget {
   final FirebaseUser currentUser;
-  final User user;
+  final Doctor doctor;
   @override
-  _profileWidgetState createState() => _profileWidgetState();
-  profileWidget({this.currentUser, this.user});
+  _DoctorProfileState createState() => _DoctorProfileState();
+  DoctorProfile({this.currentUser, this.doctor});
 }
 
-class _profileWidgetState extends State<profileWidget> {
+class _DoctorProfileState extends State<DoctorProfile> {
   String gender;
   File _image;
   @override
@@ -121,7 +122,7 @@ class _profileWidgetState extends State<profileWidget> {
                               //color: Colors.blue,
                               //image here
                               image: DecorationImage(
-                                image: AssetImage('icons/user.jpg'),
+                                image: AssetImage('icons/Doctor.png'),
                                 fit: BoxFit.fill,
                               ),
                               shape: BoxShape.circle,
@@ -159,7 +160,7 @@ class _profileWidgetState extends State<profileWidget> {
                       Container(
                         margin: EdgeInsets.only(left: 15.0),
                         child: Text(
-                          '${snapshot.data['country']}',
+                          '${snapshot.data['clinicRegion']}',
                           style: TextStyle(
                             fontSize: 18.0,
                           ),
@@ -215,14 +216,14 @@ class _profileWidgetState extends State<profileWidget> {
                   child: Row(
                     children: <Widget>[
                       Icon(
-                        Icons.calendar_today,
+                        Icons.location_on,
                         color: Colors.grey,
                         size: 32.0,
                       ),
                       Container(
                         margin: EdgeInsets.only(left: 15.0),
                         child: Text(
-                          '${snapshot.data['birthday']}',
+                          '${snapshot.data['address1']}',
                           style: TextStyle(
                             fontSize: 18.0,
                           ),
@@ -231,78 +232,29 @@ class _profileWidgetState extends State<profileWidget> {
                     ],
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: 15.0, top: 7.0),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.person,
-                        color: Colors.grey,
-                        size: 32.0,
-                      ),
-                      snapshot.data['gender'] == 1
-                          ? Container(
+                snapshot.data['address2'] != ""
+                    ? Container(
+                        margin: EdgeInsets.only(left: 15.0, top: 7.0),
+                        child: Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.location_city,
+                              color: Colors.grey,
+                              size: 32.0,
+                            ),
+                            Container(
                               margin: EdgeInsets.only(left: 15.0),
                               child: Text(
-                                'Female',
-                                // '${gender}',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                ),
-                              ),
-                            )
-                          : Container(
-                              margin: EdgeInsets.only(left: 15.0),
-                              child: Text(
-                                'Male',
-                                // '${gender}',
+                                '${snapshot.data['address2']}',
                                 style: TextStyle(
                                   fontSize: 18.0,
                                 ),
                               ),
                             ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 15.0, top: 7.0),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.location_city,
-                        color: Colors.grey,
-                        size: 32.0,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 15.0),
-                        child: Text(
-                          '${snapshot.data['country']}',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                          ),
+                          ],
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 1.0),
-                        child: Text(
-                          ',',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 5.0),
-                        child: Text(
-                          '${snapshot.data['city']}',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                      )
+                    : Container()
               ],
             );
           }
@@ -318,7 +270,7 @@ class _profileWidgetState extends State<profileWidget> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => profileEditWidget(
+                      builder: (context) => DoctorEditProfile(
                             currentUser: widget.currentUser,
                           )));
             },

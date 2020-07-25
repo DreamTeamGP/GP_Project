@@ -176,8 +176,8 @@ class _MeasurementPopUp extends State<MeasurementPopUp> {
         record['UserId'] == widget.currentUser.uid &&
         record['Date'] == getDateForTimeStamp(date)) {
       if (measruringTypedropdownValue == "Fasting blood glucose") {
-        if (int.parse(_measurementController.text) > 90 &&
-            int.parse(_measurementController.text) < 140) {
+        if (int.parse(_measurementController.text) > 20 &&
+            int.parse(_measurementController.text) < 1000) {
           databaseReference
               .collection('patientsMeasurements')
               .document(docId)
@@ -192,8 +192,8 @@ class _MeasurementPopUp extends State<MeasurementPopUp> {
           print("no measurement");
         }
       } else if (measruringTypedropdownValue == "Post prandial blood glucose") {
-        if (int.parse(_measurementController.text) > 140 &&
-            int.parse(_measurementController.text) < 180) {
+        if (int.parse(_measurementController.text) > 20 &&
+            int.parse(_measurementController.text) < 1000) {
           databaseReference
               .collection('patientsMeasurements')
               .document(docId)
