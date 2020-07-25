@@ -18,6 +18,7 @@ class details extends StatefulWidget {
 class _detailsState extends State<details> {
   double rating = 0;
   var patientName;
+  var patientDoctor;
   initUser() async {
     final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     FirebaseUser firebaseUser;
@@ -29,7 +30,9 @@ class _detailsState extends State<details> {
         .get()
         .then((snapshot) {
       patientName = snapshot.data['name'];
+      patientDoctor = snapshot.data['doctorId'];
       print(snapshot.data['name']);
+      print(patientDoctor);
     });
   }
 
@@ -286,37 +289,36 @@ class _detailsState extends State<details> {
                 ),
         ],
       ),
-
       floatingActionButton: Container(
-        width: 95.0,
-        height: 95.0,
-        child: FloatingActionButton(
-          backgroundColor: Colors.cyan,
-          onPressed: () {
-            Firestore.instance
-                .collection('addDoctorRequest')
-                .document()
-                .setData({
-              'doctorID': widget.doctor.data["id"],
-              'patientID': widget.currentuser.uid,
-              'patientName': patientName,
-              'approved': 0,
-            });
-            SnackBar(content: Text('Request has been Sent,Thank you'));
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => HomePage(
-                          user: widget.currentuser,
-                        )));
-          },
-          child: Icon(
-            Icons.person_add,
-            color: Colors.white,
-            size: 50.0,
-          ),
-        ),
-      ),
+              width: 95.0,
+              height: 95.0,
+              child: FloatingActionButton(
+                backgroundColor: Colors.cyan,
+                onPressed: () {
+                  Firestore.instance
+                      .collection('addDoctorRequest')
+                      .document()
+                      .setData({
+                    'doctorID': widget.doctor.data["id"],
+                    'patientID': widget.currentuser.uid,
+                    'patientName': patientName,
+                    'approved': 0,
+                  });
+                  SnackBar(content: Text('Request has been Sent,Thank you'));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HomePage(
+                                user: widget.currentuser,
+                              )));
+                },
+                child: Icon(
+                  Icons.person_add,
+                  color: Colors.white,
+                  size: 50.0,
+                ),
+              ),
+            ),
       //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

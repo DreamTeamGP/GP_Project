@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gp_project/Pages/Maps.dart';
 import 'assignedDr.dart';
-
+import 'PatientReport.dart';
 import 'Search.dart';
 
 class ProfileDrawer extends StatefulWidget {
@@ -403,7 +403,14 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                 'My Report',
                 style: TextStyle(fontSize: 22),
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PatientReport(
+                              currentUser: widget.currentUser,
+                            )));
+              },
             ),
             ListTile(
                 leading: Icon(Icons.perm_identity),
