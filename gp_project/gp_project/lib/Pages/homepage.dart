@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
           builder: (context) => AlertDialog(
             content: ListTile(
               title: Text(message['notification']['title']),
-              subtitle: Text(message['notification']['name']),
+              subtitle: Text(message['notification']['body']),
             ),
             actions: <Widget>[
               FlatButton(
