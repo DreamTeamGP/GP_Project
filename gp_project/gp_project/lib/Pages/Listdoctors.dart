@@ -116,6 +116,8 @@ class _listdocState extends State<listdoc> {
               itemCount: snapshot.data.length,
               itemBuilder: (_, index) {
                 String currentId = snapshot.data[index].data["id"];
+
+                // if (snapshot.data[index].data["doctorId"] = null)
                 return Column(
                   children: <Widget>[
                     Padding(

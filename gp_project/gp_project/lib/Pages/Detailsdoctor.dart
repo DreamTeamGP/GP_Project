@@ -306,8 +306,8 @@ class _detailsState extends State<details> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => listdoc(
-                          currentUser: widget.currentuser,
+                    builder: (context) => HomePage(
+                          user: widget.currentuser,
                         )));
           },
           child: Icon(
